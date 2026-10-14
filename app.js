@@ -279,6 +279,10 @@ function mapRender(v){
   mapView = mapClampView(v);
   mapSvgEl.setAttribute('viewBox',
     mapView.x.toFixed(2)+' '+mapView.y.toFixed(2)+' '+mapView.w.toFixed(2)+' '+mapView.h.toFixed(2));
+  /* labels and strokes are authored in user units, so without this they would
+     blow up 8x along with the geometry. --mk cancels the zoom for annotation
+     only: the map grows, the place names stay put. */
+  mapSvgEl.style.setProperty('--mk', (mapView.w / MAP_FULL.w).toFixed(4));
   mapSvgEl.style.cursor = mapIsZoomed() ? 'grab' : '';
   updateScalebar();
 }
