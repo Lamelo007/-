@@ -251,178 +251,234 @@ document.querySelectorAll('.filter-chip[data-filter]').forEach(chip=>{
   });
 });
 
-/* ---------------- map view: viewBox zoom + drag pan ----------------
-   Zooming the SVG with a CSS transform only ever cropped the centre of the
+/* ---------------- map camera: viewBox zoom + drag pan ----------------
+   Zooming an SVG with a CSS transform only ever cropped the centre of the
    canvas and left no way to reach the edges. We drive the viewBox instead,
    which keeps the projection exact and lets us pan.
-   The viewBox is always kept at the 800:560 source ratio so the map never
-   stretches, and it is clamped to the full extent so you can't pan off-map. */
-const MAP_FULL = {x:0, y:0, w:800, h:560};
-const MAP_MIN_W = MAP_FULL.w / 8;          // deepest zoom-in = 8x
-const MAP_KM_PER_UNIT = 0.03664;           // 0.285 deg lon at 22.5N / 800 units
-let mapView = {x:0, y:0, w:800, h:560};
-let mapTarget = {x:0, y:0, w:800, h:560};  // where an in-flight animation is heading
-let mapAnim = null, mapPan = null, mapPinch = null, mapSuppressClick = false;
+   The viewBox always keeps the source ratio so the map never stretches, and it
+   is clamped to the full extent so you can't pan off-map.
+   One camera per SVG: the green map and the heat map each own one. */
+function createMapCamera(cfg){
+  const svg = cfg.svg;
+  const full = {x:cfg.full.x, y:cfg.full.y, w:cfg.full.w, h:cfg.full.h};
+  const minW = full.w / (cfg.maxZoom || 8);
+  const aspect = full.h / full.w;
+  const cam = {full:full, minW:minW};
 
-const mapSvgEl = document.getElementById('mapSvg');
-const mapPointers = new Map();
+  let view   = {x:full.x, y:full.y, w:full.w, h:full.h};
+  let target = {x:full.x, y:full.y, w:full.w, h:full.h};  // where an animation is heading
+  let anim = null, pan = null, pinch = null, suppressClick = false;
+  const pointers = new Map();
 
-function mapClampView(v){
-  v.w = Math.min(Math.max(v.w, MAP_MIN_W), MAP_FULL.w);
-  v.h = v.w * (MAP_FULL.h / MAP_FULL.w);
-  v.x = Math.min(Math.max(v.x, MAP_FULL.x), MAP_FULL.x + MAP_FULL.w - v.w);
-  v.y = Math.min(Math.max(v.y, MAP_FULL.y), MAP_FULL.y + MAP_FULL.h - v.h);
-  return v;
-}
-function mapIsZoomed(){ return mapTarget.w < MAP_FULL.w - 0.5; }
-function mapRender(v){
-  mapView = mapClampView(v);
-  mapSvgEl.setAttribute('viewBox',
-    mapView.x.toFixed(2)+' '+mapView.y.toFixed(2)+' '+mapView.w.toFixed(2)+' '+mapView.h.toFixed(2));
-  /* labels and strokes are authored in user units, so without this they would
-     blow up 8x along with the geometry. --mk cancels the zoom for annotation
-     only: the map grows, the place names stay put. */
-  mapSvgEl.style.setProperty('--mk', (mapView.w / MAP_FULL.w).toFixed(4));
-  mapSvgEl.style.cursor = mapIsZoomed() ? 'grab' : '';
-  updateScalebar();
-}
-function mapSetView(v){ mapRender(v); mapTarget = {x:mapView.x, y:mapView.y, w:mapView.w, h:mapView.h}; }
-function mapAnimateTo(target){
-  if(mapAnim) cancelAnimationFrame(mapAnim);
-  const from = {x:mapView.x, y:mapView.y, w:mapView.w, h:mapView.h};
-  const to = mapClampView({x:target.x, y:target.y, w:target.w, h:target.h});
-  mapTarget = {x:to.x, y:to.y, w:to.w, h:to.h};
-  const t0 = performance.now(), dur = 260;
-  function step(now){
-    const p = Math.min((now - t0) / dur, 1);
-    const e = 1 - Math.pow(1 - p, 3);
-    mapRender({x:from.x+(to.x-from.x)*e, y:from.y+(to.y-from.y)*e,
-               w:from.w+(to.w-from.w)*e, h:from.h+(to.h-from.h)*e});
-    mapAnim = p < 1 ? requestAnimationFrame(step) : null;
+  function clamp(v){
+    v.w = Math.min(Math.max(v.w, minW), full.w);
+    v.h = v.w * aspect;
+    v.x = Math.min(Math.max(v.x, full.x), full.x + full.w - v.w);
+    v.y = Math.min(Math.max(v.y, full.y), full.y + full.h - v.h);
+    return v;
   }
-  mapAnim = requestAnimationFrame(step);
-}
-/* zoom by `factor`, keeping the viewBox point (cx,cy) pinned under the cursor.
-   Always computed from mapTarget, so rapid clicks compound predictably instead
-   of reading a half-finished animation. */
-function mapZoom(factor, cx, cy, animate){
-  const base = mapTarget;
-  if(cx === undefined){ cx = base.x + base.w/2; cy = base.y + base.h/2; }
-  const w = Math.min(Math.max(base.w / factor, MAP_MIN_W), MAP_FULL.w);
-  const k = w / base.w;
-  const target = {x:cx-(cx-base.x)*k, y:cy-(cy-base.y)*k, w:w, h:base.h*k};
-  if(animate === false) mapSetView(target); else mapAnimateTo(target);
-}
-/* CSS px per viewBox unit, honouring preserveAspectRatio="xMidYMid meet" */
-function mapPxPerUnit(){
-  const r = mapSvgEl.getBoundingClientRect();
-  if(!r.width || !r.height) return 1;
-  return Math.min(r.width / mapView.w, r.height / mapView.h);
-}
-function mapClientToView(clientX, clientY){
-  const r = mapSvgEl.getBoundingClientRect();
-  const s = mapPxPerUnit();
-  const offX = r.left + (r.width - mapView.w*s)/2;
-  const offY = r.top + (r.height - mapView.h*s)/2;
-  return {x: mapView.x + (clientX-offX)/s, y: mapView.y + (clientY-offY)/s};
+  cam.clamp = clamp;
+  cam.view = function(){ return view; };
+  cam.target = function(){ return target; };
+  cam.isZoomed = function(){ return target.w < full.w - 0.5; };
+
+  /* CSS px per viewBox unit, honouring preserveAspectRatio="xMidYMid meet" */
+  cam.pxPerUnit = function(){
+    const r = svg.getBoundingClientRect();
+    if(!r.width || !r.height) return 1;
+    return Math.min(r.width / view.w, r.height / view.h);
+  };
+  cam.canvasWidth = function(){ return svg.getBoundingClientRect().width || 0; };
+  cam.clientToView = function(clientX, clientY){
+    const r = svg.getBoundingClientRect();
+    const s = cam.pxPerUnit();
+    const offX = r.left + (r.width - view.w*s)/2;
+    const offY = r.top + (r.height - view.h*s)/2;
+    return {x: view.x + (clientX-offX)/s, y: view.y + (clientY-offY)/s};
+  };
+  /* viewBox point -> CSS px offset inside the svg element */
+  cam.viewToLocal = function(x, y){
+    const r = svg.getBoundingClientRect();
+    const s = cam.pxPerUnit();
+    return {x: (r.width - view.w*s)/2 + (x-view.x)*s,
+            y: (r.height - view.h*s)/2 + (y-view.y)*s};
+  };
+
+  cam.render = function(v){
+    view = clamp(v);
+    svg.setAttribute('viewBox',
+      view.x.toFixed(2)+' '+view.y.toFixed(2)+' '+view.w.toFixed(2)+' '+view.h.toFixed(2));
+    /* annotation is authored in user units, so without this it would blow up
+       along with the geometry. --mk cancels the zoom for annotation only: the
+       map grows, the labels stay put. */
+    svg.style.setProperty('--mk', (view.w / full.w).toFixed(4));
+    svg.style.cursor = cam.isZoomed() ? 'grab' : '';
+    if(cfg.onRender) cfg.onRender(cam);
+  };
+  cam.setView = function(v){
+    cam.render(v);
+    target = {x:view.x, y:view.y, w:view.w, h:view.h};
+  };
+  cam.animateTo = function(to){
+    if(anim) cancelAnimationFrame(anim);
+    const from = {x:view.x, y:view.y, w:view.w, h:view.h};
+    const t = clamp({x:to.x, y:to.y, w:to.w, h:to.h});
+    target = {x:t.x, y:t.y, w:t.w, h:t.h};
+    const t0 = performance.now(), dur = 260;
+    function step(now){
+      const p = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      cam.render({x:from.x+(t.x-from.x)*e, y:from.y+(t.y-from.y)*e,
+                  w:from.w+(t.w-from.w)*e, h:from.h+(t.h-from.h)*e});
+      anim = p < 1 ? requestAnimationFrame(step) : null;
+    }
+    anim = requestAnimationFrame(step);
+  };
+  /* zoom by `factor`, keeping the viewBox point (cx,cy) pinned under the cursor.
+     Always computed from the target, so rapid clicks compound predictably
+     instead of reading a half-finished animation. */
+  cam.zoom = function(factor, cx, cy, animate){
+    const base = target;
+    if(cx === undefined){ cx = base.x + base.w/2; cy = base.y + base.h/2; }
+    const w = Math.min(Math.max(base.w / factor, minW), full.w);
+    const k = w / base.w;
+    const t = {x:cx-(cx-base.x)*k, y:cy-(cy-base.y)*k, w:w, h:base.h*k};
+    if(animate === false) cam.setView(t); else cam.animateTo(t);
+  };
+  cam.reset = function(animate){
+    const t = {x:full.x, y:full.y, w:full.w, h:full.h};
+    if(animate === false) cam.setView(t); else cam.animateTo(t);
+  };
+
+  /* ---- input ---- */
+  svg.addEventListener('wheel', e=>{
+    e.preventDefault();
+    const p = cam.clientToView(e.clientX, e.clientY);
+    cam.zoom(e.deltaY < 0 ? 1.25 : 1/1.25, p.x, p.y, false);
+  }, {passive:false});
+
+  svg.addEventListener('dblclick', e=>{
+    const p = cam.clientToView(e.clientX, e.clientY);
+    cam.zoom(2, p.x, p.y);
+  });
+
+  /* drag to pan, two-finger pinch to zoom (pointer events cover both) */
+  svg.addEventListener('pointerdown', e=>{
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    suppressClick = false;
+    if(pointers.size === 1){
+      pan = {id:e.pointerId, x:e.clientX, y:e.clientY, moved:0,
+             view:{x:target.x, y:target.y, w:target.w, h:target.h}};
+      if(cam.isZoomed()) svg.style.cursor = 'grabbing';
+    } else if(pointers.size === 2){
+      pan = null;
+      const [a, b] = [...pointers.values()];
+      pinch = {dist:Math.hypot(a.x-b.x, a.y-b.y),
+               mid:cam.clientToView((a.x+b.x)/2, (a.y+b.y)/2),
+               view:{x:target.x, y:target.y, w:target.w, h:target.h}};
+    }
+    if(cam.isZoomed()) svg.setPointerCapture(e.pointerId);
+  });
+  svg.addEventListener('pointermove', e=>{
+    if(!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+    if(pointers.size >= 2 && pinch){
+      const [a, b] = [...pointers.values()];
+      const dist = Math.hypot(a.x-b.x, a.y-b.y);
+      if(pinch.dist > 0 && dist > 0){
+        const w = Math.min(Math.max(pinch.view.w * (pinch.dist/dist), minW), full.w);
+        const k = w / pinch.view.w;
+        cam.setView({x:pinch.mid.x-(pinch.mid.x-pinch.view.x)*k,
+                     y:pinch.mid.y-(pinch.mid.y-pinch.view.y)*k,
+                     w:w, h:pinch.view.h*k});
+      }
+      return;
+    }
+    if(!pan || e.pointerId !== pan.id) return;
+    const s = cam.pxPerUnit();
+    pan.moved = Math.max(pan.moved, Math.hypot(e.clientX-pan.x, e.clientY-pan.y));
+    cam.setView({x:pan.view.x - (e.clientX-pan.x)/s,
+                 y:pan.view.y - (e.clientY-pan.y)/s,
+                 w:pan.view.w, h:pan.view.h});
+  });
+  function endPointer(e){
+    if(!pointers.has(e.pointerId)) return;
+    pointers.delete(e.pointerId);
+    if(pan && e.pointerId === pan.id){
+      if(pan.moved > 4) suppressClick = true;
+      pan = null;
+    }
+    if(pointers.size < 2) pinch = null;
+    svg.style.cursor = cam.isZoomed() ? 'grab' : '';
+  }
+  svg.addEventListener('pointerup', endPointer);
+  svg.addEventListener('pointercancel', endPointer);
+  /* a drag must not also fire the child's onclick */
+  svg.addEventListener('click', e=>{
+    if(suppressClick){ suppressClick = false; e.stopPropagation(); e.preventDefault(); }
+  }, true);
+
+  cam.render(view);   // publish --mk and the viewBox once up front
+  return cam;
 }
 
 /* ---- scale bar: recomputed from the live viewBox, so it stays truthful ---- */
-function updateScalebar(){
-  const track = document.getElementById('scalebarTrack');
-  const labels = document.getElementById('scalebarLabels');
-  if(!track || !labels) return;
-  const kmPerPx = MAP_KM_PER_UNIT / mapPxPerUnit();
+function createScalebar(trackId, labelsId, kmPerUnit){
+  const track = document.getElementById(trackId);
+  const labels = document.getElementById(labelsId);
   const steps = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
-  let d = steps[0];
-  for(const v of steps){ if(v / kmPerPx <= 150) d = v; else break; }
-  const px = Math.max(40, Math.round(d / kmPerPx));
-  track.style.width = px + 'px';
-  labels.style.width = px + 'px';
   const fmt = x => (x >= 1 ? String(Number(x.toFixed(2))) : x.toFixed(1));
-  labels.innerHTML = '<span>0</span><span>'+fmt(d/2)+'</span><span>'+fmt(d)+' km</span>';
+  return {
+    update: function(cam){
+      if(!track || !labels) return;
+      const kmPerPx = kmPerUnit / cam.pxPerUnit();
+      /* cap the bar against the canvas, not a fixed 150px — on a phone the map
+         is only ~340px wide and a 150px bar would swallow it */
+      const cap = Math.max(56, Math.min(150, cam.canvasWidth() * 0.30));
+      let d = steps[0];
+      for(const v of steps){ if(v / kmPerPx <= cap) d = v; else break; }
+      const px = Math.max(40, Math.round(d / kmPerPx));
+      track.style.width = px + 'px';
+      labels.style.width = px + 'px';
+      labels.innerHTML = '<span>0</span><span>'+fmt(d/2)+'</span><span>'+fmt(d)+' km</span>';
+    }
+  };
 }
-window.addEventListener('resize', updateScalebar);
+
+const MAP_KM_PER_UNIT = 0.03664;           // 0.285 deg lon at 22.5N / 800 units
+const MAP_FULL = {x:0, y:0, w:800, h:560};
+
+const mapScalebar = createScalebar('scalebarTrack', 'scalebarLabels', MAP_KM_PER_UNIT);
+const mapCam = createMapCamera({
+  svg: document.getElementById('mapSvg'),
+  full: MAP_FULL, maxZoom: 8,
+  onRender: cam => mapScalebar.update(cam)
+});
+
+const heatScalebar = createScalebar('heatScalebarTrack', 'heatScalebarLabels', MAP_KM_PER_UNIT);
+const heatCam = createMapCamera({
+  svg: document.getElementById('heatSvg'),
+  full: MAP_FULL, maxZoom: 6,
+  onRender: cam => { heatScalebar.update(cam); hideHeatPopup(); }
+});
+
+window.addEventListener('resize', ()=>{ mapScalebar.update(mapCam); heatScalebar.update(heatCam); });
 
 /* ---- controls ---- */
-document.getElementById('zoomIn').addEventListener('click', ()=> mapZoom(1.6));
-document.getElementById('zoomOut').addEventListener('click', ()=> mapZoom(1/1.6));
+document.getElementById('zoomIn').addEventListener('click', ()=> mapCam.zoom(1.6));
+document.getElementById('zoomOut').addEventListener('click', ()=> mapCam.zoom(1/1.6));
 document.getElementById('resetMap').addEventListener('click', ()=>{
-  mapAnimateTo({x:MAP_FULL.x, y:MAP_FULL.y, w:MAP_FULL.w, h:MAP_FULL.h});
+  mapCam.reset();
   document.querySelectorAll('.filter-chip[data-filter]').forEach(c=>c.classList.remove('active'));
   document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
   document.querySelectorAll('.zone').forEach(z=>{z.style.opacity='0.7';z.style.pointerEvents='auto';});
 });
 
-mapSvgEl.addEventListener('wheel', e=>{
-  e.preventDefault();
-  const p = mapClientToView(e.clientX, e.clientY);
-  mapZoom(e.deltaY < 0 ? 1.25 : 1/1.25, p.x, p.y, false);
-}, {passive:false});
-
-mapSvgEl.addEventListener('dblclick', e=>{
-  const p = mapClientToView(e.clientX, e.clientY);
-  mapZoom(2, p.x, p.y);
-});
-
-/* drag to pan, and two-finger pinch to zoom (pointer events cover both) */
-mapSvgEl.addEventListener('pointerdown', e=>{
-  if(e.pointerType === 'mouse' && e.button !== 0) return;
-  mapPointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-  mapSuppressClick = false;
-  if(mapPointers.size === 1){
-    mapPan = {id:e.pointerId, x:e.clientX, y:e.clientY, moved:0,
-              view:{x:mapTarget.x, y:mapTarget.y, w:mapTarget.w, h:mapTarget.h}};
-    if(mapIsZoomed()) mapSvgEl.style.cursor = 'grabbing';
-  } else if(mapPointers.size === 2){
-    mapPan = null;
-    const [a, b] = [...mapPointers.values()];
-    mapPinch = {dist:Math.hypot(a.x-b.x, a.y-b.y),
-                mid:mapClientToView((a.x+b.x)/2, (a.y+b.y)/2),
-                view:{x:mapTarget.x, y:mapTarget.y, w:mapTarget.w, h:mapTarget.h}};
-  }
-  if(mapIsZoomed()) mapSvgEl.setPointerCapture(e.pointerId);
-});
-mapSvgEl.addEventListener('pointermove', e=>{
-  if(!mapPointers.has(e.pointerId)) return;
-  mapPointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-
-  if(mapPointers.size >= 2 && mapPinch){
-    const [a, b] = [...mapPointers.values()];
-    const dist = Math.hypot(a.x-b.x, a.y-b.y);
-    if(mapPinch.dist > 0 && dist > 0){
-      const w = Math.min(Math.max(mapPinch.view.w * (mapPinch.dist/dist), MAP_MIN_W), MAP_FULL.w);
-      const k = w / mapPinch.view.w;
-      mapSetView({x:mapPinch.mid.x-(mapPinch.mid.x-mapPinch.view.x)*k,
-                  y:mapPinch.mid.y-(mapPinch.mid.y-mapPinch.view.y)*k,
-                  w:w, h:mapPinch.view.h*k});
-    }
-    return;
-  }
-  if(!mapPan || e.pointerId !== mapPan.id) return;
-  const s = mapPxPerUnit();
-  mapPan.moved = Math.max(mapPan.moved, Math.hypot(e.clientX-mapPan.x, e.clientY-mapPan.y));
-  mapSetView({x:mapPan.view.x - (e.clientX-mapPan.x)/s,
-              y:mapPan.view.y - (e.clientY-mapPan.y)/s,
-              w:mapPan.view.w, h:mapPan.view.h});
-});
-function mapEndPointer(e){
-  if(!mapPointers.has(e.pointerId)) return;
-  mapPointers.delete(e.pointerId);
-  if(mapPan && e.pointerId === mapPan.id){
-    if(mapPan.moved > 4) mapSuppressClick = true;
-    mapPan = null;
-  }
-  if(mapPointers.size < 2) mapPinch = null;
-  mapSvgEl.style.cursor = mapIsZoomed() ? 'grab' : '';
-}
-mapSvgEl.addEventListener('pointerup', mapEndPointer);
-mapSvgEl.addEventListener('pointercancel', mapEndPointer);
-/* a drag must not also fire the zone's onclick */
-mapSvgEl.addEventListener('click', e=>{
-  if(mapSuppressClick){ mapSuppressClick = false; e.stopPropagation(); e.preventDefault(); }
-}, true);
-
+document.getElementById('heatZoomIn').addEventListener('click', ()=> heatCam.zoom(1.6));
+document.getElementById('heatZoomOut').addEventListener('click', ()=> heatCam.zoom(1/1.6));
+document.getElementById('heatReset').addEventListener('click', ()=> heatCam.reset());
 function selectSurveyOption(el){
   el.parentElement.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
@@ -536,6 +592,7 @@ function renderHeatPoints(filter){
     halo.setAttribute('class','halo');
     halo.setAttribute('cx',p.x); halo.setAttribute('cy',p.y);
     halo.setAttribute('r',(p.r*2.2).toFixed(1));
+    halo.style.setProperty('--hr',(p.r*2.2).toFixed(1)+'px');
     halo.setAttribute('fill',grad);
     halo.setAttribute('opacity',opacity);
 
@@ -543,6 +600,7 @@ function renderHeatPoints(filter){
     core.setAttribute('class','core');
     core.setAttribute('cx',p.x); core.setAttribute('cy',p.y);
     core.setAttribute('r',(3+p.r*0.10).toFixed(1));
+    core.style.setProperty('--cr',(3+p.r*0.10).toFixed(1)+'px');
     core.setAttribute('fill',color);
     core.setAttribute('opacity',0.9);
 
@@ -558,14 +616,8 @@ function renderHeatPoints(filter){
     container.appendChild(g);
   });
 }
-/* viewBox -> canvas pixels, honouring preserveAspectRatio="xMidYMid meet" so the
-   popup lands on the right blob when the canvas is not exactly 800x560 */
-function heatPointToCanvas(x,y){
-  const r=document.getElementById('heatSvg').getBoundingClientRect();
-  if(!r.width||!r.height) return {x:0,y:0};
-  const s=Math.min(r.width/800,r.height/560);
-  return {x:(r.width-800*s)/2+x*s, y:(r.height-560*s)/2+y*s};
-}
+/* viewBox -> canvas pixels via the live camera, so the popup stays on the blob
+   it belongs to after any amount of zooming and panning */
 function showHeatPopup(p){
   const popup=document.getElementById('heatPopup');
   const typeLabels={positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
@@ -575,7 +627,7 @@ function showHeatPopup(p){
   popup.classList.add('show');
   const canvas=document.getElementById('heatCanvas');
   const cr=canvas.getBoundingClientRect();
-  const pt=heatPointToCanvas(p.x,p.y);
+  const pt=heatCam.viewToLocal(p.x,p.y);
   const pw=popup.offsetWidth, ph=popup.offsetHeight;
   let left=pt.x+18;
   if(left+pw>cr.width-8) left=pt.x-pw-18;
@@ -661,7 +713,9 @@ window.addEventListener('load',()=>{
   renderDashTable();
   updateCharts();
   renderHeatPoints('all');
-  mapSetView(mapView);
+  /* re-publish once layout has settled, so both scale bars are truthful */
+  mapCam.render(mapCam.view());
+  heatCam.render(heatCam.view());
   animateNumber(document.getElementById('stat1'),7);
   animateNumber(document.getElementById('stat2'),1284);
   animateNumber(document.getElementById('stat3'),6);
