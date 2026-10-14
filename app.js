@@ -1,16 +1,14 @@
 /* ========== App Logic (uses i18n.js for translations) ========== */
-
-/* Zone metadata keys (names resolved via i18n) */
-const zoneKeys = ['z1','z2','z3','z4','z5','z6','z7','z8'];
-
-/* Survey options data (keys reference i18n) */
+/* App Logic */
+const zoneKeys = ['z1','z2','z3','z4','z5','z6','z7'];
 const surveyZoneKeys = [
-  {key:'z1', icon:'\u{1F9AB}'}, // flamingo
-  {key:'z2', icon:'\u{1F333}'}, // tree
-  {key:'z3', icon:'\u{1F33F}'}, // herb
-  {key:'z4', icon:'\u{1F4A7}'}, // water drop
-  {key:'z5', icon:'\u{1F3DE}\uFE0F'}, // park
-  {key:'z6', icon:'\u{1F98C}'}, // deer
+  {key:'z1', icon:'\u{1F986}'},
+  {key:'z2', icon:'\u{1F41F}'},
+  {key:'z3', icon:'\u{1F33E}'},
+  {key:'z4', icon:'\u{1F98B}'},
+  {key:'z5', icon:'\u{1FAB7}'},
+  {key:'z6', icon:'\u{1FAB6}'},
+  {key:'z7', icon:'\u{1F333}'},
 ];
 const funcKeys = [
   {key:'func.sports', icon:'\u{1F3C3}'},
@@ -20,97 +18,111 @@ const funcKeys = [
   {key:'func.education', icon:'\u{1F393}'},
   {key:'func.birdwatch', icon:'\u{1F41F}'},
 ];
-
-/* Heatmap data (text references i18n zone names) */
 const heatPoints = [
-  {x:180,y:140,r:45,intensity:0.9,type:'positive',zoneKey:'z1',textKey:'heat.p1',tagKey:'func.eco'},
-  {x:370,y:130,r:35,intensity:0.7,type:'improve',zoneKey:'z2',textKey:'heat.p2',tagKey:'tag.shade'},
-  {x:535,y:200,r:40,intensity:0.8,type:'function',zoneKey:'z3',textKey:'heat.p3',tagKey:'func.cycling'},
-  {x:680,y:120,r:30,intensity:0.6,type:'concern',zoneKey:'z4',textKey:'heat.p4',tagKey:'func.eco'},
-  {x:310,y:340,r:38,intensity:0.75,type:'improve',zoneKey:'z5',textKey:'heat.p5',tagKey:'tag.walkable'},
-  {x:480,y:340,r:42,intensity:0.85,type:'concern',zoneKey:'z6',textKey:'heat.p6',tagKey:'func.eco'},
-  {x:155,y:350,r:28,intensity:0.5,type:'positive',zoneKey:'z7',textKey:'heat.p7',tagKey:'heat.ecoConn'},
-  {x:630,y:335,r:36,intensity:0.7,type:'function',zoneKey:'z8',textKey:'heat.p8',tagKey:'func.education'},
-  {x:200,y:100,r:20,intensity:0.4,type:'positive',zoneKey:'z1',textKey:'heat.p9',tagKey:'heat.birdwatch'},
-  {x:340,y:180,r:18,intensity:0.35,type:'improve',zoneKey:'z2',textKey:'heat.p10',tagKey:'tag.lighting'},
-  {x:500,y:230,r:22,intensity:0.45,type:'function',zoneKey:'z3',textKey:'heat.p11',tagKey:'tag.accessible'},
+  {x:104,y:243,r:45,intensity:0.9,type:'positive',zoneKey:'z1',textKey:'heat.p1',tagKey:'func.birdwatch'},
+  {x:280,y:116,r:38,intensity:0.7,type:'improve',zoneKey:'z2',textKey:'heat.p2',tagKey:'heat.wetlandManage'},
+  {x:332,y:136,r:34,intensity:0.8,type:'function',zoneKey:'z3',textKey:'heat.p3',tagKey:'func.education'},
+  {x:564,y:292,r:30,intensity:0.6,type:'concern',zoneKey:'z4',textKey:'heat.p4',tagKey:'func.eco'},
+  {x:535,y:268,r:42,intensity:0.85,type:'concern',zoneKey:'z5',textKey:'heat.p6',tagKey:'func.eco'},
+  {x:679,y:102,r:36,intensity:0.75,type:'improve',zoneKey:'z6',textKey:'heat.p5',tagKey:'heat.access'},
+  {x:754,y:185,r:36,intensity:0.7,type:'function',zoneKey:'z7',textKey:'heat.p8',tagKey:'func.education'},
+  {x:152,y:193,r:20,intensity:0.4,type:'positive',zoneKey:'z1',textKey:'heat.p9',tagKey:'func.birdwatch'},
+  {x:222,y:112,r:18,intensity:0.35,type:'improve',zoneKey:'z2',textKey:'heat.p10',tagKey:'heat.lighting'},
+  {x:382,y:180,r:22,intensity:0.45,type:'function',zoneKey:'z3',textKey:'heat.p11',tagKey:'heat.accessible'},
+  {x:708,y:141,r:28,intensity:0.5,type:'positive',zoneKey:'z7',textKey:'heat.p7',tagKey:'heat.ecoConn'},
 ];
-/* Heat text translations (inline for brevity) */
 const heatTexts = {
   'en':{
-    'heat.p1':'Hope to add birdwatching hides and guided tour services',
-    'heat.p2':'Insufficient shade facilities, too hot in summer',
-    'heat.p3':'Suggest adding greenway cycling routes and rest stops',
-    'heat.p4':'Concerned that development will affect ecological restoration',
-    'heat.p5':'Poor walkability, need more entrances',
-    'heat.p6':'Should restrict visitor access to protect ecology',
-    'heat.p7':'Eco-corridor design is great, support it',
-    'heat.p8':'Hope to add a children nature education center',
+    'heat.p1':'Hope Mai Po adds more birdwatching hides and guided tours',
+    'heat.p2':'Fishpond management should stay eco-friendly for wintering birds',
+    'heat.p3':'Suggest adding a farm market and nature education facilities at Long Valley',
+    'heat.p4':'Worried nearby development will damage the Fung Yuen butterfly habitat',
+    'heat.p5':'Poor walkability at Luk Keng, need more shuttle access',
+    'heat.p6':'Sha Lo Tung should limit visitor access to protect the dragonfly habitat',
+    'heat.p7':'Country trails are well maintained, support it',
+    'heat.p8':'Hope Wu Kau Tang adds a children\'s nature education centre',
     'heat.p9':'Great birdwatching experience',
     'heat.p10':'Insufficient night lighting',
     'heat.p11':'Hope to add accessible ramps',
-    'heat.ecoConn':'Ecological Connection','heat.birdwatch':'Birdwatching',
+    'heat.wetlandManage':'Fishpond Management',
+    'heat.access':'Accessibility',
+    'heat.restricted':'Restricted Access',
+    'heat.lighting':'Night Lighting',
+    'heat.accessible':'Accessible Design',
+    'heat.ecoConn':'Ecological Connection',
+    'heat.birdwatch':'Birdwatching'
   },
   'zh-CN':{
-    'heat.p1':'希望增加观鸟隐蔽设施和导赏服务',
-    'heat.p2':'遮阴设施不足，夏季太热无法使用',
-    'heat.p3':'建议增加绿道骑行路线和休息站',
-    'heat.p4':'担心开发影响生态修复进度',
-    'heat.p5':'步行可达性差，需要更多入口',
-    'heat.p6':'应限制游客进入，保护生态',
-    'heat.p7':'生态走廊设计很好，支持',
-    'heat.p8':'希望增设儿童自然教育中心',
+    'heat.p1':'希望拉姆萨尔湿地增加观鸟屋和导赏团服务',
+    'heat.p2':'鱼塘管理应维持生态友善，保障越冬水鸟',
+    'heat.p3':'建议塱原增设农墟及自然教育设施',
+    'heat.p4':'担心周边发展影响凤园蝴蝶栖息地',
+    'heat.p5':'鹿颈步行可达性差，需要更多接驳',
+    'heat.p6':'沙罗洞应限制游客进入，保护蜻蜓栖息地',
+    'heat.p7':'郊野步道维护良好，支持',
+    'heat.p8':'希望乌蛟腾增设儿童自然教育中心',
     'heat.p9':'观鸟体验很好',
     'heat.p10':'夜间照明不足',
     'heat.p11':'希望增加无障碍通道',
-    'heat.ecoConn':'生态连接','heat.birdwatch':'观鸟',
+    'heat.wetlandManage':'鱼塘管理',
+    'heat.access':'交通接驳',
+    'heat.restricted':'限制进入',
+    'heat.lighting':'夜间照明',
+    'heat.accessible':'无障碍设计',
+    'heat.ecoConn':'生态连接',
+    'heat.birdwatch':'观鸟'
   },
   'zh-TW':{
-    'heat.p1':'希望增加觀鳥隱蔽設施和導賞服務',
-    'heat.p2':'遮陰設施不足，夏季太熱無法使用',
-    'heat.p3':'建議增加綠道騎行路線和休息站',
-    'heat.p4':'擔心開發影響生態修復進度',
-    'heat.p5':'步行可達性差，需要更多入口',
-    'heat.p6':'應限制遊客進入，保護生態',
-    'heat.p7':'生態走廊設計很好，支持',
-    'heat.p8':'希望增設兒童自然教育中心',
+    'heat.p1':'希望拉姆薩爾濕地增加觀鳥屋和導賞團服務',
+    'heat.p2':'魚塘管理應維持生態友善，保障越冬水鳥',
+    'heat.p3':'建議塱原增設農墟及自然教育設施',
+    'heat.p4':'擔心周邊發展影響鳳園蝴蝶棲息地',
+    'heat.p5':'鹿頸步行可達性差，需要更多接駁',
+    'heat.p6':'沙羅洞應限制遊客進入，保護蜻蜓棲息地',
+    'heat.p7':'郊野步道維護良好，支持',
+    'heat.p8':'希望烏蛟騰增設兒童自然教育中心',
     'heat.p9':'觀鳥體驗很好',
     'heat.p10':'夜間照明不足',
     'heat.p11':'希望增加無障礙通道',
-    'heat.ecoConn':'生態連接','heat.birdwatch':'觀鳥',
-  },
+    'heat.wetlandManage':'魚塘管理',
+    'heat.access':'交通接駁',
+    'heat.restricted':'限制進入',
+    'heat.lighting':'夜間照明',
+    'heat.accessible':'無障礙設計',
+    'heat.ecoConn':'生態連接',
+    'heat.birdwatch':'觀鳥'
+  }
 };
 function heatT(key){
   const lang = window.currentLang || 'zh-CN';
-  return (heatTexts[lang] && heatTexts[lang][key]) || heatTexts['zh-CN'][key] || key;
+  if(heatTexts[lang] && heatTexts[lang][key] !== undefined) return heatTexts[lang][key];
+  if(heatTexts['zh-CN'][key] !== undefined) return heatTexts['zh-CN'][key];
+  return t(key);
 }
-
-/* Zone coords for new heat points */
 const zoneCoords = {
-  'z1':{x:180,y:140},'z2':{x:370,y:130},'z3':{x:535,y:200},'z4':{x:680,y:120},
-  'z5':{x:310,y:340},'z6':{x:480,y:340},'z7':{x:155,y:350},'z8':{x:630,y:335},
+  'z1':{x:122,y:219},
+  'z2':{x:254,y:136},
+  'z3':{x:356,y:154},
+  'z4':{x:544,y:274},
+  'z5':{x:555,y:248},
+  'z6':{x:655,y:118},
+  'z7':{x:736,y:163}
 };
-
-/* Dashboard table data */
 const tableData = [
-  {zoneKey:'z1',typeKey:'type.wetland',opinions:186,avg:4.2,topicKey:'heat.birdwatch',priority:'low'},
-  {zoneKey:'z2',typeKey:'type.park',opinions:234,avg:3.1,topicKey:'tag.shade',priority:'high'},
-  {zoneKey:'z3',typeKey:'type.corridor',opinions:156,avg:3.8,topicKey:'func.cycling',priority:'mid'},
-  {zoneKey:'z4',typeKey:'type.wetland',opinions:98,avg:3.5,topicKey:'heat.ecoConn',priority:'mid'},
-  {zoneKey:'z5',typeKey:'type.park',opinions:201,avg:3.2,topicKey:'tag.walkable',priority:'high'},
-  {zoneKey:'z6',typeKey:'type.reserve',opinions:145,avg:4.5,topicKey:'func.eco',priority:'low'},
-  {zoneKey:'z7',typeKey:'type.corridor',opinions:87,avg:4.0,topicKey:'heat.ecoConn',priority:'low'},
-  {zoneKey:'z8',typeKey:'type.park',opinions:177,avg:3.6,topicKey:'func.education',priority:'mid'},
+  {zoneKey:'z1',typeKey:'type.wetland',opinions:186,avg:4.2,topicKey:'func.birdwatch',priority:'low'},
+  {zoneKey:'z2',typeKey:'type.wetland',opinions:234,avg:3.1,topicKey:'heat.wetlandManage',priority:'high'},
+  {zoneKey:'z3',typeKey:'type.park',opinions:156,avg:3.8,topicKey:'func.education',priority:'mid'},
+  {zoneKey:'z4',typeKey:'type.reserve',opinions:98,avg:3.5,topicKey:'func.eco',priority:'mid'},
+  {zoneKey:'z5',typeKey:'type.reserve',opinions:201,avg:3.2,topicKey:'heat.restricted',priority:'high'},
+  {zoneKey:'z6',typeKey:'type.wetland',opinions:145,avg:4.5,topicKey:'heat.access',priority:'low'},
+  {zoneKey:'z7',typeKey:'type.park',opinions:177,avg:3.6,topicKey:'func.education',priority:'mid'},
 ];
-
-/* State */
 const surveyData = {zoneKey:null,rating:0,functions:[],suggestion:''};
 let currentStep = 0;
 let surveyCount = 1284;
 let mapScale = 1;
 let surveyChartInst=null, dashBarInst=null, dashPieInst=null;
 
-/* ========== Navigation ========== */
 function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
 window.addEventListener('scroll',()=>{
@@ -137,7 +149,6 @@ document.getElementById('hamburger').addEventListener('click',()=>{
   else{links.style.display='flex';links.style.position='absolute';links.style.top='64px';links.style.left='0';links.style.right='0';links.style.flexDirection='column';links.style.background='rgba(27,94,58,0.98)';links.style.padding='16px';}
 });
 
-/* ========== Render Survey Options ========== */
 function renderSurveyOptions(){
   const zc = document.getElementById('zoneOptions');
   if(!zc) return;
@@ -145,20 +156,17 @@ function renderSurveyOptions(){
     '<div class="option-item" data-value="'+z.key+'" onclick="selectSurveyOption(this)">'+
     '<div class="radio"></div><span class="label">'+z.icon+' '+t('zone.'+z.key+'.name')+'</span></div>'
   ).join('');
-  // Restore selected state
   if(surveyData.zoneKey){
     zc.querySelectorAll('.option-item').forEach(o=>{
       if(o.dataset.value===surveyData.zoneKey) o.classList.add('selected');
     });
   }
-
   const fc = document.getElementById('funcOptions');
   if(!fc) return;
   fc.innerHTML = funcKeys.map(f=>
     '<div class="option-item" onclick="toggleMulti(this)" data-fkey="'+f.key+'">'+
     '<div class="radio" style="border-radius:4px;"></div><span class="label">'+f.icon+' '+t(f.key)+'</span></div>'
   ).join('');
-  // Restore selected state
   if(surveyData.functions.length){
     fc.querySelectorAll('.option-item').forEach(o=>{
       if(surveyData.functions.includes(o.dataset.fkey)) o.classList.add('selected');
@@ -166,7 +174,6 @@ function renderSurveyOptions(){
   }
 }
 
-/* ========== Render Roadmap ========== */
 function renderRoadmap(){
   const tl = document.getElementById('timeline');
   if(!tl) return;
@@ -182,7 +189,6 @@ function renderRoadmap(){
   ).join('');
 }
 
-/* ========== Render Dashboard Table ========== */
 function renderDashTable(){
   const tb = document.getElementById('dashTableBody');
   if(!tb) return;
@@ -198,11 +204,11 @@ function renderDashTable(){
   }).join('');
 }
 
-/* ========== Map: Zone Selection ========== */
 window.selectedZoneId = null;
 function selectZone(id){
   const zk = id;
   window.selectedZoneId = zk;
+  document.querySelectorAll('.zone').forEach(z=>z.classList.toggle('selected', z.dataset.id===zk));
   document.getElementById('zoneEmpty').style.display='none';
   const detail = document.getElementById('zoneDetail');
   detail.style.display='block';
@@ -230,11 +236,10 @@ function selectZone(id){
     '<button class="btn-survey btn-next" style="width:100%;margin-top:8px;padding:12px;" onclick="scrollToSection(\'survey-section\')">'+t('map.submitOpinion')+'</button>';
 }
 function getZoneType(zk){
-  const map = {z1:'wetland',z2:'park',z3:'corridor',z4:'wetland',z5:'park',z6:'reserve',z7:'corridor',z8:'park'};
+  const map = {z1:'wetland',z2:'wetland',z3:'park',z4:'reserve',z5:'reserve',z6:'wetland',z7:'park'};
   return map[zk]||'park';
 }
 
-/* ========== Map Filters ========== */
 document.querySelectorAll('.filter-chip[data-filter]').forEach(chip=>{
   chip.addEventListener('click',()=>{
     document.querySelectorAll('.filter-chip[data-filter]').forEach(c=>c.classList.remove('active'));
@@ -247,7 +252,6 @@ document.querySelectorAll('.filter-chip[data-filter]').forEach(chip=>{
   });
 });
 
-/* ========== Map Zoom ========== */
 document.getElementById('zoomIn').addEventListener('click',()=>{
   mapScale=Math.min(mapScale*1.2,2);
   document.getElementById('mapSvg').style.transform='scale('+mapScale+')';
@@ -264,7 +268,6 @@ document.getElementById('resetMap').addEventListener('click',()=>{
   document.querySelectorAll('.zone').forEach(z=>{z.style.opacity='0.7';z.style.pointerEvents='auto';});
 });
 
-/* ========== Survey Logic ========== */
 function selectSurveyOption(el){
   el.parentElement.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
@@ -317,7 +320,6 @@ function submitSurvey(){
   surveyCount++;
   document.getElementById('totalSurveys').textContent=surveyCount.toLocaleString();
   document.getElementById('todaySurveys').textContent=parseInt(document.getElementById('todaySurveys').textContent)+1;
-  // Feedback
   const zoneName = surveyData.zoneKey ? t('zone.'+surveyData.zoneKey+'.name') : t('survey.fb.unknownZone');
   const kw = surveyData.functions.length ? surveyData.functions.map(f=>t(f)).join(', ') : t('survey.fb.general');
   const fb=document.getElementById('surveyFeedback');
@@ -342,7 +344,6 @@ function submitSurvey(){
   },2000);
 }
 
-/* ========== Toast ========== */
 function showToast(msg){
   const tEl=document.getElementById('toast');
   tEl.textContent=msg;
@@ -350,7 +351,6 @@ function showToast(msg){
   setTimeout(()=>tEl.classList.remove('show'),3000);
 }
 
-/* ========== Heatmap ========== */
 function renderHeatPoints(filter){
   filter = filter || 'all';
   window.currentHeatFilter = filter;
@@ -384,7 +384,7 @@ function showHeatPopup(p){
     '<div class="tag">'+typeLabels[p.type]+' \u00b7 '+heatT(p.tagKey)+'</div>'+
     '<div class="text">"'+heatT(p.textKey)+'"</div>';
   const rect=document.getElementById('heatCanvas').getBoundingClientRect();
-  const scaleX=rect.width/800, scaleY=rect.height/480;
+  const scaleX=rect.width/800, scaleY=rect.height/560;
   popup.style.left=(p.x*scaleX+15)+'px';
   popup.style.top=(p.y*scaleY-30)+'px';
   popup.classList.add('show');
@@ -409,7 +409,6 @@ function addHeatPoint(data){
     zoneKey:data.zoneKey||'z1',
     textKey:'heat.custom', tagKey:data.functions[0]||'heat.generalOpinion',
   });
-  // Add custom text
   const lang=window.currentLang||'zh-CN';
   if(!heatTexts[lang]['heat.custom']){
     heatTexts['en']['heat.custom']=data.suggestion||'User opinion';
@@ -421,30 +420,23 @@ function addHeatPoint(data){
   renderHeatPoints();
 }
 
-/* ========== Charts ========== */
 function updateCharts(){
-  // Destroy existing charts
   if(surveyChartInst) surveyChartInst.destroy();
   if(dashBarInst) dashBarInst.destroy();
   if(dashPieInst) dashPieInst.destroy();
-
-  // Survey doughnut chart
   const sCtx=document.getElementById('surveyChart').getContext('2d');
   surveyChartInst=new Chart(sCtx,{
     type:'doughnut',
     data:{labels:t('chart.labels.func'),datasets:[{data:[28,22,18,15,10,7],backgroundColor:['#4DB6AC','#66BB6A','#FFB74D','#BA68C8','#42A5F5','#26C6DA'],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:'#333'}},title:{display:true,text:t('chart.funcDist'),font:{size:13}}}}
   });
-
-  // Dashboard bar chart
   const bCtx=document.getElementById('dashBarChart').getContext('2d');
+  const bRows=tableData.map(r=>({n:t('zone.'+r.zoneKey+'.short'),v:r.avg,p:r.priority}));
   dashBarInst=new Chart(bCtx,{
     type:'bar',
-    data:{labels:t('chart.labels.zones'),datasets:[{label:t('chart.satisfaction'),data:[4.2,3.1,3.8,3.5,3.2,4.5,4.0,3.6],backgroundColor:['#4CAF6F','#FF9800','#4CAF6F','#FF9800','#FF9800','#4CAF6F','#4CAF6F','#FF9800'],borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{color:'rgba(255,255,255,0.5)'},grid:{color:'rgba(255,255,255,0.08)'}},x:{ticks:{color:'rgba(255,255,255,0.5)',font:{size:10}},grid:{display:false}}}}
+    data:{labels:bRows.map(r=>r.n),datasets:[{label:t('chart.satisfaction'),data:bRows.map(r=>r.v),backgroundColor:bRows.map(r=>r.p==='high'?'#FF9800':'#4CAF6F'),borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{color:'rgba(255,255,255,0.5)'},grid:{color:'rgba(255,255,255,0.08)'}},x:{ticks:{color:'rgba(255,255,255,0.5)',font:{size:10},maxRotation:45,minRotation:45,autoSkip:false},grid:{display:false}}}}
   });
-
-  // Dashboard pie chart
   const pCtx=document.getElementById('dashPieChart').getContext('2d');
   dashPieInst=new Chart(pCtx,{
     type:'pie',
@@ -453,7 +445,6 @@ function updateCharts(){
   });
 }
 
-/* ========== Animate Hero Stats ========== */
 function animateNumber(el,target,duration){
   duration=duration||1500;
   const startTime=performance.now();
@@ -468,7 +459,6 @@ function animateNumber(el,target,duration){
   requestAnimationFrame(update);
 }
 
-/* ========== Init ========== */
 window.addEventListener('load',()=>{
   initLang();
   renderSurveyOptions();
