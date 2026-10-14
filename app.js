@@ -120,7 +120,6 @@ const tableData = [
 const surveyData = {zoneKey:null,rating:0,functions:[],suggestion:''};
 let currentStep = 0;
 let surveyCount = 1284;
-let mapScale = 1;
 let surveyChartInst=null, dashBarInst=null, dashPieInst=null;
 
 function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
@@ -252,21 +251,173 @@ document.querySelectorAll('.filter-chip[data-filter]').forEach(chip=>{
   });
 });
 
-document.getElementById('zoomIn').addEventListener('click',()=>{
-  mapScale=Math.min(mapScale*1.2,2);
-  document.getElementById('mapSvg').style.transform='scale('+mapScale+')';
-});
-document.getElementById('zoomOut').addEventListener('click',()=>{
-  mapScale=Math.max(mapScale/1.2,0.5);
-  document.getElementById('mapSvg').style.transform='scale('+mapScale+')';
-});
-document.getElementById('resetMap').addEventListener('click',()=>{
-  mapScale=1;
-  document.getElementById('mapSvg').style.transform='scale(1)';
+/* ---------------- map view: viewBox zoom + drag pan ----------------
+   Zooming the SVG with a CSS transform only ever cropped the centre of the
+   canvas and left no way to reach the edges. We drive the viewBox instead,
+   which keeps the projection exact and lets us pan.
+   The viewBox is always kept at the 800:560 source ratio so the map never
+   stretches, and it is clamped to the full extent so you can't pan off-map. */
+const MAP_FULL = {x:0, y:0, w:800, h:560};
+const MAP_MIN_W = MAP_FULL.w / 8;          // deepest zoom-in = 8x
+const MAP_KM_PER_UNIT = 0.03664;           // 0.285 deg lon at 22.5N / 800 units
+let mapView = {x:0, y:0, w:800, h:560};
+let mapTarget = {x:0, y:0, w:800, h:560};  // where an in-flight animation is heading
+let mapAnim = null, mapPan = null, mapPinch = null, mapSuppressClick = false;
+
+const mapSvgEl = document.getElementById('mapSvg');
+const mapPointers = new Map();
+
+function mapClampView(v){
+  v.w = Math.min(Math.max(v.w, MAP_MIN_W), MAP_FULL.w);
+  v.h = v.w * (MAP_FULL.h / MAP_FULL.w);
+  v.x = Math.min(Math.max(v.x, MAP_FULL.x), MAP_FULL.x + MAP_FULL.w - v.w);
+  v.y = Math.min(Math.max(v.y, MAP_FULL.y), MAP_FULL.y + MAP_FULL.h - v.h);
+  return v;
+}
+function mapIsZoomed(){ return mapTarget.w < MAP_FULL.w - 0.5; }
+function mapRender(v){
+  mapView = mapClampView(v);
+  mapSvgEl.setAttribute('viewBox',
+    mapView.x.toFixed(2)+' '+mapView.y.toFixed(2)+' '+mapView.w.toFixed(2)+' '+mapView.h.toFixed(2));
+  mapSvgEl.style.cursor = mapIsZoomed() ? 'grab' : '';
+  updateScalebar();
+}
+function mapSetView(v){ mapRender(v); mapTarget = {x:mapView.x, y:mapView.y, w:mapView.w, h:mapView.h}; }
+function mapAnimateTo(target){
+  if(mapAnim) cancelAnimationFrame(mapAnim);
+  const from = {x:mapView.x, y:mapView.y, w:mapView.w, h:mapView.h};
+  const to = mapClampView({x:target.x, y:target.y, w:target.w, h:target.h});
+  mapTarget = {x:to.x, y:to.y, w:to.w, h:to.h};
+  const t0 = performance.now(), dur = 260;
+  function step(now){
+    const p = Math.min((now - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    mapRender({x:from.x+(to.x-from.x)*e, y:from.y+(to.y-from.y)*e,
+               w:from.w+(to.w-from.w)*e, h:from.h+(to.h-from.h)*e});
+    mapAnim = p < 1 ? requestAnimationFrame(step) : null;
+  }
+  mapAnim = requestAnimationFrame(step);
+}
+/* zoom by `factor`, keeping the viewBox point (cx,cy) pinned under the cursor.
+   Always computed from mapTarget, so rapid clicks compound predictably instead
+   of reading a half-finished animation. */
+function mapZoom(factor, cx, cy, animate){
+  const base = mapTarget;
+  if(cx === undefined){ cx = base.x + base.w/2; cy = base.y + base.h/2; }
+  const w = Math.min(Math.max(base.w / factor, MAP_MIN_W), MAP_FULL.w);
+  const k = w / base.w;
+  const target = {x:cx-(cx-base.x)*k, y:cy-(cy-base.y)*k, w:w, h:base.h*k};
+  if(animate === false) mapSetView(target); else mapAnimateTo(target);
+}
+/* CSS px per viewBox unit, honouring preserveAspectRatio="xMidYMid meet" */
+function mapPxPerUnit(){
+  const r = mapSvgEl.getBoundingClientRect();
+  if(!r.width || !r.height) return 1;
+  return Math.min(r.width / mapView.w, r.height / mapView.h);
+}
+function mapClientToView(clientX, clientY){
+  const r = mapSvgEl.getBoundingClientRect();
+  const s = mapPxPerUnit();
+  const offX = r.left + (r.width - mapView.w*s)/2;
+  const offY = r.top + (r.height - mapView.h*s)/2;
+  return {x: mapView.x + (clientX-offX)/s, y: mapView.y + (clientY-offY)/s};
+}
+
+/* ---- scale bar: recomputed from the live viewBox, so it stays truthful ---- */
+function updateScalebar(){
+  const track = document.getElementById('scalebarTrack');
+  const labels = document.getElementById('scalebarLabels');
+  if(!track || !labels) return;
+  const kmPerPx = MAP_KM_PER_UNIT / mapPxPerUnit();
+  const steps = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
+  let d = steps[0];
+  for(const v of steps){ if(v / kmPerPx <= 150) d = v; else break; }
+  const px = Math.max(40, Math.round(d / kmPerPx));
+  track.style.width = px + 'px';
+  labels.style.width = px + 'px';
+  const fmt = x => (x >= 1 ? String(Number(x.toFixed(2))) : x.toFixed(1));
+  labels.innerHTML = '<span>0</span><span>'+fmt(d/2)+'</span><span>'+fmt(d)+' km</span>';
+}
+window.addEventListener('resize', updateScalebar);
+
+/* ---- controls ---- */
+document.getElementById('zoomIn').addEventListener('click', ()=> mapZoom(1.6));
+document.getElementById('zoomOut').addEventListener('click', ()=> mapZoom(1/1.6));
+document.getElementById('resetMap').addEventListener('click', ()=>{
+  mapAnimateTo({x:MAP_FULL.x, y:MAP_FULL.y, w:MAP_FULL.w, h:MAP_FULL.h});
   document.querySelectorAll('.filter-chip[data-filter]').forEach(c=>c.classList.remove('active'));
   document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
   document.querySelectorAll('.zone').forEach(z=>{z.style.opacity='0.7';z.style.pointerEvents='auto';});
 });
+
+mapSvgEl.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const p = mapClientToView(e.clientX, e.clientY);
+  mapZoom(e.deltaY < 0 ? 1.25 : 1/1.25, p.x, p.y, false);
+}, {passive:false});
+
+mapSvgEl.addEventListener('dblclick', e=>{
+  const p = mapClientToView(e.clientX, e.clientY);
+  mapZoom(2, p.x, p.y);
+});
+
+/* drag to pan, and two-finger pinch to zoom (pointer events cover both) */
+mapSvgEl.addEventListener('pointerdown', e=>{
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  mapPointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  mapSuppressClick = false;
+  if(mapPointers.size === 1){
+    mapPan = {id:e.pointerId, x:e.clientX, y:e.clientY, moved:0,
+              view:{x:mapTarget.x, y:mapTarget.y, w:mapTarget.w, h:mapTarget.h}};
+    if(mapIsZoomed()) mapSvgEl.style.cursor = 'grabbing';
+  } else if(mapPointers.size === 2){
+    mapPan = null;
+    const [a, b] = [...mapPointers.values()];
+    mapPinch = {dist:Math.hypot(a.x-b.x, a.y-b.y),
+                mid:mapClientToView((a.x+b.x)/2, (a.y+b.y)/2),
+                view:{x:mapTarget.x, y:mapTarget.y, w:mapTarget.w, h:mapTarget.h}};
+  }
+  if(mapIsZoomed()) mapSvgEl.setPointerCapture(e.pointerId);
+});
+mapSvgEl.addEventListener('pointermove', e=>{
+  if(!mapPointers.has(e.pointerId)) return;
+  mapPointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+  if(mapPointers.size >= 2 && mapPinch){
+    const [a, b] = [...mapPointers.values()];
+    const dist = Math.hypot(a.x-b.x, a.y-b.y);
+    if(mapPinch.dist > 0 && dist > 0){
+      const w = Math.min(Math.max(mapPinch.view.w * (mapPinch.dist/dist), MAP_MIN_W), MAP_FULL.w);
+      const k = w / mapPinch.view.w;
+      mapSetView({x:mapPinch.mid.x-(mapPinch.mid.x-mapPinch.view.x)*k,
+                  y:mapPinch.mid.y-(mapPinch.mid.y-mapPinch.view.y)*k,
+                  w:w, h:mapPinch.view.h*k});
+    }
+    return;
+  }
+  if(!mapPan || e.pointerId !== mapPan.id) return;
+  const s = mapPxPerUnit();
+  mapPan.moved = Math.max(mapPan.moved, Math.hypot(e.clientX-mapPan.x, e.clientY-mapPan.y));
+  mapSetView({x:mapPan.view.x - (e.clientX-mapPan.x)/s,
+              y:mapPan.view.y - (e.clientY-mapPan.y)/s,
+              w:mapPan.view.w, h:mapPan.view.h});
+});
+function mapEndPointer(e){
+  if(!mapPointers.has(e.pointerId)) return;
+  mapPointers.delete(e.pointerId);
+  if(mapPan && e.pointerId === mapPan.id){
+    if(mapPan.moved > 4) mapSuppressClick = true;
+    mapPan = null;
+  }
+  if(mapPointers.size < 2) mapPinch = null;
+  mapSvgEl.style.cursor = mapIsZoomed() ? 'grab' : '';
+}
+mapSvgEl.addEventListener('pointerup', mapEndPointer);
+mapSvgEl.addEventListener('pointercancel', mapEndPointer);
+/* a drag must not also fire the zone's onclick */
+mapSvgEl.addEventListener('click', e=>{
+  if(mapSuppressClick){ mapSuppressClick = false; e.stopPropagation(); e.preventDefault(); }
+}, true);
 
 function selectSurveyOption(el){
   el.parentElement.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
@@ -466,8 +617,9 @@ window.addEventListener('load',()=>{
   renderDashTable();
   updateCharts();
   renderHeatPoints('all');
-  animateNumber(document.getElementById('stat1'),15);
+  mapSetView(mapView);
+  animateNumber(document.getElementById('stat1'),7);
   animateNumber(document.getElementById('stat2'),1284);
-  animateNumber(document.getElementById('stat3'),8);
-  animateNumber(document.getElementById('stat4'),3);
+  animateNumber(document.getElementById('stat3'),6);
+  animateNumber(document.getElementById('stat4'),6);
 });
