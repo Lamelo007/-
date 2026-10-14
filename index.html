@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenSpace NM | Northern Metropolis Green Space Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--green-primary:#2D7A4E;--green-light:#4CAF6F;--green-dark:#1B5E3A;--green-bg:#E8F5E9;--teal-primary:#00897B;--teal-light:#4DB6AC;--teal-bg:#E0F2F1;--orange-primary:#F57C00;--orange-light:#FFB74D;--orange-bg:#FFF3E0;--purple-primary:#6A1B9A;--purple-light:#9C27B0;--purple-bg:#F3E5F5;--blue-primary:#1565C0;--blue-light:#42A5F5;--blue-bg:#E3F2FD;--dark:#1a1a2e;--gray-bg:#f5f5f5;--white:#fff;--shadow:0 4px 20px rgba(0,0,0,0.1);--shadow-hover:0 8px 40px rgba(0,0,0,0.18);--radius:16px}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','PingFang SC','PingFang TC','Microsoft YaHei',sans-serif;background:var(--white);color:var(--dark);line-height:1.6}
+a{text-decoration:none;color:inherit}ul{list-style:none}
+.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:rgba(27,94,58,0.95);backdrop-filter:blur(10px);box-shadow:0 2px 12px rgba(0,0,0,0.15);transition:background 0.3s}
+.topnav.scrolled{background:rgba(27,94,58,0.98)}
+.nav-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:18px}
+.nav-brand .logo-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4CAF6F,#81C784);display:flex;align-items:center;justify-content:center;font-size:20px}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{color:rgba(255,255,255,0.85);padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;transition:all 0.2s;cursor:pointer}
+.nav-links a:hover{background:rgba(255,255,255,0.15);color:#fff}
+.nav-links a.active{background:rgba(255,255,255,0.2);color:#fff}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-cta{background:#FFD54F;color:#1B5E3A;padding:8px 18px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;border:none;transition:all 0.2s}
+.nav-cta:hover{background:#FFC107;transform:translateY(-1px)}
+.lang-switch{display:flex;gap:2px;background:rgba(255,255,255,0.1);border-radius:8px;padding:3px}
+.lang-btn{padding:5px 10px;border-radius:6px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.6);font-size:12px;font-weight:600;transition:all 0.2s}
+.lang-btn:hover{color:#fff}
+.lang-btn.active{background:#FFD54F;color:#1B5E3A}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+.section{min-height:100vh;padding:80px 0 60px;position:relative;overflow:hidden}
+.section-header{text-align:center;margin-bottom:48px;padding:0 20px}
+.section-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:12px;letter-spacing:0.5px}
+.section-title{font-size:36px;font-weight:800;margin-bottom:12px}
+.section-subtitle{font-size:16px;color:#666;max-width:700px;margin:0 auto}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+#hero{background:linear-gradient(160deg,#0d4f2c 0%,#1B5E3A 40%,#2D7A4E 100%);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(76,175,111,0.3) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(129,199,132,0.2) 0%,transparent 50%)}
+.hero-content{position:relative;z-index:2;max-width:800px;padding:0 20px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);padding:6px 20px;border-radius:30px;font-size:14px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.3)}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:#4CAF6F;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero-title{font-size:52px;font-weight:900;line-height:1.2;margin-bottom:16px}
+.hero-title .accent{color:#FFD54F}
+.hero-desc{font-size:18px;color:rgba(255,255,255,0.85);margin-bottom:40px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:#FFD54F;color:#1B5E3A;padding:14px 36px;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer;border:none;transition:all 0.25s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,213,79,0.4)}
+.btn-outline{background:transparent;color:#fff;padding:14px 36px;border-radius:12px;font-weight:600;font-size:16px;cursor:pointer;border:2px solid rgba(255,255,255,0.4);transition:all 0.25s}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.1)}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-top:60px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:40px;font-weight:900;color:#FFD54F}
+.hero-stat .label{font-size:14px;color:rgba(255,255,255,0.7);margin-top:4px}
+#problem{background:var(--gray-bg)}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.problem-card{background:#fff;border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);transition:all 0.3s;border-top:4px solid transparent}
+.problem-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover)}
+.problem-card:nth-child(1){border-top-color:#e53935}.problem-card:nth-child(2){border-top-color:#FB8C00}.problem-card:nth-child(3){border-top-color:#43A047}.problem-card:nth-child(4){border-top-color:#1E88E5}
+.problem-card .icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px}
+.problem-card:nth-child(1) .icon{background:#FFEBEE;color:#e53935}.problem-card:nth-child(2) .icon{background:#FFF3E0;color:#FB8C00}.problem-card:nth-child(3) .icon{background:#E8F5E9;color:#43A047}.problem-card:nth-child(4) .icon{background:#E3F2FD;color:#1E88E5}
+.problem-card h3{font-size:20px;font-weight:700;margin-bottom:8px}.problem-card p{font-size:14px;color:#555;line-height:1.7}
+.before-after{display:flex;gap:20px;margin-top:48px;flex-wrap:wrap;justify-content:center}
+.ba-card{flex:1;min-width:300px;max-width:480px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.ba-card .header{padding:20px 24px;font-weight:700;font-size:18px;color:#fff}
+.ba-card .before-header{background:linear-gradient(135deg,#e53935,#ef5350)}.ba-card .after-header{background:linear-gradient(135deg,#43A047,#66BB6A)}
+.ba-card .body{padding:24px;background:#fff;font-size:14px;color:#444;line-height:1.8}
+.ba-card .body ul li{padding:6px 0;border-bottom:1px solid #eee;display:flex;align-items:start;gap:8px}.ba-card .body ul li:last-child{border-bottom:none}
+.ba-card .body ul li .check{color:#43A047;font-weight:700}.ba-card .body ul li .cross{color:#e53935;font-weight:700}
+#map-section{background:linear-gradient(180deg,#E8F5E9 0%,#fff 100%)}
+.map-wrapper{display:grid;grid-template-columns:1fr 340px;gap:24px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.map-canvas{position:relative;height:560px;background:linear-gradient(135deg,#f0f4e8 0%,#e8f0d8 100%);overflow:hidden}
+.map-svg{width:100%;height:100%}.zone{cursor:pointer;transition:all 0.3s;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1))}.zone:hover{filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2)) brightness(1.05)}
+.zone-label{font-size:11px;fill:#333;font-weight:600;pointer-events:none;text-shadow:0 0 4px rgba(255,255,255,0.8)}
+.map-legend{position:absolute;bottom:16px;left:16px;background:rgba(255,255,255,0.95);border-radius:12px;padding:12px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.1);font-size:12px}
+.legend-item{display:flex;align-items:center;gap:8px;margin:4px 0}.legend-color{width:14px;height:14px;border-radius:4px}
+.map-tools{position:absolute;top:16px;right:16px;display:flex;flex-direction:column;gap:8px}
+.map-tool-btn{width:40px;height:40px;border-radius:10px;border:none;cursor:pointer;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.2s}
+.map-tool-btn:hover{background:var(--green-bg)}.map-tool-btn.active{background:var(--green-primary);color:#fff}
+.map-filters{position:absolute;top:16px;left:16px;display:flex;gap:8px;flex-wrap:wrap}
+.filter-chip{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;background:rgba(255,255,255,0.95);border:2px solid transparent;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:all 0.2s;font-weight:600}
+.filter-chip:hover{border-color:var(--green-light)}.filter-chip.active{background:var(--green-primary);color:#fff;border-color:var(--green-primary)}
+.zone-panel{background:linear-gradient(180deg,#f8f9fa 0%,#fff 100%);padding:24px;overflow-y:auto;max-height:560px}
+.zone-panel .panel-title{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--green-dark)}
+.zone-info-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid var(--green-light)}
+.zone-info-card h4{font-size:16px;font-weight:700;margin-bottom:8px}.zone-info-card .meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.zone-tag{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.tag-park{background:#E8F5E9;color:#2E7D32}.tag-wetland{background:#E0F7FA;color:#00695C}.tag-corridor{background:#F3E5F5;color:#6A1B9A}.tag-reserve{background:#FFF3E0;color:#E65100}
+.zone-info-card p{font-size:13px;color:#555;line-height:1.6}
+.zone-stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px}.zone-stat:last-child{border-bottom:none}.zone-stat .val{font-weight:700;color:var(--green-dark)}
+.empty-hint{text-align:center;padding:40px 20px;color:#999;font-size:14px}
+#survey-section{background:linear-gradient(160deg,#E0F2F1 0%,#fff 100%)}
+.survey-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.survey-form-card{background:#fff;border-radius:var(--radius);padding:36px;box-shadow:var(--shadow)}
+.survey-progress-bar{height:6px;background:#E0F2F1;border-radius:10px;margin-bottom:28px;overflow:hidden}
+.survey-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-primary),var(--teal-light));border-radius:10px;transition:width 0.4s ease}
+.survey-step-indicator{display:flex;justify-content:space-between;margin-bottom:24px}
+.step-dot{flex:1;text-align:center;font-size:12px;color:#999;font-weight:600;position:relative;padding-bottom:24px}
+.step-dot::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#E0F2F1;display:flex;align-items:center;justify-content:center;font-size:13px;color:#999;border:3px solid #E0F2F1;z-index:2}
+.step-dot.active::before{background:var(--teal-primary);color:#fff;border-color:var(--teal-primary)}
+.step-dot.done::before{background:var(--teal-light);color:#fff;border-color:var(--teal-light)}
+.step-dot::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:3px;background:#E0F2F1;z-index:1}
+.step-dot:last-child::after{display:none}.step-dot.active::after,.step-dot.done::after{background:var(--teal-light)}
+.survey-q{display:none}.survey-q.active{display:block;animation:fadeIn 0.4s}
+@keyframes fadeIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.survey-q h3{font-size:20px;font-weight:700;margin-bottom:8px;color:#004D40}.survey-q .q-hint{font-size:14px;color:#888;margin-bottom:20px}
+.rating-group{display:flex;gap:8px;margin-bottom:20px}.rating-star{font-size:32px;cursor:pointer;color:#ccc;transition:all 0.15s;user-select:none}.rating-star.active,.rating-star:hover{color:#FFB300;transform:scale(1.15)}
+.option-group{display:flex;flex-direction:column;gap:10px}
+.option-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid #eee;border-radius:12px;cursor:pointer;transition:all 0.2s}
+.option-item:hover{border-color:var(--teal-light);background:var(--teal-bg)}.option-item.selected{border-color:var(--teal-primary);background:var(--teal-bg)}
+.option-item .radio{width:20px;height:20px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;transition:all 0.2s}.option-item.selected .radio{border-color:var(--teal-primary);background:var(--teal-primary);box-shadow:inset 0 0 0 3px #fff}
+.option-item .label{font-size:14px;font-weight:500}
+.text-input{width:100%;padding:12px 16px;border:2px solid #eee;border-radius:10px;font-size:14px;font-family:inherit;transition:border-color 0.2s;resize:vertical;min-height:80px}.text-input:focus{outline:none;border-color:var(--teal-primary)}
+.survey-nav{display:flex;justify-content:space-between;margin-top:28px}
+.btn-survey{padding:10px 28px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all 0.2s}
+.btn-prev{background:#eee;color:#666}.btn-prev:hover{background:#ddd}.btn-next{background:var(--teal-primary);color:#fff}.btn-next:hover{background:var(--teal-light);transform:translateY(-1px)}.btn-submit{background:#FF6F00;color:#fff}.btn-submit:hover{background:#F57C00;transform:translateY(-1px)}
+.survey-result-card{background:linear-gradient(160deg,#004D40 0%,#00695C 100%);border-radius:var(--radius);padding:36px;color:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.result-header{font-size:20px;font-weight:700;margin-bottom:20px}
+.result-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.result-stat{background:rgba(255,255,255,0.1);border-radius:12px;padding:16px;text-align:center}.result-stat .num{font-size:28px;font-weight:800;color:#FFD54F}.result-stat .lbl{font-size:12px;color:rgba(255,255,255,0.7)}
+.result-chart-box{background:rgba(255,255,255,0.95);border-radius:12px;padding:20px;flex:1;min-height:200px}
+.result-feedback{margin-top:20px;padding:16px;background:rgba(255,255,255,0.1);border-radius:12px;font-size:14px;display:none}.result-feedback.show{display:block;animation:fadeIn 0.4s}
+#opinion-section{background:linear-gradient(160deg,#FFF3E0 0%,#fff 100%)}
+.heatmap-wrapper{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.heatmap-controls{display:flex;gap:12px;padding:20px;flex-wrap:wrap;align-items:center;background:var(--orange-bg);border-bottom:2px solid #FFE0B2}
+.heatmap-controls .label{font-weight:700;font-size:14px;color:#E65100;margin-right:8px}
+.opinion-filter{padding:6px 16px;border-radius:20px;font-size:13px;cursor:pointer;background:#fff;border:2px solid #FFE0B2;transition:all 0.2s;font-weight:600}.opinion-filter:hover{border-color:var(--orange-light)}.opinion-filter.active{background:var(--orange-primary);color:#fff;border-color:var(--orange-primary)}
+.heatmap-canvas{position:relative;height:480px;background:linear-gradient(135deg,#f5f0e0 0%,#e8e0d0 100%);overflow:hidden}
+.heat-popup{position:absolute;background:#fff;border-radius:10px;padding:12px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.15);font-size:13px;z-index:20;max-width:240px;display:none}.heat-popup.show{display:block;animation:fadeIn 0.3s}
+.heat-popup h5{font-size:14px;font-weight:700;margin-bottom:6px}.heat-popup .tag{font-size:11px;color:#999}.heat-popup .text{margin-top:6px;color:#555}
+.heatmap-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px}.heatmap-stat{text-align:center;padding:16px;border-radius:12px;background:var(--orange-bg)}.heatmap-stat .num{font-size:32px;font-weight:800;color:var(--orange-primary)}.heatmap-stat .lbl{font-size:12px;color:#888;margin-top:4px}
+.heatmap-legend{display:flex;gap:16px;padding:0 24px 24px;align-items:center;justify-content:center}.heat-legend-bar{width:200px;height:12px;border-radius:6px;background:linear-gradient(90deg,#FFE082,#FFB74D,#FF9800,#F57C00,#E65100)}.heat-legend-label{font-size:12px;color:#666;font-weight:600}
+#dashboard-section{background:#1a1a2e;color:#fff}
+#dashboard-section .section-title{color:#fff}#dashboard-section .section-subtitle{color:rgba(255,255,255,0.6)}#dashboard-section .section-tag{background:rgba(21,101,192,0.3);color:#64B5F6}
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
+.dash-kpi{background:rgba(255,255,255,0.06);border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s}.dash-kpi:hover{background:rgba(255,255,255,0.1);transform:translateY(-4px)}
+.dash-kpi .icon{font-size:28px;margin-bottom:8px}.dash-kpi .val{font-size:32px;font-weight:800}.dash-kpi .lbl{font-size:13px;color:rgba(255,255,255,0.5)}.dash-kpi .trend{font-size:13px;margin-top:6px}.trend-up{color:#4CAF6F}.trend-down{color:#ef5350}
+.dash-charts{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:24px}
+.dash-chart-box{background:rgba(255,255,255,0.06);border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,0.1)}.dash-chart-box h4{font-size:16px;font-weight:700;margin-bottom:16px}.chart-container{position:relative;height:280px}
+.dash-table-box{background:rgba(255,255,255,0.06);border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,0.1)}.dash-table-box h4{font-size:16px;font-weight:700;margin-bottom:16px}
+.dash-table{width:100%;border-collapse:collapse;font-size:13px}.dash-table th{text-align:left;padding:10px;color:rgba(255,255,255,0.5);font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)}.dash-table td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)}.dash-table .badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}.badge-high{background:rgba(239,83,80,0.2);color:#ef5350}.badge-mid{background:rgba(255,167,38,0.2);color:#FFA726}.badge-low{background:rgba(76,175,80,0.2);color:#66BB6A}
+#roadmap-section{background:linear-gradient(160deg,#F3E5F5 0%,#fff 100%)}
+.timeline{position:relative;padding:20px 0}.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--purple-light),var(--purple-primary));transform:translateX(-50%)}
+.timeline-item{position:relative;width:50%;padding:0 40px 40px}.timeline-item:nth-child(odd){left:0;text-align:right}.timeline-item:nth-child(even){left:50%;text-align:left}
+.timeline-item::before{content:'';position:absolute;top:6px;width:20px;height:20px;border-radius:50%;background:var(--purple-primary);border:4px solid #fff;box-shadow:0 0 0 3px var(--purple-primary);z-index:2}
+.timeline-item:nth-child(odd)::before{right:-10px}.timeline-item:nth-child(even)::before{left:-10px}
+.timeline-item.done::before{background:var(--green-light);box-shadow:0 0 0 3px var(--green-light)}.timeline-item.current::before{background:var(--orange-primary);box-shadow:0 0 0 3px var(--orange-primary);animation:pulse 2s infinite}
+.timeline-content{background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow);border-left:4px solid var(--purple-light)}.timeline-item.done .timeline-content{border-left-color:var(--green-light)}.timeline-item.current .timeline-content{border-left-color:var(--orange-primary)}
+.timeline-content .phase{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple-primary);margin-bottom:6px}.timeline-item.done .phase{color:var(--green-light)}.timeline-item.current .phase{color:var(--orange-primary)}
+.timeline-content h4{font-size:16px;font-weight:700;margin-bottom:6px}.timeline-content p{font-size:13px;color:#666}
+.timeline-status{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}.status-done{background:#E8F5E9;color:#2E7D32}.status-current{background:#FFF3E0;color:#E65100}.status-pending{background:#F3E5F5;color:#6A1B9A}
+.footer{background:#0d2f1a;color:rgba(255,255,255,0.6);padding:40px 0;text-align:center;font-size:14px}.footer-brand{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(100px);background:#1B5E3A;color:#fff;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:600;z-index:9999;opacity:0;transition:all 0.3s;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(max-width:900px){.nav-links{display:none}.hamburger{display:block}.hero-title{font-size:36px}.hero-stats{gap:24px}.map-wrapper{grid-template-columns:1fr}.survey-wrapper{grid-template-columns:1fr}.dash-grid{grid-template-columns:1fr 1fr}.dash-charts{grid-template-columns:1fr}.heatmap-stats{grid-template-columns:1fr 1fr}.timeline::before{left:20px}.timeline-item{width:100%;left:0!important;text-align:left!important;padding-left:50px;padding-right:0}.timeline-item::before{left:10px!important;right:auto!important}.section-title{font-size:28px}.lang-switch{display:none}.nav-cta{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="topnav" id="topnav">
+  <div class="nav-brand"><span class="logo-icon">🌿</span><span>GreenSpace NM</span></div>
+  <div class="nav-links" id="navLinks">
+    <a class="nav-link active" data-target="hero" data-i18n="nav.overview">概览</a>
+    <a class="nav-link" data-target="problem" data-i18n="nav.problem">问题</a>
+    <a class="nav-link" data-target="map-section" data-i18n="nav.map">绿化地图</a>
+    <a class="nav-link" data-target="survey-section" data-i18n="nav.survey">居民问卷</a>
+    <a class="nav-link" data-target="opinion-section" data-i18n="nav.opinion">AI意见热图</a>
+    <a class="nav-link" data-target="dashboard-section" data-i18n="nav.dashboard">政府看板</a>
+    <a class="nav-link" data-target="roadmap-section" data-i18n="nav.roadmap">项目路线</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn active" data-lang="zh-CN" onclick="switchLang('zh-CN')">简</button>
+      <button class="lang-btn" data-lang="zh-TW" onclick="switchLang('zh-TW')">繁</button>
+    </div>
+    <button class="nav-cta" onclick="scrollToSection('survey-section')" data-i18n="nav.cta">立即参与</button>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<section class="section" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> <span data-i18n="hero.badge">Hackathon Demo · 北部都会区绿化空间规划</span></div>
+    <h1 class="hero-title"><span data-i18n="hero.title1">让绿化规划</span><span class="accent" data-i18n="hero.title2">看得见</span><br><span data-i18n="hero.title3">让居民声音</span><span class="accent" data-i18n="hero.title4">落得上图</span></h1>
+    <p class="hero-desc" data-i18n="hero.desc">将官方文字版绿化空间规划转化为可视化互动地图，居民可查看规划信息并提交意见，AI 自动聚合公众反馈生成空间意见热图，帮助政府直观理解居民诉求。</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToSection('map-section')" data-i18n="hero.btn1">探索绿化地图</button>
+      <button class="btn-outline" onclick="scrollToSection('dashboard-section')" data-i18n="hero.btn2">查看政府看板</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="stat1">15</div><div class="label" data-i18n="hero.stat1">规划绿化区域</div></div>
+      <div class="hero-stat"><div class="num" id="stat2">1,284</div><div class="label" data-i18n="hero.stat2">居民意见提交</div></div>
+      <div class="hero-stat"><div class="num" id="stat3">8</div><div class="label" data-i18n="hero.stat3">功能类型</div></div>
+      <div class="hero-stat"><div class="num" id="stat4">3</div><div class="label" data-i18n="hero.stat4">示范区覆盖</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:#FFEBEE;color:#e53935;">PROBLEM</span>
+      <h2 class="section-title" data-i18n="problem.title">当前痛点</h2>
+      <p class="section-subtitle" data-i18n="problem.subtitle">居民与政府之间缺乏关于绿化空间规划的直观沟通渠道</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card"><div class="icon">📄</div><h3 data-i18n="problem.c1.title">文字报告难理解</h3><p data-i18n="problem.c1.desc">官方绿化规划主要以文字报告形式发布，公众难以理解绿化区域在哪里、用途是什么，信息获取门槛高。</p></div>
+      <div class="problem-card"><div class="icon">💬</div><h3 data-i18n="problem.c2.title">意见无法空间化</h3><p data-i18n="problem.c2.desc">现有公众咨询渠道以文字形式收集意见，居民建议无法在地图上展示，政府也难以了解意见的空间分布。</p></div>
+      <div class="problem-card"><div class="icon">🔍</div><h3 data-i18n="problem.c3.title">信息透明度不足</h3><p data-i18n="problem.c3.desc">居民无法方便地查看规划信息，政府也看不到公众建议的地理分布，降低了公众参与效率。</p></div>
+      <div class="problem-card"><div class="icon">📊</div><h3 data-i18n="problem.c4.title">反馈整理效率低</h3><p data-i18n="problem.c4.desc">公众反馈以纯文本收集，需要人工整理分类，缺乏自动化的空间意见聚合和可视化工具。</p></div>
+    </div>
+    <div class="before-after">
+      <div class="ba-card">
+        <div class="header before-header" data-i18n="problem.before.title">❌ 现状：文字驱动</div>
+        <div class="body"><ul>
+          <li><span class="cross">✗</span> <span data-i18n="problem.before.1">规划报告以 PDF 文字为主，缺乏地图可视化</span></li>
+          <li><span class="cross">✗</span> <span data-i18n="problem.before.2">公众意见以文字表格收集，无法定位到地理空间</span></li>
+          <li><span class="cross">✗</span> <span data-i18n="problem.before.3">政府需手动整理意见，效率低、覆盖面窄</span></li>
+          <li><span class="cross">✗</span> <span data-i18n="problem.before.4">居民难以参与，沟通障碍大</span></li>
+        </ul></div>
+      </div>
+      <div class="ba-card">
+        <div class="header after-header" data-i18n="problem.after.title">✅ 方案：地图驱动</div>
+        <div class="body"><ul>
+          <li><span class="check">✓</span> <span data-i18n="problem.after.1">官方规划一键转化为互动可视化地图</span></li>
+          <li><span class="check">✓</span> <span data-i18n="problem.after.2">居民在地图上查看规划并提交空间意见</span></li>
+          <li><span class="check">✓</span> <span data-i18n="problem.after.3">AI 自动聚合反馈生成意见热图</span></li>
+          <li><span class="check">✓</span> <span data-i18n="problem.after.4">政府直观查看意见分布，辅助决策</span></li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="map-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:var(--green-bg);color:var(--green-dark);">INTERACTIVE MAP</span>
+      <h2 class="section-title" data-i18n="map.title">互动绿化空间地图</h2>
+      <p class="section-subtitle" data-i18n="map.subtitle">点击地图上的绿化区域，查看规划详情、功能类型和面积信息</p>
+    </div>
+    <div class="map-wrapper">
+      <div class="map-canvas" id="mapCanvas">
+        <div class="map-filters">
+          <div class="filter-chip active" data-filter="all" data-i18n="map.filter.all">全部</div>
+          <div class="filter-chip" data-filter="park" data-i18n="type.park">公园</div>
+          <div class="filter-chip" data-filter="wetland" data-i18n="type.wetland">湿地</div>
+          <div class="filter-chip" data-filter="corridor" data-i18n="type.corridor">生态走廊</div>
+          <div class="filter-chip" data-filter="reserve" data-i18n="type.reserve">自然保护区</div>
+        </div>
+        <div class="map-tools">
+          <button class="map-tool-btn" id="zoomIn" data-i18n-title="map.zoomIn" title="放大">＋</button>
+          <button class="map-tool-btn" id="zoomOut" data-i18n-title="map.zoomOut" title="缩小">－</button>
+          <button class="map-tool-btn" id="resetMap" data-i18n-title="map.reset" title="重置">⟳</button>
+        </div>
+        <svg class="map-svg" viewBox="0 0 800 560" id="mapSvg" preserveAspectRatio="xMidYMid meet">
+          <path d="M 0 200 Q 200 180 400 220 T 800 200 L 800 280 Q 600 300 400 260 T 0 280 Z" fill="#B3D9E6" opacity="0.4"/>
+          <rect x="20" y="380" width="180" height="160" rx="8" fill="#E0E0E0" opacity="0.5"/>
+          <rect x="620" y="380" width="160" height="140" rx="8" fill="#E0E0E0" opacity="0.5"/>
+          <text x="110" y="460" text-anchor="middle" fill="#999" font-size="12" data-i18n="map.builtArea">已建设区域</text>
+          <text x="700" y="450" text-anchor="middle" fill="#999" font-size="12" data-i18n="map.builtArea">已建设区域</text>
+          <g class="zone" data-type="wetland" data-id="z1" onclick="selectZone('z1')"><ellipse cx="180" cy="140" rx="90" ry="55" fill="#4DB6AC" opacity="0.7" stroke="#00695C" stroke-width="2"/><text class="zone-label" x="180" y="145" text-anchor="middle" data-i18n="zone.z1.name">米埔湿地</text></g>
+          <g class="zone" data-type="park" data-id="z2" onclick="selectZone('z2')"><path d="M 300 80 L 420 60 L 460 120 L 440 180 L 360 200 L 300 160 Z" fill="#66BB6A" opacity="0.7" stroke="#2E7D32" stroke-width="2"/><text class="zone-label" x="370" y="135" text-anchor="middle" data-i18n="zone.z2.name">新田公园</text></g>
+          <g class="zone" data-type="corridor" data-id="z3" onclick="selectZone('z3')"><path d="M 460 160 L 580 140 L 620 200 L 600 260 L 500 250 L 460 210 Z" fill="#BA68C8" opacity="0.6" stroke="#6A1B9A" stroke-width="2"/><text class="zone-label" x="535" y="200" text-anchor="middle" data-i18n="zone.z3.name">生态走廊A</text></g>
+          <g class="zone" data-type="wetland" data-id="z4" onclick="selectZone('z4')"><ellipse cx="680" cy="120" rx="70" ry="45" fill="#4DB6AC" opacity="0.7" stroke="#00695C" stroke-width="2"/><text class="zone-label" x="680" y="125" text-anchor="middle" data-i18n="zone.z4.name">湿地修复区</text></g>
+          <g class="zone" data-type="park" data-id="z5" onclick="selectZone('z5')"><rect x="250" y="300" width="120" height="80" rx="12" fill="#66BB6A" opacity="0.7" stroke="#2E7D32" stroke-width="2"/><text class="zone-label" x="310" y="345" text-anchor="middle" data-i18n="zone.z5.name">古洞公园</text></g>
+          <g class="zone" data-type="reserve" data-id="z6" onclick="selectZone('z6')"><path d="M 420 300 L 540 290 L 560 370 L 460 390 L 420 360 Z" fill="#FF9800" opacity="0.6" stroke="#E65100" stroke-width="2"/><text class="zone-label" x="480" y="345" text-anchor="middle" data-i18n="zone.z6.name">自然保护区</text></g>
+          <g class="zone" data-type="corridor" data-id="z7" onclick="selectZone('z7')"><path d="M 100 300 Q 150 280 200 300 L 220 360 L 180 400 L 120 390 L 90 350 Z" fill="#BA68C8" opacity="0.6" stroke="#6A1B9A" stroke-width="2"/><text class="zone-label" x="155" y="350" text-anchor="middle" data-i18n="zone.z7.name">生态走廊B</text></g>
+          <g class="zone" data-type="park" data-id="z8" onclick="selectZone('z8')"><rect x="580" y="300" width="100" height="70" rx="12" fill="#66BB6A" opacity="0.7" stroke="#2E7D32" stroke-width="2"/><text class="zone-label" x="630" y="340" text-anchor="middle" data-i18n="zone.z8.name">粉岭公园</text></g>
+          <text x="400" y="30" text-anchor="middle" fill="#1B5E3A" font-size="16" font-weight="700" data-i18n="map.demoArea">北部都会区 · 示范区域</text>
+        </svg>
+        <div class="map-legend">
+          <div class="legend-item"><div class="legend-color" style="background:#66BB6A;"></div> <span data-i18n="type.park">公园用地</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#4DB6AC;"></div> <span data-i18n="type.wetland">湿地</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#BA68C8;"></div> <span data-i18n="type.corridor">生态走廊</span></div>
+          <div class="legend-item"><div class="legend-color" style="background:#FF9800;"></div> <span data-i18n="type.reserve">自然保护区</span></div>
+        </div>
+      </div>
+      <div class="zone-panel" id="zonePanel">
+        <div class="panel-title" data-i18n="map.panelTitle">📋 区域详情</div>
+        <div class="empty-hint" id="zoneEmpty" data-i18n="map.emptyHint">👆 点击地图上的绿化区域<br>查看详细规划信息</div>
+        <div id="zoneDetail" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="survey-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:var(--teal-bg);color:var(--teal-primary);">RESIDENT SURVEY</span>
+      <h2 class="section-title" data-i18n="survey.title">居民意见问卷</h2>
+      <p class="section-subtitle" data-i18n="survey.subtitle">您的反馈将通过 AI 自动聚合，呈现在意见热图上</p>
+    </div>
+    <div class="survey-wrapper">
+      <div class="survey-form-card">
+        <div class="survey-progress-bar"><div class="survey-progress-fill" id="progressFill" style="width:25%;"></div></div>
+        <div class="survey-step-indicator">
+          <div class="step-dot active" data-step="0" data-i18n="survey.step0">区域</div>
+          <div class="step-dot" data-step="1" data-i18n="survey.step1">评分</div>
+          <div class="step-dot" data-step="2" data-i18n="survey.step2">功能</div>
+          <div class="step-dot" data-step="3" data-i18n="survey.step3">建议</div>
+        </div>
+        <div class="survey-q active" data-step="0">
+          <h3 data-i18n="survey.q0.title">您最关注的绿化区域是？</h3>
+          <p class="q-hint" data-i18n="survey.q0.hint">选择一个您最关心的规划区域</p>
+          <div class="option-group" id="zoneOptions"></div>
+          <div class="survey-nav"><button class="btn-survey btn-prev" disabled style="opacity:0.4;" data-i18n="survey.prev">上一步</button><button class="btn-survey btn-next" onclick="nextStep(0)" data-i18n="survey.next">下一步</button></div>
+        </div>
+        <div class="survey-q" data-step="1">
+          <h3 data-i18n="survey.q1.title">您对该区域规划方案的满意度？</h3>
+          <p class="q-hint" data-i18n="survey.q1.hint">1 星 = 非常不满意，5 星 = 非常满意</p>
+          <div class="rating-group" id="ratingGroup"><span class="rating-star" data-val="1" onclick="selectRating(1)">★</span><span class="rating-star" data-val="2" onclick="selectRating(2)">★</span><span class="rating-star" data-val="3" onclick="selectRating(3)">★</span><span class="rating-star" data-val="4" onclick="selectRating(4)">★</span><span class="rating-star" data-val="5" onclick="selectRating(5)">★</span></div>
+          <p id="ratingLabel" style="margin-top:8px;font-size:14px;color:#888;" data-i18n="survey.selectRating">请选择评分</p>
+          <div class="survey-nav"><button class="btn-survey btn-prev" onclick="prevStep(1)" data-i18n="survey.prev">上一步</button><button class="btn-survey btn-next" onclick="nextStep(1)" data-i18n="survey.next">下一步</button></div>
+        </div>
+        <div class="survey-q" data-step="2">
+          <h3 data-i18n="survey.q2.title">您希望该区域具备哪些功能？</h3>
+          <p class="q-hint" data-i18n="survey.q2.hint">可多选</p>
+          <div class="option-group" id="funcOptions"></div>
+          <div class="survey-nav"><button class="btn-survey btn-prev" onclick="prevStep(2)" data-i18n="survey.prev">上一步</button><button class="btn-survey btn-next" onclick="nextStep(2)" data-i18n="survey.next">下一步</button></div>
+        </div>
+        <div class="survey-q" data-step="3">
+          <h3 data-i18n="survey.q3.title">您对该区域还有哪些建议？</h3>
+          <p class="q-hint" data-i18n="survey.q3.hint">您的建议将通过 AI 分析并聚合到意见热图</p>
+          <textarea class="text-input" id="suggestionText" rows="5" data-i18n-ph="survey.q3.placeholder" placeholder="例如：希望增加更多遮阴休憩设施、改善步行可达性、增加夜间照明..."></textarea>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <span style="font-size:12px;color:#999;" data-i18n="survey.quickTags">快速标签：</span>
+            <span class="filter-chip" onclick="addQuickTag(this)" style="font-size:11px;" data-i18n="tag.shade">遮阴设施</span>
+            <span class="filter-chip" onclick="addQuickTag(this)" style="font-size:11px;" data-i18n="tag.walkable">步行可达</span>
+            <span class="filter-chip" onclick="addQuickTag(this)" style="font-size:11px;" data-i18n="tag.lighting">夜间照明</span>
+            <span class="filter-chip" onclick="addQuickTag(this)" style="font-size:11px;" data-i18n="tag.accessible">无障碍</span>
+          </div>
+          <div class="survey-nav"><button class="btn-survey btn-prev" onclick="prevStep(3)" data-i18n="survey.prev">上一步</button><button class="btn-survey btn-submit" onclick="submitSurvey()" data-i18n="survey.submit">提交问卷</button></div>
+        </div>
+      </div>
+      <div class="survey-result-card">
+        <div class="result-header" data-i18n="survey.resultHeader">📊 实时聚合统计</div>
+        <div class="result-stat-grid">
+          <div class="result-stat"><div class="num" id="totalSurveys">1,284</div><div class="lbl" data-i18n="survey.totalSurvey">总问卷数</div></div>
+          <div class="result-stat"><div class="num" id="todaySurveys">37</div><div class="lbl" data-i18n="survey.todayNew">今日新增</div></div>
+          <div class="result-stat"><div class="num" id="avgRating">3.8</div><div class="lbl" data-i18n="survey.avgRating">平均满意度</div></div>
+          <div class="result-stat"><div class="num" id="activeZones">8</div><div class="lbl" data-i18n="survey.activeZones">活跃区域</div></div>
+        </div>
+        <div class="result-chart-box"><canvas id="surveyChart"></canvas></div>
+        <div class="result-feedback" id="surveyFeedback"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="opinion-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:var(--orange-bg);color:var(--orange-primary);">AI OPINION MAP</span>
+      <h2 class="section-title" data-i18n="opinion.title">AI 意见聚合热图</h2>
+      <p class="section-subtitle" data-i18n="opinion.subtitle">AI 自动分析问卷文本，将公众意见映射到地理空间，热力越强表示该区域关注度和意见密度越高</p>
+    </div>
+    <div class="heatmap-wrapper">
+      <div class="heatmap-controls">
+        <span class="label" data-i18n="opinion.typeLabel">意见类型：</span>
+        <div class="opinion-filter active" data-filter="all" onclick="filterOpinions('all')" data-i18n="opinion.all">全部意见</div>
+        <div class="opinion-filter" data-filter="positive" onclick="filterOpinions('positive')" data-i18n="opinion.positive">👍 正面</div>
+        <div class="opinion-filter" data-filter="improve" onclick="filterOpinions('improve')" data-i18n="opinion.improve">🔧 改进建议</div>
+        <div class="opinion-filter" data-filter="concern" onclick="filterOpinions('concern')" data-i18n="opinion.concern">⚠️ 担忧</div>
+        <div class="opinion-filter" data-filter="function" onclick="filterOpinions('function')" data-i18n="opinion.function">🎯 功能需求</div>
+      </div>
+      <div class="heatmap-canvas" id="heatCanvas">
+        <svg width="100%" height="100%" viewBox="0 0 800 480" id="heatSvg" preserveAspectRatio="xMidYMid meet">
+          <path d="M 0 200 Q 200 180 400 220 T 800 200 L 800 280 Q 600 300 400 260 T 0 280 Z" fill="#B3D9E6" opacity="0.3"/>
+          <rect x="20" y="380" width="180" height="80" rx="8" fill="#E0E0E0" opacity="0.4"/><rect x="620" y="380" width="160" height="80" rx="8" fill="#E0E0E0" opacity="0.4"/>
+          <ellipse cx="180" cy="140" rx="90" ry="55" fill="none" stroke="#00695C" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M 300 80 L 420 60 L 460 120 L 440 180 L 360 200 L 300 160 Z" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M 460 160 L 580 140 L 620 200 L 600 260 L 500 250 L 460 210 Z" fill="none" stroke="#6A1B9A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <ellipse cx="680" cy="120" rx="70" ry="45" fill="none" stroke="#00695C" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <rect x="250" y="300" width="120" height="80" rx="12" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M 420 300 L 540 290 L 560 370 L 460 390 L 420 360 Z" fill="none" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <path d="M 100 300 Q 150 280 200 300 L 220 360 L 180 400 L 120 390 L 90 350 Z" fill="none" stroke="#6A1B9A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <rect x="580" y="300" width="100" height="70" rx="12" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+          <text x="180" y="145" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z1.name">米埔湿地</text>
+          <text x="370" y="135" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z2.name">新田公园</text>
+          <text x="535" y="200" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z3.name">生态走廊A</text>
+          <text x="680" y="125" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z4.name">湿地修复区</text>
+          <text x="310" y="345" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z5.name">古洞公园</text>
+          <text x="480" y="345" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z6.name">自然保护区</text>
+          <text x="155" y="350" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z7.name">生态走廊B</text>
+          <text x="630" y="340" text-anchor="middle" fill="#666" font-size="10" opacity="0.6" data-i18n="zone.z8.name">粉岭公园</text>
+          <g id="heatCircles"></g>
+        </svg>
+        <div class="heat-popup" id="heatPopup"></div>
+      </div>
+      <div class="heatmap-stats">
+        <div class="heatmap-stat"><div class="num" id="heatTotal">1,284</div><div class="lbl" data-i18n="opinion.stat1">已聚合意见</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatPositive">42%</div><div class="lbl" data-i18n="opinion.stat2">正面评价</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatImprove">38%</div><div class="lbl" data-i18n="opinion.stat3">改进建议</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatConcern">20%</div><div class="lbl" data-i18n="opinion.stat4">担忧反馈</div></div>
+      </div>
+      <div class="heatmap-legend"><span class="heat-legend-label" data-i18n="opinion.low">低</span><div class="heat-legend-bar"></div><span class="heat-legend-label" data-i18n="opinion.high">高</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="dashboard-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">GOVERNMENT DASHBOARD</span>
+      <h2 class="section-title" data-i18n="dash.title">政府决策看板</h2>
+      <p class="section-subtitle" data-i18n="dash.subtitle">规划官员可直观查看公众意见分布、满意度趋势和热门议题</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-kpi"><div class="icon">📝</div><div class="val" id="dashTotal">1,284</div><div class="lbl" data-i18n="dash.kpi1">意见总数</div><div class="trend trend-up" data-i18n="dash.trend1">↑ 12% 本周</div></div>
+      <div class="dash-kpi"><div class="icon">⭐</div><div class="val" id="dashAvg">3.8</div><div class="lbl" data-i18n="dash.kpi2">平均满意度</div><div class="trend trend-up" data-i18n="dash.trend2">↑ 0.3 较上周</div></div>
+      <div class="dash-kpi"><div class="icon">🎯</div><div class="val" id="dashZones">8</div><div class="lbl" data-i18n="dash.kpi3">覆盖区域</div><div class="trend trend-up" data-i18n="dash.trend3">↑ 2 新增</div></div>
+      <div class="dash-kpi"><div class="icon">🔥</div><div class="val" id="dashHot" data-i18n="dash.hotTopic">遮阴设施</div><div class="lbl" data-i18n="dash.kpi4">热门议题</div><div class="trend trend-down" data-i18n="dash.trend4">↓ 需关注</div></div>
+    </div>
+    <div class="dash-charts">
+      <div class="dash-chart-box"><h4 data-i18n="dash.chart1">各区域满意度对比</h4><div class="chart-container"><canvas id="dashBarChart"></canvas></div></div>
+      <div class="dash-chart-box"><h4 data-i18n="dash.chart2">意见类型分布</h4><div class="chart-container"><canvas id="dashPieChart"></canvas></div></div>
+    </div>
+    <div class="dash-table-box">
+      <h4 data-i18n="dash.tableTitle">📋 区域意见汇总表</h4>
+      <table class="dash-table"><thead><tr><th data-i18n="dash.col1">区域名称</th><th data-i18n="dash.col2">类型</th><th data-i18n="dash.col3">意见数</th><th data-i18n="dash.col4">平均满意度</th><th data-i18n="dash.col5">热门议题</th><th data-i18n="dash.col6">优先级</th></tr></thead><tbody id="dashTableBody"></tbody></table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roadmap-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:var(--purple-bg);color:var(--purple-primary);">ROADMAP</span>
+      <h2 class="section-title" data-i18n="roadmap.title">项目路线图</h2>
+      <p class="section-subtitle" data-i18n="roadmap.subtitle">从规划到部署的完整里程碑</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">🌿 GreenSpace NM · <span data-i18n="footer.brand">北部都会区绿化空间互动平台</span></div>
+  <p data-i18n="footer.info">Hackathon Demo | 客户：香港政府城市规划及土地发展部门 | 2026</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* I18N TRANSLATIONS — English / 简体中文 / 繁體中文 */
+const I18N = {
+'en':{
+'nav.overview':'Overview','nav.problem':'Problem','nav.map':'Green Map','nav.survey':'Survey','nav.opinion':'AI Opinion','nav.dashboard':'Dashboard','nav.roadmap':'Roadmap','nav.cta':'Participate',
+'hero.badge':'Hackathon Demo · Northern Metropolis Green Space Planning',
+'hero.title1':'Make Green Planning ','hero.title2':'Visible','hero.title3':'Put Resident Voices ','hero.title4':'On the Map',
+'hero.desc':'Transforming official text-based green space plans into interactive maps. Residents can view planning info and submit feedback. AI aggregates public input into spatial opinion, helping the government intuitively understand resident needs.',
+'hero.btn1':'Explore Green Map','hero.btn2':'View Dashboard',
+'hero.stat1':'Planned Green Zones','hero.stat2':'Resident Submissions','hero.stat3':'Function Types','hero.stat4':'Demo Areas',
+'problem.title':'Current Pain Points','problem.subtitle':'Lack of intuitive communication channels between residents and the government on green space planning',
+'problem.c1.title':'Text Reports Hard to Understand','problem.c1.desc':'Official green space plans are mostly released as text reports. The public struggles to understand where green areas are and what they are used for.',
+'problem.c2.title':'Feedback Cannot Be Spatialized','problem.c2.desc':'Existing consultation channels collect text-based feedback. Resident suggestions cannot be displayed on a map, and the government cannot see their spatial distribution.',
+'problem.c3.title':'Insufficient Transparency','problem.c3.desc':'Residents cannot easily access planning info, and the government cannot see the geographic spread of public suggestions, reducing participation efficiency.',
+'problem.c4.title':'Low Feedback Processing Efficiency','problem.c4.desc':'Public feedback is collected as plain text, requiring manual sorting. There is no automated spatial opinion aggregation and visualization tool.',
+'problem.before.title':'\u274c Status Quo: Text-Driven','problem.before.1':'Planning reports are text-heavy PDFs, lacking map visualization','problem.before.2':'Public feedback collected in text tables, impossible to geo-locate','problem.before.3':'Government must manually sort opinions — slow and narrow coverage','problem.before.4':'Residents face high barriers to participation',
+'problem.after.title':'\u2705 Solution: Map-Driven','problem.after.1':'Official plans converted to interactive visual maps with one click','problem.after.2':'Residents view plans on the map and submit spatial feedback','problem.after.3':'AI automatically aggregates feedback into opinion heatmaps','problem.after.4':'Government sees opinion distribution intuitively for decision support',
+'type.park':'Park','type.wetland':'Wetland','type.corridor':'Eco-Corridor','type.reserve':'Nature Reserve',
+'map.title':'Interactive Green Space Map','map.subtitle':'Click green zones on the map to view planning details, function types, and area info',
+'map.filter.all':'All','map.zoomIn':'Zoom In','map.zoomOut':'Zoom Out','map.reset':'Reset','map.builtArea':'Built-up Area','map.demoArea':'Northern Metropolis · Demo Area',
+'map.panelTitle':'\ud83d\udccb Zone Details','map.emptyHint':'\ud83d\udc46 Click a green zone on the map<br>to view detailed planning info',
+'map.planningArea':'Planning Area','map.opinionCount':'Opinion Count','map.avgSatisfaction':'Avg. Satisfaction','map.attentionLevel':'Attention Level','map.planningData':'\ud83d\udcca Planning Data','map.planningFunctions':'\ud83c\udfaf Planned Functions','map.submitOpinion':'\ud83d\udcac Submit Opinion for This Zone',
+'map.level.high':'High','map.level.mid':'Medium','map.level.low':'Low',
+'survey.title':'Resident Opinion Survey','survey.subtitle':'Your feedback will be automatically aggregated by AI and shown on the opinion heatmap',
+'survey.step0':'Zone','survey.step1':'Rating','survey.step2':'Functions','survey.step3':'Suggestions',
+'survey.prev':'Previous','survey.next':'Next','survey.submit':'Submit Survey','survey.selectRating':'Please select a rating',
+'survey.q0.title':'Which green zone do you care about most?','survey.q0.hint':'Select a planning zone you are most concerned about',
+'survey.q1.title':'How satisfied are you with the planning of this zone?','survey.q1.hint':'1 star = Very dissatisfied, 5 stars = Very satisfied',
+'survey.q2.title':'What functions do you want this zone to have?','survey.q2.hint':'Multi-select',
+'survey.q3.title':'Any other suggestions for this zone?','survey.q3.hint':'Your suggestions will be analyzed by AI and aggregated to the opinion heatmap',
+'survey.q3.placeholder':'e.g., Add more shaded rest facilities, improve walkability, add night lighting...',
+'survey.quickTags':'Quick tags:',
+'survey.resultHeader':'\ud83d\udcca Real-time Aggregation Stats','survey.totalSurvey':'Total Surveys','survey.todayNew':'New Today','survey.avgRating':'Avg. Rating','survey.activeZones':'Active Zones',
+'survey.toast.selectZone':'Please select a zone first','survey.toast.selectRating':'Please select a rating first','survey.toast.success':'Survey submitted! AI has aggregated your opinion.',
+'survey.fb.success':'\u2705 <strong>Submitted!</strong> Your opinion on <strong>{zone}</strong> (satisfaction {rating}\u2b50) has been aggregated to the opinion heatmap via AI.<br>\ud83c\udfaf AI identified keywords: {keywords}',
+'survey.fb.general':'General feedback','survey.fb.unknownZone':'this zone',
+'func.sports':'Sports & Recreation','func.children':'Children Playground','func.eco':'Ecological Conservation','func.cycling':'Greenway Cycling','func.education':'Nature Education','func.birdwatch':'Birdwatching/Wetland Experience',
+'tag.shade':'Shade facilities','tag.walkable':'Walkability','tag.lighting':'Night lighting','tag.accessible':'Accessibility',
+'rating.1':'Very dissatisfied','rating.2':'Somewhat dissatisfied','rating.3':'Neutral','rating.4':'Fairly satisfied','rating.5':'Very satisfied',
+'opinion.title':'AI Opinion Aggregation Heatmap','opinion.subtitle':'AI automatically analyzes survey text, mapping public opinions to geographic space. Stronger heat indicates higher attention and opinion density in that area',
+'opinion.typeLabel':'Opinion Type:','opinion.all':'All Opinions','opinion.positive':'\ud83d\udc4d Positive','opinion.improve':'\ud83d\udd27 Improvement','opinion.concern':'\u26a0\ufe0f Concerns','opinion.function':'\ud83c\udfaf Function Needs',
+'opinion.stat1':'Aggregated Opinions','opinion.stat2':'Positive','opinion.stat3':'Improvements','opinion.stat4':'Concerns',
+'opinion.low':'Low','opinion.high':'High',
+'opinion.filterToast':'Filtered: {type} opinions ({count} entries)',
+'opinion.typeLabelAll':'All','opinion.typeLabelPositive':'Positive','opinion.typeLabelImprove':'Improvement','opinion.typeLabelConcern':'Concerns','opinion.typeLabelFunction':'Function Needs',
+'dash.title':'Government Decision Dashboard','dash.subtitle':'Planning officers can intuitively view public opinion distribution, satisfaction trends, and hot topics',
+'dash.kpi1':'Total Opinions','dash.kpi2':'Avg. Satisfaction','dash.kpi3':'Covered Zones','dash.kpi4':'Hot Topic',
+'dash.trend1':'\u2191 12% this week','dash.trend2':'\u2191 0.3 vs last week','dash.trend3':'\u2191 2 new','dash.trend4':'\u2193 Needs attention',
+'dash.hotTopic':'Shade facilities',
+'dash.chart1':'Satisfaction by Zone','dash.chart2':'Opinion Type Distribution','dash.tableTitle':'\ud83d\udccb Zone Opinion Summary Table',
+'dash.col1':'Zone Name','dash.col2':'Type','dash.col3':'Opinions','dash.col4':'Avg. Satisfaction','dash.col5':'Hot Topic','dash.col6':'Priority',
+'dash.priority.high':'High','dash.priority.mid':'Medium','dash.priority.low':'Low',
+'roadmap.title':'Project Roadmap','roadmap.subtitle':'Complete milestones from planning to deployment',
+'footer.brand':'Northern Metropolis Green Space Interactive Platform','footer.info':'Hackathon Demo | Client: Hong Kong Government Urban Planning & Land Development Dept. | 2026',
+'zone.z1.name':'Mai Po Wetland','zone.z2.name':'San Tin Park','zone.z3.name':'Eco-Corridor A','zone.z4.name':'Wetland Restoration','zone.z5.name':'Kwu Tung Park','zone.z6.name':'Nature Reserve','zone.z7.name':'Eco-Corridor B','zone.z8.name':'Fanling Park',
+'zone.z1.typeLabel':'Wetland','zone.z2.typeLabel':'Park','zone.z3.typeLabel':'Eco-Corridor','zone.z4.typeLabel':'Wetland','zone.z5.typeLabel':'Park','zone.z6.typeLabel':'Nature Reserve','zone.z7.typeLabel':'Eco-Corridor','zone.z8.typeLabel':'Park',
+'zone.z1.area':'~240 ha','zone.z2.area':'~85 ha','zone.z3.area':'~60 ha','zone.z4.area':'~120 ha','zone.z5.area':'~45 ha','zone.z6.area':'~180 ha','zone.z7.area':'~50 ha','zone.z8.area':'~70 ha',
+'zone.status.planned':'Planned','zone.status.planning':'In Planning','zone.status.restoring':'Restoring','zone.status.designated':'Designated',
+'zone.z1.desc':'Mai Po Wetland is an internationally important wetland. The plan preserves its ecological value while adding public birdwatching trails and education facilities.',
+'zone.z2.desc':'San Tin Park is planned as a comprehensive community park with sports fields, children playground areas, and a greenway system.',
+'zone.z3.desc':'Eco-Corridor A connects Mai Po Wetland and San Tin Park, planned as an ecological connection channel to ensure wildlife migration.',
+'zone.z4.desc':'The Wetland Restoration Area is undergoing ecological restoration to recover degraded wetlands and enhance stormwater management capacity.',
+'zone.z5.desc':'Kwu Tung Park serves the surrounding community, with sports fields, fitness facilities, and community activity spaces.',
+'zone.z6.desc':'The Nature Reserve focuses on ecological conservation with restricted public access, primarily for research monitoring and ecological protection.',
+'zone.z7.desc':'Eco-Corridor B connects Kwu Tung Park and the Nature Reserve, providing greenway cycling and ecological connection functions.',
+'zone.z8.desc':'Fanling Park integrates nature education and community leisure, featuring a nature education center and outdoor activity areas.',
+'zone.z1.functions':['Ecological Conservation','Birdwatching','Environmental Education'],
+'zone.z2.functions':['Sports & Recreation','Children Playground','Greenway'],
+'zone.z3.functions':['Ecological Connection','Walking Greenway','Wildlife Habitat'],
+'zone.z4.functions':['Ecological Restoration','Stormwater Management','Nature Education'],
+'zone.z5.functions':['Community Leisure','Sports & Fitness','Community Activities'],
+'zone.z6.functions':['Ecological Conservation','Research Monitoring','Restricted Access'],
+'zone.z7.functions':['Ecological Connection','Greenway Cycling'],
+'zone.z8.functions':['Sports & Recreation','Nature Education','Community Activities'],
+'zone.z1.statusKey':'planned','zone.z2.statusKey':'planning','zone.z3.statusKey':'planning','zone.z4.statusKey':'restoring','zone.z5.statusKey':'planning','zone.z6.statusKey':'designated','zone.z7.statusKey':'planning','zone.z8.statusKey':'planning',
+'roadmap.items':[
+{'phase':'Phase 1','title':'Project Direction & Team Setup','desc':'Confirmed the Northern Metropolis green space interactive map direction, completed team role allocation, and established a GitHub collaboration repository.','status':'done','statusLabel':'\u2705 Completed'},
+{'phase':'Phase 2','title':'Framework & Initial Page','desc':'Set up the overall project framework, created the demo website page, and studied relevant policy documents and academic materials.','status':'done','statusLabel':'\u2705 Completed'},
+{'phase':'Phase 3 · In Progress','title':'Geo Data Import & Map Visualization','desc':'Searching for suitable geospatial data sources, importing green zone data, generating visual maps, and refining map display styles.','status':'current','statusLabel':'\ud83d\udd04 In Progress'},
+{'phase':'Phase 4','title':'Survey Design & Integration','desc':'Design survey content, integrate the survey module into the website, and write code to collect and organize answer data.','status':'pending','statusLabel':'\u23f3 Not Started'},
+{'phase':'Phase 5','title':'AI Opinion Aggregation & Opinion Map','desc':'Develop AI module to analyze survey text, build opinion map based on collected feedback, and adjust display rules for readability.','status':'pending','statusLabel':'\u23f3 Not Started'},
+{'phase':'Phase 6','title':'Full Testing & Demo Deployment','desc':'Test all functional modules, verify data flow, AI aggregation, and map generation, and prepare for the final Hackathon demo.','status':'pending','statusLabel':'\u23f3 Not Started'},
+],
+'chart.funcDist':'Function Demand Distribution','chart.satisfaction':'Avg. Satisfaction',
+'chart.labels.func':['Sports & Rec','Eco Conservation','Children Play','Greenway Cycling','Nature Ed','Wetland Exp'],
+'chart.labels.opinion':['Positive','Improvement','Concerns','Function Needs'],
+'chart.labels.zones':['Mai Po','San Tin','Corridor A','Wetland Rest.','Kwu Tung','Nature Res.','Corridor B','Fanling'],
+'heat.unknownZone':'Unknown Zone','heat.generalOpinion':'General opinion',
+},
+'zh-CN':{
+'nav.overview':'概览','nav.problem':'问题','nav.map':'绿化地图','nav.survey':'居民问卷','nav.opinion':'AI意见热图','nav.dashboard':'政府看板','nav.roadmap':'项目路线','nav.cta':'立即参与',
+'hero.badge':'Hackathon Demo · 北部都会区绿化空间规划',
+'hero.title1':'让绿化规划','hero.title2':'看得见','hero.title3':'让居民声音','hero.title4':'落得上图',
+'hero.desc':'将官方文字版绿化空间规划转化为可视化互动地图，居民可查看规划信息并提交意见，AI 自动聚合公众反馈生成空间意见热图，帮助政府直观理解居民诉求。',
+'hero.btn1':'探索绿化地图','hero.btn2':'查看政府看板',
+'hero.stat1':'规划绿化区域','hero.stat2':'居民意见提交','hero.stat3':'功能类型','hero.stat4':'示范区覆盖',
+'problem.title':'当前痛点','problem.subtitle':'居民与政府之间缺乏关于绿化空间规划的直观沟通渠道',
+'problem.c1.title':'文字报告难理解','problem.c1.desc':'官方绿化规划主要以文字报告形式发布，公众难以理解绿化区域在哪里、用途是什么，信息获取门槛高。',
+'problem.c2.title':'意见无法空间化','problem.c2.desc':'现有公众咨询渠道以文字形式收集意见，居民建议无法在地图上展示，政府也难以了解意见的空间分布。',
+'problem.c3.title':'信息透明度不足','problem.c3.desc':'居民无法方便地查看规划信息，政府也看不到公众建议的地理分布，降低了公众参与效率。',
+'problem.c4.title':'反馈整理效率低','problem.c4.desc':'公众反馈以纯文本收集，需要人工整理分类，缺乏自动化的空间意见聚合和可视化工具。',
+'problem.before.title':'❌ 现状：文字驱动','problem.before.1':'规划报告以 PDF 文字为主，缺乏地图可视化','problem.before.2':'公众意见以文字表格收集，无法定位到地理空间','problem.before.3':'政府需手动整理意见，效率低、覆盖面窄','problem.before.4':'居民难以参与，沟通障碍大',
+'problem.after.title':'✅ 方案：地图驱动','problem.after.1':'官方规划一键转化为互动可视化地图','problem.after.2':'居民在地图上查看规划并提交空间意见','problem.after.3':'AI 自动聚合反馈生成意见热图','problem.after.4':'政府直观查看意见分布，辅助决策',
+'type.park':'公园','type.wetland':'湿地','type.corridor':'生态走廊','type.reserve':'自然保护区',
+'map.title':'互动绿化空间地图','map.subtitle':'点击地图上的绿化区域，查看规划详情、功能类型和面积信息',
+'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'缩小','map.reset':'重置','map.builtArea':'已建设区域','map.demoArea':'北部都会区 · 示范区域',
+'map.panelTitle':'📋 区域详情','map.emptyHint':'👆 点击地图上的绿化区域<br>查看详细规划信息',
+'map.planningArea':'规划面积','map.opinionCount':'意见数','map.avgSatisfaction':'平均满意度','map.attentionLevel':'关注度等级','map.planningData':'📊 规划数据','map.planningFunctions':'🎯 规划功能','map.submitOpinion':'💬 对此区域发表意见',
+'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
+'survey.title':'居民意见问卷','survey.subtitle':'您的反馈将通过 AI 自动聚合，呈现在意见热图上',
+'survey.step0':'区域','survey.step1':'评分','survey.step2':'功能','survey.step3':'建议',
+'survey.prev':'上一步','survey.next':'下一步','survey.submit':'提交问卷','survey.selectRating':'请选择评分',
+'survey.q0.title':'您最关注的绿化区域是？','survey.q0.hint':'选择一个您最关心的规划区域',
+'survey.q1.title':'您对该区域规划方案的满意度？','survey.q1.hint':'1 星 = 非常不满意，5 星 = 非常满意',
+'survey.q2.title':'您希望该区域具备哪些功能？','survey.q2.hint':'可多选',
+'survey.q3.title':'您对该区域还有哪些建议？','survey.q3.hint':'您的建议将通过 AI 分析并聚合到意见热图',
+'survey.q3.placeholder':'例如：希望增加更多遮阴休憩设施、改善步行可达性、增加夜间照明...',
+'survey.quickTags':'快速标签：',
+'survey.resultHeader':'📊 实时聚合统计','survey.totalSurvey':'总问卷数','survey.todayNew':'今日新增','survey.avgRating':'平均满意度','survey.activeZones':'活跃区域',
+'survey.toast.selectZone':'请先选择一个区域','survey.toast.selectRating':'请先选择评分','survey.toast.success':'问卷提交成功！AI 已聚合您的意见',
+'survey.fb.success':'✅ <strong>提交成功！</strong> 您对 <strong>{zone}</strong> 的意见（满意度 {rating}★）已通过 AI 聚合至意见热图。<br>🎯 AI 已识别关键词：{keywords}',
+'survey.fb.general':'一般建议','survey.fb.unknownZone':'该区域',
+'func.sports':'休闲运动场地','func.children':'儿童游乐设施','func.eco':'生态保育区','func.cycling':'绿道骑行','func.education':'自然教育','func.birdwatch':'观鸟/湿地体验',
+'tag.shade':'遮阴设施','tag.walkable':'步行可达','tag.lighting':'夜间照明','tag.accessible':'无障碍',
+'rating.1':'非常不满意','rating.2':'不太满意','rating.3':'一般','rating.4':'比较满意','rating.5':'非常满意',
+'opinion.title':'AI 意见聚合热图','opinion.subtitle':'AI 自动分析问卷文本，将公众意见映射到地理空间，热力越强表示该区域关注度和意见密度越高',
+'opinion.typeLabel':'意见类型：','opinion.all':'全部意见','opinion.positive':'👍 正面','opinion.improve':'🔧 改进建议','opinion.concern':'⚠️ 担忧','opinion.function':'🎯 功能需求',
+'opinion.stat1':'已聚合意见','opinion.stat2':'正面评价','opinion.stat3':'改进建议','opinion.stat4':'担忧反馈',
+'opinion.low':'低','opinion.high':'高',
+'opinion.filterToast':'已筛选：{type} 意见 ({count} 条)',
+'opinion.typeLabelAll':'全部','opinion.typeLabelPositive':'正面','opinion.typeLabelImprove':'改进建议','opinion.typeLabelConcern':'担忧','opinion.typeLabelFunction':'功能需求',
+'dash.title':'政府决策看板','dash.subtitle':'规划官员可直观查看公众意见分布、满意度趋势和热门议题',
+'dash.kpi1':'意见总数','dash.kpi2':'平均满意度','dash.kpi3':'覆盖区域','dash.kpi4':'热门议题',
+'dash.trend1':'↑ 12% 本周','dash.trend2':'↑ 0.3 较上周','dash.trend3':'↑ 2 新增','dash.trend4':'↓ 需关注',
+'dash.hotTopic':'遮阴设施',
+'dash.chart1':'各区域满意度对比','dash.chart2':'意见类型分布','dash.tableTitle':'📋 区域意见汇总表',
+'dash.col1':'区域名称','dash.col2':'类型','dash.col3':'意见数','dash.col4':'平均满意度','dash.col5':'热门议题','dash.col6':'优先级',
+'dash.priority.high':'高优先','dash.priority.mid':'中优先','dash.priority.low':'低优先',
+'roadmap.title':'项目路线图','roadmap.subtitle':'从规划到部署的完整里程碑',
+'footer.brand':'北部都会区绿化空间互动平台','footer.info':'Hackathon Demo | 客户：香港政府城市规划及土地发展部门 | 2026',
+'zone.z1.name':'米埔湿地','zone.z2.name':'新田公园','zone.z3.name':'生态走廊A','zone.z4.name':'湿地修复区','zone.z5.name':'古洞公园','zone.z6.name':'自然保护区','zone.z7.name':'生态走廊B','zone.z8.name':'粉岭公园',
+'zone.z1.typeLabel':'湿地','zone.z2.typeLabel':'公园用地','zone.z3.typeLabel':'生态走廊','zone.z4.typeLabel':'湿地','zone.z5.typeLabel':'公园用地','zone.z6.typeLabel':'自然保护区','zone.z7.typeLabel':'生态走廊','zone.z8.typeLabel':'公园用地',
+'zone.z1.area':'约 240 公顷','zone.z2.area':'约 85 公顷','zone.z3.area':'约 60 公顷','zone.z4.area':'约 120 公顷','zone.z5.area':'约 45 公顷','zone.z6.area':'约 180 公顷','zone.z7.area':'约 50 公顷','zone.z8.area':'约 70 公顷',
+'zone.status.planned':'已规划','zone.status.planning':'规划中','zone.status.restoring':'修复中','zone.status.designated':'已划定',
+'zone.z1.desc':'米埔湿地是国际重要湿地，规划保留其生态价值，同时增设公众观鸟步道和教育设施。',
+'zone.z2.desc':'新田公园规划为综合性社区公园，包含运动场地、儿童游乐区和绿道系统。',
+'zone.z3.desc':'生态走廊A连接米埔湿地与新田公园，规划为生态连接通道，保障野生动物迁徙。',
+'zone.z4.desc':'湿地修复区正在进行生态修复工程，目标是恢复退化湿地，提升雨洪管理能力。',
+'zone.z5.desc':'古洞公园服务于周边社区，规划运动场地、健身设施和社区活动空间。',
+'zone.z6.desc':'自然保护区以生态保育为核心，限制公众进入，主要供科研监测和生态保护使用。',
+'zone.z7.desc':'生态走廊B连接古洞公园与自然保护区，提供绿道骑行和生态连接功能。',
+'zone.z8.desc':'粉岭公园规划融合自然教育与社区休闲，包含自然教育中心和户外活动区。',
+'zone.z1.functions':['生态保育','观鸟','环境教育'],
+'zone.z2.functions':['休闲运动','儿童游乐','绿道'],
+'zone.z3.functions':['生态连接','步行绿道','生物栖息'],
+'zone.z4.functions':['生态修复','雨洪管理','自然教育'],
+'zone.z5.functions':['社区休闲','运动健身','社区活动'],
+'zone.z6.functions':['生态保育','科研监测','限制进入'],
+'zone.z7.functions':['生态连接','绿道骑行'],
+'zone.z8.functions':['休闲运动','自然教育','社区活动'],
+'zone.z1.statusKey':'planned','zone.z2.statusKey':'planning','zone.z3.statusKey':'planning','zone.z4.statusKey':'restoring','zone.z5.statusKey':'planning','zone.z6.statusKey':'designated','zone.z7.statusKey':'planning','zone.z8.statusKey':'planning',
+'roadmap.items':[
+{'phase':'Phase 1','title':'项目方向确认与团队组建','desc':'确认北部都会区绿化空间互动地图方向，完成团队角色分配，建立 GitHub 协作仓库。','status':'done','statusLabel':'✅ 已完成'},
+{'phase':'Phase 2','title':'基础框架与初始页面','desc':'搭建项目整体框架，创建 Demo 网站页面，研究相关政策文件和学术资料。','status':'done','statusLabel':'✅ 已完成'},
+{'phase':'Phase 3 · 进行中','title':'地理数据导入与地图可视化','desc':'搜索合适的地理空间数据源，导入绿化区域数据，生成可视化地图，优化地图展示样式。','status':'current','statusLabel':'🔄 进行中'},
+{'phase':'Phase 4','title':'居民问卷设计与集成','desc':'设计问卷内容，将问卷模块集成到网站，编写代码收集和组织答案数据。','status':'pending','statusLabel':'⏳ 待开始'},
+{'phase':'Phase 5','title':'AI 意见聚合与意见地图','desc':'开发 AI 模块分析问卷文本，基于收集的反馈构建意见地图，调整展示规则确保可读性。','status':'pending','statusLabel':'⏳ 待开始'},
+{'phase':'Phase 6','title':'全功能测试与 Demo 部署','desc':'测试所有功能模块，验证数据流转、AI 聚合和地图生成，准备 Hackathon 最终演示。','status':'pending','statusLabel':'⏳ 待开始'},
+],
+'chart.funcDist':'功能需求分布','chart.satisfaction':'平均满意度',
+'chart.labels.func':['休闲运动','生态保育','儿童游乐','绿道骑行','自然教育','湿地体验'],
+'chart.labels.opinion':['正面评价','改进建议','担忧反馈','功能需求'],
+'chart.labels.zones':['米埔湿地','新田公园','生态走廊A','湿地修复区','古洞公园','自然保护区','生态走廊B','粉岭公园'],
+'heat.unknownZone':'未知区域','heat.generalOpinion':'综合意见',
+},
+'zh-TW':{
+'nav.overview':'概覽','nav.problem':'問題','nav.map':'綠化地圖','nav.survey':'居民問卷','nav.opinion':'AI意見熱圖','nav.dashboard':'政府看板','nav.roadmap':'項目路線','nav.cta':'立即參與',
+'hero.badge':'Hackathon Demo · 北部都會區綠化空間規劃',
+'hero.title1':'讓綠化規劃','hero.title2':'看得見','hero.title3':'讓居民聲音','hero.title4':'落得上圖',
+'hero.desc':'將官方文字版綠化空間規劃轉化為可視化互動地圖，居民可查看規劃資訊並提交意見，AI 自動聚合公眾反饋生成空間意見熱圖，幫助政府直觀理解居民訴求。',
+'hero.btn1':'探索綠化地圖','hero.btn2':'查看政府看板',
+'hero.stat1':'規劃綠化區域','hero.stat2':'居民意見提交','hero.stat3':'功能類型','hero.stat4':'示範區覆蓋',
+'problem.title':'當前痛點','problem.subtitle':'居民與政府之間缺乏關於綠化空間規劃的直觀溝通渠道',
+'problem.c1.title':'文字報告難理解','problem.c1.desc':'官方綠化規劃主要以文字報告形式發佈，公眾難以理解綠化區域在哪裡、用途是什麼，資訊獲取門檻高。',
+'problem.c2.title':'意見無法空間化','problem.c2.desc':'現有公眾諮詢渠道以文字形式收集意見，居民建議無法在地圖上展示，政府也難以了解意見的空間分佈。',
+'problem.c3.title':'資訊透明度不足','problem.c3.desc':'居民無法方便地查看規劃資訊，政府也看不到公眾建議的地理分佈，降低了公眾參與效率。',
+'problem.c4.title':'反饋整理效率低','problem.c4.desc':'公眾反饋以純文字收集，需要人工整理分類，缺乏自動化的空間意見聚合和可視化工具。',
+'problem.before.title':'❌ 現狀：文字驅動','problem.before.1':'規劃報告以 PDF 文字為主，缺乏地圖可視化','problem.before.2':'公眾意見以文字表格收集，無法定位到地理空間','problem.before.3':'政府需手動整理意見，效率低、覆蓋面窄','problem.before.4':'居民難以參與，溝通障礙大',
+'problem.after.title':'✅ 方案：地圖驅動','problem.after.1':'官方規劃一鍵轉化為互動可視化地圖','problem.after.2':'居民在地圖上查看規劃並提交空間意見','problem.after.3':'AI 自動聚合反饋生成意見熱圖','problem.after.4':'政府直觀查看意見分佈，輔助決策',
+'type.park':'公園','type.wetland':'濕地','type.corridor':'生態走廊','type.reserve':'自然保護區',
+'map.title':'互動綠化空間地圖','map.subtitle':'點擊地圖上的綠化區域，查看規劃詳情、功能類型和面積資訊',
+'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'縮小','map.reset':'重置','map.builtArea':'已建設區域','map.demoArea':'北部都會區 · 示範區域',
+'map.panelTitle':'📋 區域詳情','map.emptyHint':'👆 點擊地圖上的綠化區域<br>查看詳細規劃資訊',
+'map.planningArea':'規劃面積','map.opinionCount':'意見數','map.avgSatisfaction':'平均滿意度','map.attentionLevel':'關注度等級','map.planningData':'📊 規劃數據','map.planningFunctions':'🎯 規劃功能','map.submitOpinion':'💬 對此區域發表意見',
+'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
+'survey.title':'居民意見問卷','survey.subtitle':'您的反饋將通過 AI 自動聚合，呈現在意見熱圖上',
+'survey.step0':'區域','survey.step1':'評分','survey.step2':'功能','survey.step3':'建議',
+'survey.prev':'上一步','survey.next':'下一步','survey.submit':'提交問卷','survey.selectRating':'請選擇評分',
+'survey.q0.title':'您最關注的綠化區域是？','survey.q0.hint':'選擇一個您最關心的規劃區域',
+'survey.q1.title':'您對該區域規劃方案的滿意度？','survey.q1.hint':'1 星 = 非常不滿意，5 星 = 非常滿意',
+'survey.q2.title':'您希望該區域具備哪些功能？','survey.q2.hint':'可多選',
+'survey.q3.title':'您對該區域還有哪些建議？','survey.q3.hint':'您的建議將通過 AI 分析並聚合到意見熱圖',
+'survey.q3.placeholder':'例如：希望增加更多遮陰休憩設施、改善步行可達性、增加夜間照明...',
+'survey.quickTags':'快速標籤：',
+'survey.resultHeader':'📊 實時聚合統計','survey.totalSurvey':'總問卷數','survey.todayNew':'今日新增','survey.avgRating':'平均滿意度','survey.activeZones':'活躍區域',
+'survey.toast.selectZone':'請先選擇一個區域','survey.toast.selectRating':'請先選擇評分','survey.toast.success':'問卷提交成功！AI 已聚合您的意見',
+'survey.fb.success':'✅ <strong>提交成功！</strong> 您對 <strong>{zone}</strong> 的意見（滿意度 {rating}★）已通過 AI 聚合至意見熱圖。<br>🎯 AI 已識別關鍵詞：{keywords}',
+'survey.fb.general':'一般建議','survey.fb.unknownZone':'該區域',
+'func.sports':'休閒運動場地','func.children':'兒童遊樂設施','func.eco':'生態保育區','func.cycling':'綠道騎行','func.education':'自然教育','func.birdwatch':'觀鳥/濕地體驗',
+'tag.shade':'遮陰設施','tag.walkable':'步行可達','tag.lighting':'夜間照明','tag.accessible':'無障礙',
+'rating.1':'非常不滿意','rating.2':'不太滿意','rating.3':'一般','rating.4':'比較滿意','rating.5':'非常滿意',
+'opinion.title':'AI 意見聚合熱圖','opinion.subtitle':'AI 自動分析問卷文字，將公眾意見映射到地理空間，熱力越強表示該區域關注度和意見密度越高',
+'opinion.typeLabel':'意見類型：','opinion.all':'全部意見','opinion.positive':'👍 正面','opinion.improve':'🔧 改進建議','opinion.concern':'⚠️ 擔憂','opinion.function':'🎯 功能需求',
+'opinion.stat1':'已聚合意見','opinion.stat2':'正面評價','opinion.stat3':'改進建議','opinion.stat4':'擔憂反饋',
+'opinion.low':'低','opinion.high':'高',
+'opinion.filterToast':'已篩選：{type} 意見 ({count} 條)',
+'opinion.typeLabelAll':'全部','opinion.typeLabelPositive':'正面','opinion.typeLabelImprove':'改進建議','opinion.typeLabelConcern':'擔憂','opinion.typeLabelFunction':'功能需求',
+'dash.title':'政府決策看板','dash.subtitle':'規劃官員可直觀查看公眾意見分佈、滿意度趨勢和熱門議題',
+'dash.kpi1':'意見總數','dash.kpi2':'平均滿意度','dash.kpi3':'覆蓋區域','dash.kpi4':'熱門議題',
+'dash.trend1':'↑ 12% 本週','dash.trend2':'↑ 0.3 較上週','dash.trend3':'↑ 2 新增','dash.trend4':'↓ 需關注',
+'dash.hotTopic':'遮陰設施',
+'dash.chart1':'各區域滿意度對比','dash.chart2':'意見類型分佈','dash.tableTitle':'📋 區域意見匯總表',
+'dash.col1':'區域名稱','dash.col2':'類型','dash.col3':'意見數','dash.col4':'平均滿意度','dash.col5':'熱門議題','dash.col6':'優先級',
+'dash.priority.high':'高優先','dash.priority.mid':'中優先','dash.priority.low':'低優先',
+'roadmap.title':'項目路線圖','roadmap.subtitle':'從規劃到部署的完整里程碑',
+'footer.brand':'北部都會區綠化空間互動平台','footer.info':'Hackathon Demo | 客戶：香港政府城市規劃及土地發展部門 | 2026',
+'zone.z1.name':'米埔濕地','zone.z2.name':'新田公園','zone.z3.name':'生態走廊A','zone.z4.name':'濕地修復區','zone.z5.name':'古洞公園','zone.z6.name':'自然保護區','zone.z7.name':'生態走廊B','zone.z8.name':'粉嶺公園',
+'zone.z1.typeLabel':'濕地','zone.z2.typeLabel':'公園用地','zone.z3.typeLabel':'生態走廊','zone.z4.typeLabel':'濕地','zone.z5.typeLabel':'公園用地','zone.z6.typeLabel':'自然保護區','zone.z7.typeLabel':'生態走廊','zone.z8.typeLabel':'公園用地',
+'zone.z1.area':'約 240 公頃','zone.z2.area':'約 85 公頃','zone.z3.area':'約 60 公頃','zone.z4.area':'約 120 公頃','zone.z5.area':'約 45 公頃','zone.z6.area':'約 180 公頃','zone.z7.area':'約 50 公頃','zone.z8.area':'約 70 公頃',
+'zone.status.planned':'已規劃','zone.status.planning':'規劃中','zone.status.restoring':'修復中','zone.status.designated':'已劃定',
+'zone.z1.desc':'米埔濕地是國際重要濕地，規劃保留其生態價值，同時增設公眾觀鳥步道和教育設施。',
+'zone.z2.desc':'新田公園規劃為綜合性社區公園，包含運動場地、兒童遊樂區和綠道系統。',
+'zone.z3.desc':'生態走廊A連接米埔濕地與新田公園，規劃為生態連接通道，保障野生動物遷徙。',
+'zone.z4.desc':'濕地修復區正在進行生態修復工程，目標是恢復退化濕地，提升雨洪管理能力。',
+'zone.z5.desc':'古洞公園服務於周邊社區，規劃運動場地、健身設施和社區活動空間。',
+'zone.z6.desc':'自然保護區以生態保育為核心，限制公眾進入，主要供科研監測和生態保護使用。',
+'zone.z7.desc':'生態走廊B連接古洞公園與自然保護區，提供綠道騎行和生態連接功能。',
+'zone.z8.desc':'粉嶺公園規劃融合自然教育與社區休閒，包含自然教育中心和戶外活動區。',
+'zone.z1.functions':['生態保育','觀鳥','環境教育'],
+'zone.z2.functions':['休閒運動','兒童遊樂','綠道'],
+'zone.z3.functions':['生態連接','步行綠道','生物棲息'],
+'zone.z4.functions':['生態修復','雨洪管理','自然教育'],
+'zone.z5.functions':['社區休閒','運動健身','社區活動'],
+'zone.z6.functions':['生態保育','科研監測','限制進入'],
+'zone.z7.functions':['生態連接','綠道騎行'],
+'zone.z8.functions':['休閒運動','自然教育','社區活動'],
+'zone.z1.statusKey':'planned','zone.z2.statusKey':'planning','zone.z3.statusKey':'planning','zone.z4.statusKey':'restoring','zone.z5.statusKey':'planning','zone.z6.statusKey':'designated','zone.z7.statusKey':'planning','zone.z8.statusKey':'planning',
+'roadmap.items':[
+{'phase':'Phase 1','title':'項目方向確認與團隊組建','desc':'確認北部都會區綠化空間互動地圖方向，完成團隊角色分配，建立 GitHub 協作倉庫。','status':'done','statusLabel':'✅ 已完成'},
+{'phase':'Phase 2','title':'基礎框架與初始頁面','desc':'搭建項目整體框架，創建 Demo 網站頁面，研究相關政策文件和學術資料。','status':'done','statusLabel':'✅ 已完成'},
+{'phase':'Phase 3 · 進行中','title':'地理數據導入與地圖可視化','desc':'搜索合適的地理空間數據源，導入綠化區域數據，生成可視化地圖，優化地圖展示樣式。','status':'current','statusLabel':'🔄 進行中'},
+{'phase':'Phase 4','title':'居民問卷設計與集成','desc':'設計問卷內容，將問卷模組集成到網站，編寫代碼收集和組織答案數據。','status':'pending','statusLabel':'⏳ 待開始'},
+{'phase':'Phase 5','title':'AI 意見聚合與意見地圖','desc':'開發 AI 模組分析問卷文字，基於收集的反饋構建意見地圖，調整展示規則確保可讀性。','status':'pending','statusLabel':'⏳ 待開始'},
+{'phase':'Phase 6','title':'全功能測試與 Demo 部署','desc':'測試所有功能模組，驗證數據流轉、AI 聚合和地圖生成，準備 Hackathon 最終演示。','status':'pending','statusLabel':'⏳ 待開始'},
+],
+'chart.funcDist':'功能需求分佈','chart.satisfaction':'平均滿意度',
+'chart.labels.func':['休閒運動','生態保育','兒童遊樂','綠道騎行','自然教育','濕地體驗'],
+'chart.labels.opinion':['正面評價','改進建議','擔憂反饋','功能需求'],
+'chart.labels.zones':['米埔濕地','新田公園','生態走廊A','濕地修復區','古洞公園','自然保護區','生態走廊B','粉嶺公園'],
+'heat.unknownZone':'未知區域','heat.generalOpinion':'綜合意見',
+}
+};
+function t(key){
+  const lang = window.currentLang || 'zh-CN';
+  const dict = I18N[lang] || I18N['zh-CN'];
+  return dict[key] !== undefined ? dict[key] : (I18N['zh-CN'][key] !== undefined ? I18N['zh-CN'][key] : key);
+}
+function switchLang(lang){
+  window.currentLang = lang;
+  document.documentElement.lang = lang;
+  try{ localStorage.setItem('gs-lang', lang); }catch(e){}
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if(el.tagName === 'text' || el.tagName === 'TEXT'){
+      el.textContent = val;
+    } else {
+      el.innerHTML = val;
+    }
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    el.setAttribute('title', t(el.getAttribute('data-i18n-title')));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+  });
+  renderSurveyOptions();
+  renderRoadmap();
+  renderDashTable();
+  updateCharts();
+  if(window.selectedZoneId){
+    selectZone(window.selectedZoneId);
+  }
+  renderHeatPoints(window.currentHeatFilter || 'all');
+}
+function initLang(){
+  let saved = 'zh-CN';
+  try{ saved = localStorage.getItem('gs-lang') || 'zh-CN'; }catch(e){}
+  window.currentLang = saved;
+  window.currentHeatFilter = 'all';
+  switchLang(saved);
+}
+</script>
+<script>
+/* App Logic */
+const zoneKeys = ['z1','z2','z3','z4','z5','z6','z7','z8'];
+const surveyZoneKeys = [
+  {key:'z1', icon:'\u{1F9AB}'},
+  {key:'z2', icon:'\u{1F333}'},
+  {key:'z3', icon:'\u{1F33F}'},
+  {key:'z4', icon:'\u{1F4A7}'},
+  {key:'z5', icon:'\u{1F3DE}\uFE0F'},
+  {key:'z6', icon:'\u{1F98C}'},
+];
+const funcKeys = [
+  {key:'func.sports', icon:'\u{1F3C3}'},
+  {key:'func.children', icon:'\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466}'},
+  {key:'func.eco', icon:'\u{1F98B}'},
+  {key:'func.cycling', icon:'\u{1F6B4}'},
+  {key:'func.education', icon:'\u{1F393}'},
+  {key:'func.birdwatch', icon:'\u{1F41F}'},
+];
+const heatPoints = [
+  {x:180,y:140,r:45,intensity:0.9,type:'positive',zoneKey:'z1',textKey:'heat.p1',tagKey:'func.eco'},
+  {x:370,y:130,r:35,intensity:0.7,type:'improve',zoneKey:'z2',textKey:'heat.p2',tagKey:'tag.shade'},
+  {x:535,y:200,r:40,intensity:0.8,type:'function',zoneKey:'z3',textKey:'heat.p3',tagKey:'func.cycling'},
+  {x:680,y:120,r:30,intensity:0.6,type:'concern',zoneKey:'z4',textKey:'heat.p4',tagKey:'func.eco'},
+  {x:310,y:340,r:38,intensity:0.75,type:'improve',zoneKey:'z5',textKey:'heat.p5',tagKey:'tag.walkable'},
+  {x:480,y:340,r:42,intensity:0.85,type:'concern',zoneKey:'z6',textKey:'heat.p6',tagKey:'func.eco'},
+  {x:155,y:350,r:28,intensity:0.5,type:'positive',zoneKey:'z7',textKey:'heat.p7',tagKey:'heat.ecoConn'},
+  {x:630,y:335,r:36,intensity:0.7,type:'function',zoneKey:'z8',textKey:'heat.p8',tagKey:'func.education'},
+  {x:200,y:100,r:20,intensity:0.4,type:'positive',zoneKey:'z1',textKey:'heat.p9',tagKey:'heat.birdwatch'},
+  {x:340,y:180,r:18,intensity:0.35,type:'improve',zoneKey:'z2',textKey:'heat.p10',tagKey:'tag.lighting'},
+  {x:500,y:230,r:22,intensity:0.45,type:'function',zoneKey:'z3',textKey:'heat.p11',tagKey:'tag.accessible'},
+];
+const heatTexts = {
+  'en':{
+    'heat.p1':'Hope to add birdwatching hides and guided tour services',
+    'heat.p2':'Insufficient shade facilities, too hot in summer',
+    'heat.p3':'Suggest adding greenway cycling routes and rest stops',
+    'heat.p4':'Concerned that development will affect ecological restoration',
+    'heat.p5':'Poor walkability, need more entrances',
+    'heat.p6':'Should restrict visitor access to protect ecology',
+    'heat.p7':'Eco-corridor design is great, support it',
+    'heat.p8':'Hope to add a children nature education center',
+    'heat.p9':'Great birdwatching experience',
+    'heat.p10':'Insufficient night lighting',
+    'heat.p11':'Hope to add accessible ramps',
+    'heat.ecoConn':'Ecological Connection','heat.birdwatch':'Birdwatching',
+  },
+  'zh-CN':{
+    'heat.p1':'希望增加观鸟隐蔽设施和导赏服务',
+    'heat.p2':'遮阴设施不足，夏季太热无法使用',
+    'heat.p3':'建议增加绿道骑行路线和休息站',
+    'heat.p4':'担心开发影响生态修复进度',
+    'heat.p5':'步行可达性差，需要更多入口',
+    'heat.p6':'应限制游客进入，保护生态',
+    'heat.p7':'生态走廊设计很好，支持',
+    'heat.p8':'希望增设儿童自然教育中心',
+    'heat.p9':'观鸟体验很好',
+    'heat.p10':'夜间照明不足',
+    'heat.p11':'希望增加无障碍通道',
+    'heat.ecoConn':'生态连接','heat.birdwatch':'观鸟',
+  },
+  'zh-TW':{
+    'heat.p1':'希望增加觀鳥隱蔽設施和導賞服務',
+    'heat.p2':'遮陰設施不足，夏季太熱無法使用',
+    'heat.p3':'建議增加綠道騎行路線和休息站',
+    'heat.p4':'擔心開發影響生態修復進度',
+    'heat.p5':'步行可達性差，需要更多入口',
+    'heat.p6':'應限制遊客進入，保護生態',
+    'heat.p7':'生態走廊設計很好，支持',
+    'heat.p8':'希望增設兒童自然教育中心',
+    'heat.p9':'觀鳥體驗很好',
+    'heat.p10':'夜間照明不足',
+    'heat.p11':'希望增加無障礙通道',
+    'heat.ecoConn':'生態連接','heat.birdwatch':'觀鳥',
+  },
+};
+function heatT(key){
+  const lang = window.currentLang || 'zh-CN';
+  return (heatTexts[lang] && heatTexts[lang][key]) || heatTexts['zh-CN'][key] || key;
+}
+const zoneCoords = {
+  'z1':{x:180,y:140},'z2':{x:370,y:130},'z3':{x:535,y:200},'z4':{x:680,y:120},
+  'z5':{x:310,y:340},'z6':{x:480,y:340},'z7':{x:155,y:350},'z8':{x:630,y:335},
+};
+const tableData = [
+  {zoneKey:'z1',typeKey:'type.wetland',opinions:186,avg:4.2,topicKey:'heat.birdwatch',priority:'low'},
+  {zoneKey:'z2',typeKey:'type.park',opinions:234,avg:3.1,topicKey:'tag.shade',priority:'high'},
+  {zoneKey:'z3',typeKey:'type.corridor',opinions:156,avg:3.8,topicKey:'func.cycling',priority:'mid'},
+  {zoneKey:'z4',typeKey:'type.wetland',opinions:98,avg:3.5,topicKey:'heat.ecoConn',priority:'mid'},
+  {zoneKey:'z5',typeKey:'type.park',opinions:201,avg:3.2,topicKey:'tag.walkable',priority:'high'},
+  {zoneKey:'z6',typeKey:'type.reserve',opinions:145,avg:4.5,topicKey:'func.eco',priority:'low'},
+  {zoneKey:'z7',typeKey:'type.corridor',opinions:87,avg:4.0,topicKey:'heat.ecoConn',priority:'low'},
+  {zoneKey:'z8',typeKey:'type.park',opinions:177,avg:3.6,topicKey:'func.education',priority:'mid'},
+];
+const surveyData = {zoneKey:null,rating:0,functions:[],suggestion:''};
+let currentStep = 0;
+let surveyCount = 1284;
+let mapScale = 1;
+let surveyChartInst=null, dashBarInst=null, dashPieInst=null;
+
+function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+window.addEventListener('scroll',()=>{
+  const scrollY = window.scrollY;
+  const nav = document.getElementById('topnav');
+  if(scrollY>50){nav.classList.add('scrolled');}else{nav.classList.remove('scrolled');}
+  document.querySelectorAll('.section').forEach(sec=>{
+    const top=sec.offsetTop-80, bottom=top+sec.offsetHeight;
+    if(scrollY>=top && scrollY<bottom){
+      document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector('.nav-link[data-target="'+sec.id+'"]');
+      if(link) link.classList.add('active');
+    }
+  });
+});
+
+document.querySelectorAll('.nav-link').forEach(link=>{
+  link.addEventListener('click',()=>scrollToSection(link.dataset.target));
+});
+
+document.getElementById('hamburger').addEventListener('click',()=>{
+  const links=document.getElementById('navLinks');
+  if(links.style.display==='flex'){links.style.display='';}
+  else{links.style.display='flex';links.style.position='absolute';links.style.top='64px';links.style.left='0';links.style.right='0';links.style.flexDirection='column';links.style.background='rgba(27,94,58,0.98)';links.style.padding='16px';}
+});
+
+function renderSurveyOptions(){
+  const zc = document.getElementById('zoneOptions');
+  if(!zc) return;
+  zc.innerHTML = surveyZoneKeys.map(z=>
+    '<div class="option-item" data-value="'+z.key+'" onclick="selectSurveyOption(this)">'+
+    '<div class="radio"></div><span class="label">'+z.icon+' '+t('zone.'+z.key+'.name')+'</span></div>'
+  ).join('');
+  if(surveyData.zoneKey){
+    zc.querySelectorAll('.option-item').forEach(o=>{
+      if(o.dataset.value===surveyData.zoneKey) o.classList.add('selected');
+    });
+  }
+  const fc = document.getElementById('funcOptions');
+  if(!fc) return;
+  fc.innerHTML = funcKeys.map(f=>
+    '<div class="option-item" onclick="toggleMulti(this)" data-fkey="'+f.key+'">'+
+    '<div class="radio" style="border-radius:4px;"></div><span class="label">'+f.icon+' '+t(f.key)+'</span></div>'
+  ).join('');
+  if(surveyData.functions.length){
+    fc.querySelectorAll('.option-item').forEach(o=>{
+      if(surveyData.functions.includes(o.dataset.fkey)) o.classList.add('selected');
+    });
+  }
+}
+
+function renderRoadmap(){
+  const tl = document.getElementById('timeline');
+  if(!tl) return;
+  const items = t('roadmap.items');
+  tl.innerHTML = items.map(it=>
+    '<div class="timeline-item '+it.status+'">'+
+    '<div class="timeline-content">'+
+    '<div class="phase">'+it.phase+'</div>'+
+    '<h4>'+it.title+'</h4>'+
+    '<p>'+it.desc+'</p>'+
+    '<span class="timeline-status status-'+it.status+'">'+it.statusLabel+'</span>'+
+    '</div></div>'
+  ).join('');
+}
+
+function renderDashTable(){
+  const tb = document.getElementById('dashTableBody');
+  if(!tb) return;
+  tb.innerHTML = tableData.map(r=>{
+    const bc = r.priority==='high'?'badge-high':r.priority==='mid'?'badge-mid':'badge-low';
+    const bt = t('dash.priority.'+r.priority);
+    return '<tr><td>'+t('zone.'+r.zoneKey+'.name')+'</td>'+
+    '<td>'+t(r.typeKey)+'</td>'+
+    '<td>'+r.opinions+'</td>'+
+    '<td>'+r.avg+' \u2b50</td>'+
+    '<td>'+heatT(r.topicKey)+'</td>'+
+    '<td><span class="badge '+bc+'">'+bt+'</span></td></tr>';
+  }).join('');
+}
+
+window.selectedZoneId = null;
+function selectZone(id){
+  const zk = id;
+  window.selectedZoneId = zk;
+  document.getElementById('zoneEmpty').style.display='none';
+  const detail = document.getElementById('zoneDetail');
+  detail.style.display='block';
+  const attentionLevels = ['high','mid','high','mid'];
+  const al = attentionLevels[Math.floor(Math.random()*4)];
+  detail.innerHTML =
+    '<div class="zone-info-card">'+
+    '<h4>\ud83d\udccd '+t('zone.'+zk+'.name')+'</h4>'+
+    '<div class="meta">'+
+    '<span class="zone-tag tag-'+getZoneType(zk)+'">'+t('zone.'+zk+'.typeLabel')+'</span>'+
+    '<span class="zone-tag" style="background:#f5f5f5;color:#666;">'+t('zone.status.'+t('zone.'+zk+'.statusKey'))+'</span>'+
+    '</div>'+
+    '<p>'+t('zone.'+zk+'.desc')+'</p></div>'+
+    '<div class="zone-info-card">'+
+    '<h4>'+t('map.planningData')+'</h4>'+
+    '<div class="zone-stat"><span>'+t('map.planningArea')+'</span><span class="val">'+t('zone.'+zk+'.area')+'</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.opinionCount')+'</span><span class="val">'+Math.floor(Math.random()*200+50)+'</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.avgSatisfaction')+'</span><span class="val">'+(Math.random()*2+3).toFixed(1)+' / 5.0</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.attentionLevel')+'</span><span class="val">'+t('map.level.'+al)+'</span></div></div>'+
+    '<div class="zone-info-card">'+
+    '<h4>'+t('map.planningFunctions')+'</h4>'+
+    '<div class="meta" style="margin-top:8px;">'+
+    t('zone.'+zk+'.functions').map(f=>'<span class="zone-tag tag-'+getZoneType(zk)+'">'+f+'</span>').join('')+
+    '</div></div>'+
+    '<button class="btn-survey btn-next" style="width:100%;margin-top:8px;padding:12px;" onclick="scrollToSection(\'survey-section\')">'+t('map.submitOpinion')+'</button>';
+}
+function getZoneType(zk){
+  const map = {z1:'wetland',z2:'park',z3:'corridor',z4:'wetland',z5:'park',z6:'reserve',z7:'corridor',z8:'park'};
+  return map[zk]||'park';
+}
+
+document.querySelectorAll('.filter-chip[data-filter]').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-chip[data-filter]').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    const filter=chip.dataset.filter;
+    document.querySelectorAll('.zone').forEach(zone=>{
+      if(filter==='all'||zone.dataset.type===filter){zone.style.opacity='0.7';zone.style.pointerEvents='auto';}
+      else{zone.style.opacity='0.15';zone.style.pointerEvents='none';}
+    });
+  });
+});
+
+document.getElementById('zoomIn').addEventListener('click',()=>{
+  mapScale=Math.min(mapScale*1.2,2);
+  document.getElementById('mapSvg').style.transform='scale('+mapScale+')';
+});
+document.getElementById('zoomOut').addEventListener('click',()=>{
+  mapScale=Math.max(mapScale/1.2,0.5);
+  document.getElementById('mapSvg').style.transform='scale('+mapScale+')';
+});
+document.getElementById('resetMap').addEventListener('click',()=>{
+  mapScale=1;
+  document.getElementById('mapSvg').style.transform='scale(1)';
+  document.querySelectorAll('.filter-chip[data-filter]').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
+  document.querySelectorAll('.zone').forEach(z=>{z.style.opacity='0.7';z.style.pointerEvents='auto';});
+});
+
+function selectSurveyOption(el){
+  el.parentElement.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  surveyData.zoneKey = el.dataset.value;
+}
+function selectRating(val){
+  surveyData.rating=val;
+  document.querySelectorAll('.rating-star').forEach((s,i)=>{
+    if(i<val){s.classList.add('active');}else{s.classList.remove('active');}
+  });
+  document.getElementById('ratingLabel').textContent=t('rating.'+val);
+}
+function toggleMulti(el){
+  el.classList.toggle('selected');
+}
+function nextStep(step){
+  if(step===0 && !surveyData.zoneKey){showToast(t('survey.toast.selectZone'));return;}
+  if(step===1 && surveyData.rating===0){showToast(t('survey.toast.selectRating'));return;}
+  document.querySelector('.survey-q[data-step="'+step+'"]').classList.remove('active');
+  document.querySelector('.step-dot[data-step="'+step+'"]').classList.remove('active');
+  document.querySelector('.step-dot[data-step="'+step+'"]').classList.add('done');
+  const next=step+1;
+  document.querySelector('.survey-q[data-step="'+next+'"]').classList.add('active');
+  document.querySelector('.step-dot[data-step="'+next+'"]').classList.add('active');
+  document.getElementById('progressFill').style.width=((next+1)*25)+'%';
+  currentStep=next;
+}
+function prevStep(step){
+  document.querySelector('.survey-q[data-step="'+step+'"]').classList.remove('active');
+  document.querySelector('.step-dot[data-step="'+step+'"]').classList.remove('active');
+  const prev=step-1;
+  document.querySelector('.survey-q[data-step="'+prev+'"]').classList.add('active');
+  document.querySelector('.step-dot[data-step="'+prev+'"]').classList.remove('done');
+  document.querySelector('.step-dot[data-step="'+prev+'"]').classList.add('active');
+  document.getElementById('progressFill').style.width=((prev+1)*25)+'%';
+  currentStep=prev;
+}
+function addQuickTag(el){
+  const ta=document.getElementById('suggestionText');
+  const txt=el.textContent.trim();
+  if(ta.value && !ta.value.endsWith(' ') && !ta.value.endsWith('\n')) ta.value+=', ';
+  ta.value+=txt;
+}
+function submitSurvey(){
+  surveyData.functions=[];
+  document.querySelectorAll('#funcOptions .option-item.selected').forEach(o=>{
+    surveyData.functions.push(o.dataset.fkey);
+  });
+  surveyData.suggestion=document.getElementById('suggestionText').value;
+  surveyCount++;
+  document.getElementById('totalSurveys').textContent=surveyCount.toLocaleString();
+  document.getElementById('todaySurveys').textContent=parseInt(document.getElementById('todaySurveys').textContent)+1;
+  const zoneName = surveyData.zoneKey ? t('zone.'+surveyData.zoneKey+'.name') : t('survey.fb.unknownZone');
+  const kw = surveyData.functions.length ? surveyData.functions.map(f=>t(f)).join(', ') : t('survey.fb.general');
+  const fb=document.getElementById('surveyFeedback');
+  fb.innerHTML = t('survey.fb.success')
+    .replace('{zone}', zoneName)
+    .replace('{rating}', surveyData.rating)
+    .replace('{keywords}', kw + (surveyData.suggestion ? ', '+surveyData.suggestion.substring(0,20)+'...' : ''));
+  fb.classList.add('show');
+  addHeatPoint(surveyData);
+  showToast(t('survey.toast.success'));
+  setTimeout(()=>{
+    document.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
+    document.querySelectorAll('.rating-star').forEach(s=>s.classList.remove('active'));
+    document.getElementById('suggestionText').value='';
+    document.getElementById('ratingLabel').textContent=t('survey.selectRating');
+    Object.assign(surveyData,{zoneKey:null,rating:0,functions:[],suggestion:''});
+    document.querySelector('.survey-q.active').classList.remove('active');
+    document.querySelector('.survey-q[data-step="0"]').classList.add('active');
+    document.querySelectorAll('.step-dot').forEach((d,i)=>{d.classList.remove('done','active');if(i===0)d.classList.add('active');});
+    document.getElementById('progressFill').style.width='25%';
+    currentStep=0;
+  },2000);
+}
+
+function showToast(msg){
+  const tEl=document.getElementById('toast');
+  tEl.textContent=msg;
+  tEl.classList.add('show');
+  setTimeout(()=>tEl.classList.remove('show'),3000);
+}
+
+function renderHeatPoints(filter){
+  filter = filter || 'all';
+  window.currentHeatFilter = filter;
+  const container=document.getElementById('heatCircles');
+  if(!container) return;
+  container.innerHTML='';
+  const filtered = filter==='all' ? heatPoints : heatPoints.filter(p=>p.type===filter);
+  const colors = {positive:'#4CAF6F',improve:'#FF9800',concern:'#ef5350',function:'#42A5F5'};
+  filtered.forEach(p=>{
+    const opacity=0.2+p.intensity*0.5;
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',p.x); circle.setAttribute('cy',p.y); circle.setAttribute('r',p.r);
+    circle.setAttribute('fill',colors[p.type]||'#FF9800');
+    circle.setAttribute('opacity',opacity);
+    circle.style.cursor='pointer'; circle.style.transition='all 0.3s';
+    circle.addEventListener('mouseenter',()=>{
+      circle.setAttribute('r',p.r*1.2); circle.setAttribute('opacity',0.85);
+      showHeatPopup(p);
+    });
+    circle.addEventListener('mouseleave',()=>{
+      circle.setAttribute('r',p.r); circle.setAttribute('opacity',opacity);
+      hideHeatPopup();
+    });
+    container.appendChild(circle);
+  });
+}
+function showHeatPopup(p){
+  const popup=document.getElementById('heatPopup');
+  const typeLabels={positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
+  popup.innerHTML='<h5>'+t('zone.'+p.zoneKey+'.name')+'</h5>'+
+    '<div class="tag">'+typeLabels[p.type]+' \u00b7 '+heatT(p.tagKey)+'</div>'+
+    '<div class="text">"'+heatT(p.textKey)+'"</div>';
+  const rect=document.getElementById('heatCanvas').getBoundingClientRect();
+  const scaleX=rect.width/800, scaleY=rect.height/480;
+  popup.style.left=(p.x*scaleX+15)+'px';
+  popup.style.top=(p.y*scaleY-30)+'px';
+  popup.classList.add('show');
+}
+function hideHeatPopup(){ document.getElementById('heatPopup').classList.remove('show'); }
+
+function filterOpinions(filter){
+  document.querySelectorAll('.opinion-filter').forEach(f=>f.classList.remove('active'));
+  document.querySelector('.opinion-filter[data-filter="'+filter+'"]').classList.add('active');
+  renderHeatPoints(filter);
+  const typeMap={all:t('opinion.typeLabelAll'),positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
+  const counts={all:heatPoints.length,positive:heatPoints.filter(p=>p.type==='positive').length,improve:heatPoints.filter(p=>p.type==='improve').length,concern:heatPoints.filter(p=>p.type==='concern').length,function:heatPoints.filter(p=>p.type==='function').length};
+  showToast(t('opinion.filterToast').replace('{type}',typeMap[filter]).replace('{count}',counts[filter]));
+}
+
+function addHeatPoint(data){
+  const coord = zoneCoords[data.zoneKey]||{x:400,y:240};
+  const type = data.rating>=4?'positive':data.rating<=2?'concern':data.suggestion?'improve':'function';
+  heatPoints.push({
+    x:coord.x+(Math.random()-0.5)*40, y:coord.y+(Math.random()-0.5)*40,
+    r:25+Math.random()*20, intensity:0.5+Math.random()*0.4, type:type,
+    zoneKey:data.zoneKey||'z1',
+    textKey:'heat.custom', tagKey:data.functions[0]||'heat.generalOpinion',
+  });
+  const lang=window.currentLang||'zh-CN';
+  if(!heatTexts[lang]['heat.custom']){
+    heatTexts['en']['heat.custom']=data.suggestion||'User opinion';
+    heatTexts['zh-CN']['heat.custom']=data.suggestion||'用户意见';
+    heatTexts['zh-TW']['heat.custom']=data.suggestion||'用戶意見';
+  } else {
+    heatTexts[lang]['heat.custom']=data.suggestion||heatTexts[lang]['heat.custom'];
+  }
+  renderHeatPoints();
+}
+
+function updateCharts(){
+  if(surveyChartInst) surveyChartInst.destroy();
+  if(dashBarInst) dashBarInst.destroy();
+  if(dashPieInst) dashPieInst.destroy();
+  const sCtx=document.getElementById('surveyChart').getContext('2d');
+  surveyChartInst=new Chart(sCtx,{
+    type:'doughnut',
+    data:{labels:t('chart.labels.func'),datasets:[{data:[28,22,18,15,10,7],backgroundColor:['#4DB6AC','#66BB6A','#FFB74D','#BA68C8','#42A5F5','#26C6DA'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:'#333'}},title:{display:true,text:t('chart.funcDist'),font:{size:13}}}}
+  });
+  const bCtx=document.getElementById('dashBarChart').getContext('2d');
+  dashBarInst=new Chart(bCtx,{
+    type:'bar',
+    data:{labels:t('chart.labels.zones'),datasets:[{label:t('chart.satisfaction'),data:[4.2,3.1,3.8,3.5,3.2,4.5,4.0,3.6],backgroundColor:['#4CAF6F','#FF9800','#4CAF6F','#FF9800','#FF9800','#4CAF6F','#4CAF6F','#FF9800'],borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{color:'rgba(255,255,255,0.5)'},grid:{color:'rgba(255,255,255,0.08)'}},x:{ticks:{color:'rgba(255,255,255,0.5)',font:{size:10}},grid:{display:false}}}}
+  });
+  const pCtx=document.getElementById('dashPieChart').getContext('2d');
+  dashPieInst=new Chart(pCtx,{
+    type:'pie',
+    data:{labels:t('chart.labels.opinion'),datasets:[{data:[42,38,12,8],backgroundColor:['#4CAF6F','#FF9800','#ef5350','#42A5F5'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'rgba(255,255,255,0.7)',font:{size:11}}}}}
+  });
+}
+
+function animateNumber(el,target,duration){
+  duration=duration||1500;
+  const startTime=performance.now();
+  function update(now){
+    const elapsed=now-startTime;
+    const progress=Math.min(elapsed/duration,1);
+    const eased=1-Math.pow(1-progress,3);
+    const val=Math.floor(target*eased);
+    el.textContent=target>100?val.toLocaleString():val;
+    if(progress<1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+window.addEventListener('load',()=>{
+  initLang();
+  renderSurveyOptions();
+  renderRoadmap();
+  renderDashTable();
+  updateCharts();
+  renderHeatPoints('all');
+  animateNumber(document.getElementById('stat1'),15);
+  animateNumber(document.getElementById('stat2'),1284);
+  animateNumber(document.getElementById('stat3'),8);
+  animateNumber(document.getElementById('stat4'),3);
+});
+</script>
+</body>
+</html>
