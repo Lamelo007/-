@@ -18,19 +18,9 @@ const funcKeys = [
   {key:'func.education', icon:'\u{1F393}'},
   {key:'func.birdwatch', icon:'\u{1F41F}'},
 ];
-const heatPoints = [
-  {x:104,y:243,r:45,intensity:0.9,type:'positive',zoneKey:'z1',textKey:'heat.p1',tagKey:'func.birdwatch'},
-  {x:280,y:116,r:38,intensity:0.7,type:'improve',zoneKey:'z2',textKey:'heat.p2',tagKey:'heat.wetlandManage'},
-  {x:332,y:136,r:34,intensity:0.8,type:'function',zoneKey:'z3',textKey:'heat.p3',tagKey:'func.education'},
-  {x:564,y:292,r:30,intensity:0.6,type:'concern',zoneKey:'z4',textKey:'heat.p4',tagKey:'func.eco'},
-  {x:535,y:268,r:42,intensity:0.85,type:'concern',zoneKey:'z5',textKey:'heat.p6',tagKey:'func.eco'},
-  {x:679,y:102,r:36,intensity:0.75,type:'improve',zoneKey:'z6',textKey:'heat.p5',tagKey:'heat.access'},
-  {x:754,y:185,r:36,intensity:0.7,type:'function',zoneKey:'z7',textKey:'heat.p8',tagKey:'func.education'},
-  {x:152,y:193,r:20,intensity:0.4,type:'positive',zoneKey:'z1',textKey:'heat.p9',tagKey:'func.birdwatch'},
-  {x:222,y:112,r:18,intensity:0.35,type:'improve',zoneKey:'z2',textKey:'heat.p10',tagKey:'heat.lighting'},
-  {x:382,y:180,r:22,intensity:0.45,type:'function',zoneKey:'z3',textKey:'heat.p11',tagKey:'heat.accessible'},
-  {x:708,y:141,r:28,intensity:0.5,type:'positive',zoneKey:'z7',textKey:'heat.p7',tagKey:'heat.ecoConn'},
-];
+/* The opinion corpus that drives every figure on this page lives
+   further down, next to the zone coordinates it samples around.
+   See "demo opinion corpus" below. */
 const heatTexts = {
   'en':{
     'heat.p1':'Hope Mai Po adds more birdwatching hides and guided tours',
@@ -50,6 +40,25 @@ const heatTexts = {
     'heat.lighting':'Night Lighting',
     'heat.accessible':'Accessible Design',
     'heat.ecoConn':'Ecological Connection',
+    'heat.p12':'Suggest more shaded rest spots along the birdwatching trail',
+    'heat.p13':'Worried too many visitors will disturb the wintering waterbirds',
+    'heat.p14':'Worried the fishponds will be filled in for development',
+    'heat.p15':'Hope to add a birdwatching platform',
+    'heat.p16':'The farmland landscape is worth keeping, support it',
+    'heat.p17':'Worried the farmland will be rezoned for housing',
+    'heat.p18':'The butterfly conservation work here is excellent',
+    'heat.p19':'Suggest eco-fencing and interpretive signs',
+    'heat.p20':'Hope guided tours can be booked in advance',
+    'heat.p21':'Suggest improving the trail surface',
+    'heat.p22':'The landscape here is still pristine, I like it',
+    'heat.p23':'Worried about overcrowding on public holidays',
+    'heat.shade':'Shade & Rest',
+    'heat.pondLoss':'Fishpond Loss',
+    'heat.farmland':'Farmland',
+    'heat.ecofence':'Eco-fencing',
+    'heat.pavement':'Trail Surface',
+    'heat.crowding':'Crowding',
+    'heat.generalOpinion':'General opinion',
     'heat.birdwatch':'Birdwatching'
   },
   'zh-CN':{
@@ -70,6 +79,25 @@ const heatTexts = {
     'heat.lighting':'夜间照明',
     'heat.accessible':'无障碍设计',
     'heat.ecoConn':'生态连接',
+    'heat.p12':'建议观鸟径沿途增设遮阴休息点',
+    'heat.p13':'担心游客过多会惊扰越冬水鸟',
+    'heat.p14':'担心鱼塘被填平作发展用途',
+    'heat.p15':'希望增设观鸟平台',
+    'heat.p16':'农地景观值得保留，支持',
+    'heat.p17':'担心农地被改建为住宅',
+    'heat.p18':'蝴蝶保育工作做得好',
+    'heat.p19':'建议增设生态围栏与解说牌',
+    'heat.p20':'希望提供预约制导赏',
+    'heat.p21':'建议改善步道铺装',
+    'heat.p22':'自然景观原始，很喜欢',
+    'heat.p23':'担心假日人流过多',
+    'heat.shade':'遮阴设施',
+    'heat.pondLoss':'鱼塘流失',
+    'heat.farmland':'农地保育',
+    'heat.ecofence':'生态围栏',
+    'heat.pavement':'步道铺装',
+    'heat.crowding':'人流压力',
+    'heat.generalOpinion':'综合意见',
     'heat.birdwatch':'观鸟'
   },
   'zh-TW':{
@@ -90,6 +118,25 @@ const heatTexts = {
     'heat.lighting':'夜間照明',
     'heat.accessible':'無障礙設計',
     'heat.ecoConn':'生態連接',
+    'heat.p12':'建議觀鳥徑沿途增設遮陰休息點',
+    'heat.p13':'擔心遊客過多會驚擾越冬水鳥',
+    'heat.p14':'擔心魚塘被填平作發展用途',
+    'heat.p15':'希望增設觀鳥平台',
+    'heat.p16':'農地景觀值得保留，支持',
+    'heat.p17':'擔心農地被改建為住宅',
+    'heat.p18':'蝴蝶保育工作做得好',
+    'heat.p19':'建議增設生態圍欄與解說牌',
+    'heat.p20':'希望提供預約制導賞',
+    'heat.p21':'建議改善步道鋪裝',
+    'heat.p22':'自然景觀原始，很喜歡',
+    'heat.p23':'擔心假日人流過多',
+    'heat.shade':'遮陰設施',
+    'heat.pondLoss':'魚塘流失',
+    'heat.farmland':'農地保育',
+    'heat.ecofence':'生態圍欄',
+    'heat.pavement':'步道鋪裝',
+    'heat.crowding':'人流壓力',
+    'heat.generalOpinion':'綜合意見',
     'heat.birdwatch':'觀鳥'
   }
 };
@@ -108,15 +155,230 @@ const zoneCoords = {
   'z6':{x:655,y:118},
   'z7':{x:736,y:163}
 };
-const tableData = [
-  {zoneKey:'z1',typeKey:'type.wetland',opinions:186,avg:4.2,topicKey:'func.birdwatch',priority:'low'},
-  {zoneKey:'z2',typeKey:'type.wetland',opinions:234,avg:3.1,topicKey:'heat.wetlandManage',priority:'high'},
-  {zoneKey:'z3',typeKey:'type.park',opinions:156,avg:3.8,topicKey:'func.education',priority:'mid'},
-  {zoneKey:'z4',typeKey:'type.reserve',opinions:98,avg:3.5,topicKey:'func.eco',priority:'mid'},
-  {zoneKey:'z5',typeKey:'type.reserve',opinions:201,avg:3.2,topicKey:'heat.restricted',priority:'high'},
-  {zoneKey:'z6',typeKey:'type.wetland',opinions:145,avg:4.5,topicKey:'heat.access',priority:'low'},
-  {zoneKey:'z7',typeKey:'type.park',opinions:177,avg:3.6,topicKey:'func.education',priority:'mid'},
+
+/* ==================== demo opinion corpus + aggregation ====================
+   The MAP on this page is real: coastlines, conservation-site boundaries and
+   the watercourse network come from the Hong Kong CSDI platform. The OPINIONS
+   are not — no public consultation has actually been run for this demo.
+
+   Rather than hand-drawing a handful of blobs and calling them "AI aggregated",
+   we synthesise a corpus of 1,284 submissions and then aggregate it for real.
+   Every figure on this page — the totals, the type shares, the per-district
+   table, the satisfaction scores, and every heat blob — is computed from this
+   one corpus, so they cannot drift apart.
+
+   To run on real submissions, replace buildOpinionCorpus() with a fetch that
+   returns the same shape; nothing downstream needs to change.
+   ========================================================================= */
+
+const OPINION_TOTAL = 1284;      // submissions this demo claims
+const HEAT_CELL = 20;            // density grid cell size, in viewBox units
+
+/* deterministic PRNG, so the demo renders identically on every load */
+function mulberry32(seed){
+  return function(){
+    seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* ---- the synthetic input ------------------------------------------------
+   SITE_VOLUME: how many submissions each site drew (sums to OPINION_TOTAL).
+   TOPIC_MIX:   how that volume splits across the topics raised there.
+                dx/dy offsets a topic away from the site centre so the field
+                spreads instead of stacking on a single point; sigma is its
+                spread in viewBox units.
+   Everything below this block is derived. */
+const SITE_VOLUME = {z1:200, z2:251, z3:167, z4:105, z5:216, z6:155, z7:190};
+const TOPIC_MIX = [
+  {zoneKey:'z1', textKey:'heat.p1',  tagKey:'func.birdwatch', type:'positive', share:0.45, dx:-18, dy: 24, sigma:17},
+  {zoneKey:'z1', textKey:'heat.p9',  tagKey:'heat.birdwatch', type:'positive', share:0.25, dx: 30, dy:-26, sigma:20},
+  {zoneKey:'z1', textKey:'heat.p12', tagKey:'heat.shade',     type:'improve',  share:0.18, dx:  6, dy: 40, sigma:15},
+  {zoneKey:'z1', textKey:'heat.p13', tagKey:'func.eco',       type:'concern',  share:0.12, dx:-30, dy: -8, sigma:14},
+
+  {zoneKey:'z2', textKey:'heat.p2',  tagKey:'heat.wetlandManage', type:'improve',  share:0.40, dx: 26, dy:-20, sigma:20},
+  {zoneKey:'z2', textKey:'heat.p10', tagKey:'heat.lighting',      type:'improve',  share:0.20, dx:-32, dy:-24, sigma:17},
+  {zoneKey:'z2', textKey:'heat.p14', tagKey:'heat.pondLoss',      type:'concern',  share:0.22, dx:-10, dy:-34, sigma:18},
+  {zoneKey:'z2', textKey:'heat.p15', tagKey:'func.birdwatch',     type:'function', share:0.18, dx: 20, dy:  6, sigma:16},
+
+  {zoneKey:'z3', textKey:'heat.p3',  tagKey:'func.education', type:'function', share:0.40, dx:-24, dy:-18, sigma:17},
+  {zoneKey:'z3', textKey:'heat.p11', tagKey:'heat.accessible',type:'function', share:0.22, dx: 26, dy: 26, sigma:15},
+  {zoneKey:'z3', textKey:'heat.p16', tagKey:'heat.farmland',  type:'positive', share:0.22, dx: -6, dy:-30, sigma:16},
+  {zoneKey:'z3', textKey:'heat.p17', tagKey:'heat.farmland',  type:'concern',  share:0.16, dx: 10, dy: 34, sigma:15},
+
+  {zoneKey:'z4', textKey:'heat.p4',  tagKey:'func.eco', type:'concern',  share:0.55, dx: 20, dy: 18, sigma:16},
+  {zoneKey:'z4', textKey:'heat.p18', tagKey:'func.eco', type:'positive', share:0.45, dx:-16, dy:-14, sigma:14},
+
+  {zoneKey:'z5', textKey:'heat.p6',  tagKey:'heat.restricted', type:'concern',  share:0.50, dx:-20, dy: 20, sigma:19},
+  {zoneKey:'z5', textKey:'heat.p19', tagKey:'heat.ecofence',   type:'improve',  share:0.28, dx: 24, dy:-16, sigma:16},
+  {zoneKey:'z5', textKey:'heat.p20', tagKey:'func.education',  type:'function', share:0.22, dx: -4, dy:-30, sigma:15},
+
+  {zoneKey:'z6', textKey:'heat.p5',  tagKey:'heat.access',   type:'improve',  share:0.48, dx: 24, dy:-16, sigma:17},
+  {zoneKey:'z6', textKey:'heat.p21', tagKey:'heat.pavement', type:'improve',  share:0.28, dx:-22, dy:  8, sigma:15},
+  {zoneKey:'z6', textKey:'heat.p22', tagKey:'func.eco',      type:'positive', share:0.24, dx: 10, dy: 24, sigma:16},
+
+  {zoneKey:'z7', textKey:'heat.p8',  tagKey:'func.education', type:'function', share:0.40, dx: 18, dy: 22, sigma:18},
+  {zoneKey:'z7', textKey:'heat.p7',  tagKey:'heat.ecoConn',   type:'positive', share:0.32, dx:-28, dy:-22, sigma:17},
+  {zoneKey:'z7', textKey:'heat.p23', tagKey:'heat.crowding',  type:'concern',  share:0.28, dx: -6, dy:-34, sigma:15},
 ];
+
+const OPINION_TYPES = ['positive','improve','concern','function'];
+const ZONE_TYPE_KEY = {z1:'type.wetland', z2:'type.wetland', z3:'type.park',
+                       z4:'type.reserve', z5:'type.reserve', z6:'type.wetland',
+                       z7:'type.park'};
+
+/* a rating follows from what the comment is about: praise scores high, worry
+   scores low, and there is spread around each */
+function ratingFor(type, r){
+  const base = {positive:4.6, improve:3.6, concern:2.5, function:3.7}[type] || 3.5;
+  return Math.max(1, Math.min(5, Math.round(base + (r - 0.5) * 1.8)));
+}
+
+/* Split `total` across `shares` in whole numbers with largest-remainder, so the
+   parts always add back up to the total instead of drifting on rounding. */
+function splitExact(total, shares){
+  const raw = shares.map(s => s * total);
+  const out = raw.map(v => Math.floor(v));
+  let left = total - out.reduce((a, b) => a + b, 0);
+  const order = raw.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0]);
+  for(let i = 0; left > 0; i++, left--) out[order[i % order.length][1]]++;
+  return out;
+}
+
+function buildOpinionCorpus(){
+  const rnd = mulberry32(20261015);
+  const out = [];
+  Object.keys(SITE_VOLUME).forEach(zoneKey => {
+    const c = zoneCoords[zoneKey];
+    const topics = TOPIC_MIX.filter(t => t.zoneKey === zoneKey);
+    const counts = splitExact(SITE_VOLUME[zoneKey], topics.map(t => t.share));
+    topics.forEach((tp, ti) => {
+      for(let k = 0; k < counts[ti]; k++){
+        /* sum of three uniforms ≈ a bell shape, cheap and deterministic */
+        const g1 = rnd() + rnd() + rnd() - 1.5;
+        const g2 = rnd() + rnd() + rnd() - 1.5;
+        out.push({
+          x: c.x + tp.dx + g1 * tp.sigma * 1.4,
+          y: c.y + tp.dy + g2 * tp.sigma * 1.4,
+          zoneKey: tp.zoneKey, type: tp.type,
+          topicKey: tp.textKey, tagKey: tp.tagKey,
+          rating: ratingFor(tp.type, rnd()),
+        });
+      }
+    });
+  });
+  return out;
+}
+
+const OPINIONS = buildOpinionCorpus();
+
+/* ---- aggregation ------------------------------------------------------- */
+function topKey(counts){
+  let best = null, bv = -1;
+  for(const k in counts){ if(counts[k] > bv){ bv = counts[k]; best = k; } }
+  return best;
+}
+function countBy(points, key){
+  const m = {};
+  points.forEach(p => { m[p[key]] = (m[p[key]] || 0) + 1; });
+  return m;
+}
+/* percentages that always add to exactly 100 */
+function percentShares(counts, total){
+  const keys = Object.keys(counts);
+  const raw = keys.map(k => counts[k] / total * 100);
+  const out = {};
+  raw.forEach((v, i) => { out[keys[i]] = Math.floor(v); });
+  let left = 100 - Object.keys(out).reduce((a, k) => a + out[k], 0);
+  const order = raw.map((v, i) => [v - Math.floor(v), keys[i]]).sort((a, b) => b[0] - a[0]);
+  for(let i = 0; left > 0; i++, left--) out[order[i % order.length][1]]++;
+  return out;
+}
+
+function buildTableData(){
+  return Object.keys(zoneCoords).map(zoneKey => {
+    const rows = OPINIONS.filter(o => o.zoneKey === zoneKey);
+    const types = countBy(rows, 'type');
+    const topics = countBy(rows, 'topicKey');
+    const avg = rows.reduce((s, o) => s + o.rating, 0) / rows.length;
+    const concernShare = (types.concern || 0) / rows.length;
+    /* a site needs attention when people are unhappy AND worried */
+    const score = (5 - avg) + concernShare * 2;
+    return {
+      zoneKey: zoneKey,
+      typeKey: ZONE_TYPE_KEY[zoneKey],
+      opinions: rows.length,
+      avg: Math.round(avg * 10) / 10,
+      topicKey: topKey(topics),
+      priority: score >= 2.4 ? 'high' : score >= 1.7 ? 'mid' : 'low',
+      score: Math.round(score * 100) / 100,
+    };
+  });
+}
+
+/* Density field: bucket the corpus onto a grid and emit one node per occupied
+   cell. This is what the heat map draws — the blobs are computed from the
+   opinions, not positioned by hand. */
+function densityNodes(points){
+  const cells = new Map();
+  points.forEach(p => {
+    const k = Math.floor(p.x / HEAT_CELL) + ',' + Math.floor(p.y / HEAT_CELL);
+    let c = cells.get(k);
+    if(!c){ c = {n:0, sx:0, sy:0, types:{}, topics:{}, zoneKey:p.zoneKey}; cells.set(k, c); }
+    c.n++; c.sx += p.x; c.sy += p.y;
+    c.types[p.type] = (c.types[p.type] || 0) + 1;
+    c.topics[p.topicKey] = (c.topics[p.topicKey] || 0) + 1;
+  });
+  const out = [];
+  cells.forEach(c => {
+    const type = topKey(c.types);
+    const topicKey = topKey(c.topics);
+    out.push({x: c.sx / c.n, y: c.sy / c.n, n: c.n, type: type,
+              topicKey: topicKey, zoneKey: c.zoneKey,
+              tagKey: (TOPIC_MIX.find(t => t.textKey === topicKey) || {}).tagKey});
+  });
+  return out;
+}
+
+const tableData = buildTableData();
+
+/* ---- every figure on the page, derived from the corpus ------------------ */
+function setNum(id, value){
+  const el = document.getElementById(id);
+  if(el) el.textContent = value;
+}
+function applyDerivedNumbers(){
+  const total = OPINIONS.length;
+  const types = countBy(OPINIONS, 'type');
+  const shares = percentShares(types, total);
+  const avg = OPINIONS.reduce((s, o) => s + o.rating, 0) / total;
+  const zones = Object.keys(zoneCoords).length;
+  const hot = topKey(countBy(OPINIONS, 'topicKey'));
+
+  setNum('heatTotal', total.toLocaleString('en-US'));
+  setNum('heatPositive', shares.positive + '%');
+  setNum('heatImprove', shares.improve + '%');
+  setNum('heatConcern', shares.concern + '%');
+  setNum('heatFunction', shares.function + '%');
+
+  setNum('stat1', zones);
+  setNum('stat2', total.toLocaleString('en-US'));
+
+  setNum('dashTotal', total.toLocaleString('en-US'));
+  setNum('dashAvg', avg.toFixed(1));
+  setNum('dashZones', zones);
+  setNum('dashHot', heatT(hot));
+
+  setNum('totalSurveys', total.toLocaleString('en-US'));
+  setNum('avgRating', avg.toFixed(1));
+  setNum('activeZones', zones);
+
+  window.derivedStats = {total: total, types: types, shares: shares, avg: avg,
+                         zones: zones, hotTopic: hot};
+}
+
 const surveyData = {zoneKey:null,rating:0,functions:[],suggestion:''};
 let currentStep = 0;
 let surveyCount = 1284;
@@ -566,47 +828,46 @@ const SVGNS='http://www.w3.org/2000/svg';
 const HEAT_COLORS={positive:'#4CAF6F',improve:'#FF9800',concern:'#EF5350',function:'#42A5F5'};
 const HEAT_GRADS ={positive:'heatGradPositive',improve:'heatGradImprove',concern:'heatGradConcern',function:'heatGradFunction'};
 
-/* Each opinion is a soft radial halo (density) plus a small solid core (type).
-   The halos blend with `mix-blend-mode:multiply`, so where opinions pile up the
-   colour deepens instead of just stacking flat discs. */
+/* Draw the density field: one soft halo per occupied grid cell, sized and
+   faded by how many opinions landed in it. Nothing here is positioned by hand
+   — the blobs come out of densityNodes(). Halos blend with
+   `mix-blend-mode:multiply`, so where opinions pile up the colour deepens
+   instead of merely stacking flat discs. */
 function renderHeatPoints(filter){
   filter = filter || 'all';
   window.currentHeatFilter = filter;
   const container=document.getElementById('heatCircles');
   if(!container) return;
   container.innerHTML='';
-  const filtered = filter==='all' ? heatPoints : heatPoints.filter(p=>p.type===filter);
-  // biggest halo first, so the small ones stay clickable on top
-  filtered.slice().sort((a,b)=>b.r-a.r).forEach(p=>{
-    const color=HEAT_COLORS[p.type]||'#FF9800';
-    const grad='url(#'+(HEAT_GRADS[p.type]||'heatGradImprove')+')';
-    const opacity=0.5+p.intensity*0.5;
+  const pts = filter==='all' ? OPINIONS : OPINIONS.filter(p=>p.type===filter);
+  const nodes = densityNodes(pts);
+  if(!nodes.length) return;
+  const maxN = nodes.reduce((m,n)=>Math.max(m,n.n),1);
+
+  // biggest first, so the small ones stay reachable on top
+  nodes.slice().sort((a,b)=>b.n-a.n).forEach(nd=>{
+    const w = Math.sqrt(nd.n/maxN);        // 0..1; sqrt keeps sparse cells visible
+    const r = 18 + w*34;                   // user units
+    const opacity = 0.14 + w*0.62;
+    const grad = 'url(#'+(HEAT_GRADS[nd.type]||'heatGradImprove')+')';
 
     const g=document.createElementNS(SVGNS,'g');
     g.setAttribute('class','heat-blob');
     g.setAttribute('tabindex','0');
     g.setAttribute('role','button');
-    g.setAttribute('aria-label',t('zone.'+p.zoneKey+'.name')+', '+heatT(p.textKey));
+    g.setAttribute('aria-label', heatNodeLabel(nd));
 
     const halo=document.createElementNS(SVGNS,'circle');
     halo.setAttribute('class','halo');
-    halo.setAttribute('cx',p.x); halo.setAttribute('cy',p.y);
-    halo.setAttribute('r',(p.r*2.2).toFixed(1));
-    halo.style.setProperty('--hr',(p.r*2.2).toFixed(1)+'px');
+    halo.setAttribute('cx',nd.x.toFixed(1)); halo.setAttribute('cy',nd.y.toFixed(1));
+    halo.setAttribute('r',r.toFixed(1));
+    halo.style.setProperty('--hr',r.toFixed(1)+'px');
     halo.setAttribute('fill',grad);
-    halo.setAttribute('opacity',opacity);
+    halo.setAttribute('opacity',opacity.toFixed(3));
 
-    const core=document.createElementNS(SVGNS,'circle');
-    core.setAttribute('class','core');
-    core.setAttribute('cx',p.x); core.setAttribute('cy',p.y);
-    core.setAttribute('r',(3+p.r*0.10).toFixed(1));
-    core.style.setProperty('--cr',(3+p.r*0.10).toFixed(1)+'px');
-    core.setAttribute('fill',color);
-    core.setAttribute('opacity',0.9);
+    g.appendChild(halo);
 
-    g.appendChild(halo); g.appendChild(core);
-
-    const show=()=>showHeatPopup(p);
+    const show=()=>showHeatPopup(nd);
     const hide=()=>hideHeatPopup();
     g.addEventListener('mouseenter',show);
     g.addEventListener('mouseleave',hide);
@@ -616,18 +877,21 @@ function renderHeatPoints(filter){
     container.appendChild(g);
   });
 }
+function heatNodeLabel(nd){
+  return t('zone.'+nd.zoneKey+'.name')+', '+nd.n+' '+t('opinion.unitOpinions');
+}
 /* viewBox -> canvas pixels via the live camera, so the popup stays on the blob
    it belongs to after any amount of zooming and panning */
-function showHeatPopup(p){
+function showHeatPopup(nd){
   const popup=document.getElementById('heatPopup');
   const typeLabels={positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
-  popup.innerHTML='<h5>'+t('zone.'+p.zoneKey+'.name')+'</h5>'+
-    '<div class="tag">'+typeLabels[p.type]+' \u00b7 '+heatT(p.tagKey)+'</div>'+
-    '<div class="text">"'+heatT(p.textKey)+'"</div>';
+  popup.innerHTML='<h5>'+t('zone.'+nd.zoneKey+'.name')+'</h5>'+
+    '<div class="tag">'+nd.n+' '+t('opinion.unitOpinions')+' \u00b7 '+typeLabels[nd.type]+'</div>'+
+    '<div class="text">"'+heatT(nd.topicKey)+'"</div>';
   popup.classList.add('show');
   const canvas=document.getElementById('heatCanvas');
   const cr=canvas.getBoundingClientRect();
-  const pt=heatCam.viewToLocal(p.x,p.y);
+  const pt=heatCam.viewToLocal(nd.x,nd.y);
   const pw=popup.offsetWidth, ph=popup.offsetHeight;
   let left=pt.x+18;
   if(left+pw>cr.width-8) left=pt.x-pw-18;
@@ -643,28 +907,49 @@ function filterOpinions(filter){
   document.querySelector('.opinion-filter[data-filter="'+filter+'"]').classList.add('active');
   renderHeatPoints(filter);
   const typeMap={all:t('opinion.typeLabelAll'),positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
-  const counts={all:heatPoints.length,positive:heatPoints.filter(p=>p.type==='positive').length,improve:heatPoints.filter(p=>p.type==='improve').length,concern:heatPoints.filter(p=>p.type==='concern').length,function:heatPoints.filter(p=>p.type==='function').length};
+  const counts={all:OPINIONS.length};
+  OPINION_TYPES.forEach(k=>{ counts[k]=OPINIONS.filter(p=>p.type===k).length; });
   showToast(t('opinion.filterToast').replace('{type}',typeMap[filter]).replace('{count}',counts[filter]));
 }
 
+/* A submission from the survey form joins the same corpus, so every figure on
+   the page moves with it. */
 function addHeatPoint(data){
-  const coord = zoneCoords[data.zoneKey]||{x:400,y:240};
+  const zoneKey = data.zoneKey || 'z1';
+  const coord = zoneCoords[zoneKey] || {x:400,y:240};
   const type = data.rating>=4?'positive':data.rating<=2?'concern':data.suggestion?'improve':'function';
-  heatPoints.push({
-    x:coord.x+(Math.random()-0.5)*40, y:coord.y+(Math.random()-0.5)*40,
-    r:25+Math.random()*20, intensity:0.5+Math.random()*0.4, type:type,
-    zoneKey:data.zoneKey||'z1',
-    textKey:'heat.custom', tagKey:data.functions[0]||'heat.generalOpinion',
-  });
-  const lang=window.currentLang||'zh-CN';
-  if(!heatTexts[lang]['heat.custom']){
-    heatTexts['en']['heat.custom']=data.suggestion||'User opinion';
-    heatTexts['zh-CN']['heat.custom']=data.suggestion||'用户意见';
-    heatTexts['zh-TW']['heat.custom']=data.suggestion||'用戶意見';
-  } else {
-    heatTexts[lang]['heat.custom']=data.suggestion||heatTexts[lang]['heat.custom'];
+  const lang = window.currentLang || 'zh-CN';
+  const custom = data.suggestion || '';
+  if(custom){
+    heatTexts['en']['heat.custom']=custom;
+    heatTexts['zh-CN']['heat.custom']=custom;
+    heatTexts['zh-TW']['heat.custom']=custom;
+  } else if(!heatTexts[lang]['heat.custom']){
+    heatTexts['en']['heat.custom']='User opinion';
+    heatTexts['zh-CN']['heat.custom']='用户意见';
+    heatTexts['zh-TW']['heat.custom']='用戶意見';
   }
-  renderHeatPoints();
+  const rnd = mulberry32(Date.now() & 0xffff);
+  OPINIONS.push({
+    x: coord.x + (rnd()-0.5)*36,
+    y: coord.y + (rnd()-0.5)*36,
+    zoneKey: zoneKey, type: type,
+    topicKey: custom ? 'heat.custom' : (data.functions && data.functions[0]) || 'heat.generalOpinion',
+    tagKey: (data.functions && data.functions[0]) || 'heat.generalOpinion',
+    rating: data.rating || 3
+  });
+  refreshDerived();
+}
+
+/* re-derive every figure and redraw whatever depends on the corpus */
+function refreshDerived(){
+  const fresh = buildTableData();
+  tableData.length = 0;
+  fresh.forEach(r=>tableData.push(r));
+  applyDerivedNumbers();
+  renderHeatPoints(window.currentHeatFilter || 'all');
+  renderDashTable();
+  safeUpdateCharts();
 }
 
 function updateCharts(){
@@ -706,18 +991,28 @@ function animateNumber(el,target,duration){
   requestAnimationFrame(update);
 }
 
+/* Chart.js comes from a CDN. If it is blocked or slow the maps and every
+   derived figure must still render, so nothing may call it directly. */
+function safeUpdateCharts(){
+  if(typeof Chart === 'undefined') return;
+  try{ updateCharts(); }catch(e){ console.warn('charts unavailable:', e.message); }
+}
+
 window.addEventListener('load',()=>{
+  /* figures first: they must not sit behind anything that can fail */
+  applyDerivedNumbers();
   initLang();
   renderSurveyOptions();
   renderRoadmap();
   renderDashTable();
-  updateCharts();
+  safeUpdateCharts();
   renderHeatPoints('all');
   /* re-publish once layout has settled, so both scale bars are truthful */
   mapCam.render(mapCam.view());
   heatCam.render(heatCam.view());
-  animateNumber(document.getElementById('stat1'),7);
-  animateNumber(document.getElementById('stat2'),1284);
-  animateNumber(document.getElementById('stat3'),6);
-  animateNumber(document.getElementById('stat4'),6);
+  const d = window.derivedStats || {zones:7, total:1284};
+  animateNumber(document.getElementById('stat1'), d.zones);
+  animateNumber(document.getElementById('stat2'), d.total);
+  animateNumber(document.getElementById('stat3'), funcKeys.length);
+  animateNumber(document.getElementById('stat4'), 6);
 });
