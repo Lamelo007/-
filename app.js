@@ -506,6 +506,13 @@ function showToast(msg){
   setTimeout(()=>tEl.classList.remove('show'),3000);
 }
 
+const SVGNS='http://www.w3.org/2000/svg';
+const HEAT_COLORS={positive:'#4CAF6F',improve:'#FF9800',concern:'#EF5350',function:'#42A5F5'};
+const HEAT_GRADS ={positive:'heatGradPositive',improve:'heatGradImprove',concern:'heatGradConcern',function:'heatGradFunction'};
+
+/* Each opinion is a soft radial halo (density) plus a small solid core (type).
+   The halos blend with `mix-blend-mode:multiply`, so where opinions pile up the
+   colour deepens instead of just stacking flat discs. */
 function renderHeatPoints(filter){
   filter = filter || 'all';
   window.currentHeatFilter = filter;
@@ -513,24 +520,51 @@ function renderHeatPoints(filter){
   if(!container) return;
   container.innerHTML='';
   const filtered = filter==='all' ? heatPoints : heatPoints.filter(p=>p.type===filter);
-  const colors = {positive:'#4CAF6F',improve:'#FF9800',concern:'#ef5350',function:'#42A5F5'};
-  filtered.forEach(p=>{
-    const opacity=0.2+p.intensity*0.5;
-    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circle.setAttribute('cx',p.x); circle.setAttribute('cy',p.y); circle.setAttribute('r',p.r);
-    circle.setAttribute('fill',colors[p.type]||'#FF9800');
-    circle.setAttribute('opacity',opacity);
-    circle.style.cursor='pointer'; circle.style.transition='all 0.3s';
-    circle.addEventListener('mouseenter',()=>{
-      circle.setAttribute('r',p.r*1.2); circle.setAttribute('opacity',0.85);
-      showHeatPopup(p);
-    });
-    circle.addEventListener('mouseleave',()=>{
-      circle.setAttribute('r',p.r); circle.setAttribute('opacity',opacity);
-      hideHeatPopup();
-    });
-    container.appendChild(circle);
+  // biggest halo first, so the small ones stay clickable on top
+  filtered.slice().sort((a,b)=>b.r-a.r).forEach(p=>{
+    const color=HEAT_COLORS[p.type]||'#FF9800';
+    const grad='url(#'+(HEAT_GRADS[p.type]||'heatGradImprove')+')';
+    const opacity=0.5+p.intensity*0.5;
+
+    const g=document.createElementNS(SVGNS,'g');
+    g.setAttribute('class','heat-blob');
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','button');
+    g.setAttribute('aria-label',t('zone.'+p.zoneKey+'.name')+', '+heatT(p.textKey));
+
+    const halo=document.createElementNS(SVGNS,'circle');
+    halo.setAttribute('class','halo');
+    halo.setAttribute('cx',p.x); halo.setAttribute('cy',p.y);
+    halo.setAttribute('r',(p.r*2.2).toFixed(1));
+    halo.setAttribute('fill',grad);
+    halo.setAttribute('opacity',opacity);
+
+    const core=document.createElementNS(SVGNS,'circle');
+    core.setAttribute('class','core');
+    core.setAttribute('cx',p.x); core.setAttribute('cy',p.y);
+    core.setAttribute('r',(3+p.r*0.10).toFixed(1));
+    core.setAttribute('fill',color);
+    core.setAttribute('opacity',0.9);
+
+    g.appendChild(halo); g.appendChild(core);
+
+    const show=()=>showHeatPopup(p);
+    const hide=()=>hideHeatPopup();
+    g.addEventListener('mouseenter',show);
+    g.addEventListener('mouseleave',hide);
+    g.addEventListener('focus',show);
+    g.addEventListener('blur',hide);
+    g.addEventListener('click',e=>{ e.stopPropagation(); show(); });
+    container.appendChild(g);
   });
+}
+/* viewBox -> canvas pixels, honouring preserveAspectRatio="xMidYMid meet" so the
+   popup lands on the right blob when the canvas is not exactly 800x560 */
+function heatPointToCanvas(x,y){
+  const r=document.getElementById('heatSvg').getBoundingClientRect();
+  if(!r.width||!r.height) return {x:0,y:0};
+  const s=Math.min(r.width/800,r.height/560);
+  return {x:(r.width-800*s)/2+x*s, y:(r.height-560*s)/2+y*s};
 }
 function showHeatPopup(p){
   const popup=document.getElementById('heatPopup');
@@ -538,11 +572,17 @@ function showHeatPopup(p){
   popup.innerHTML='<h5>'+t('zone.'+p.zoneKey+'.name')+'</h5>'+
     '<div class="tag">'+typeLabels[p.type]+' \u00b7 '+heatT(p.tagKey)+'</div>'+
     '<div class="text">"'+heatT(p.textKey)+'"</div>';
-  const rect=document.getElementById('heatCanvas').getBoundingClientRect();
-  const scaleX=rect.width/800, scaleY=rect.height/560;
-  popup.style.left=(p.x*scaleX+15)+'px';
-  popup.style.top=(p.y*scaleY-30)+'px';
   popup.classList.add('show');
+  const canvas=document.getElementById('heatCanvas');
+  const cr=canvas.getBoundingClientRect();
+  const pt=heatPointToCanvas(p.x,p.y);
+  const pw=popup.offsetWidth, ph=popup.offsetHeight;
+  let left=pt.x+18;
+  if(left+pw>cr.width-8) left=pt.x-pw-18;
+  let top=pt.y-24;
+  top=Math.max(8,Math.min(top,cr.height-ph-8));
+  popup.style.left=Math.max(8,left)+'px';
+  popup.style.top=top+'px';
 }
 function hideHeatPopup(){ document.getElementById('heatPopup').classList.remove('show'); }
 
