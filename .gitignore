@@ -1,2 +1,5 @@
 nul
 nul
+start-backend.cmd
+node_modules/
+ppt-project/

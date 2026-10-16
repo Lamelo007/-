@@ -2546,8 +2546,14 @@ function buildTableFromDashboard(){
 function applyDerivedNumbers(){
   const d = appData.dashboard;
   const zones = appData.zones.length;
-  const submissions = d ? (d.total_surveys || 0) : 0;   /* surveys submitted */
-  const opinions = d ? (d.total_opinions || 0) : 0;     /* aggregated opinions */
+  /* The hero overview and the dashboard must agree on what "opinions" means.
+     Both now show total_opinions (seed baseline + real submissions) so the
+     numbers can never disagree. The survey-form result panel still shows
+     total_surveys separately because that's the count of actual form
+     submissions, which is a different metric. */
+  const submissions = d ? (d.total_surveys || 0) : 0;   /* actual survey form submissions */
+  const opinions = d ? (d.total_opinions || 0) : 0;     /* total aggregated opinions (baseline + submissions) */
+  const residentOpinions = d ? (d.resident_opinions || 0) : 0; /* opinions from real submissions */
   const avg = (d && d.avg_rating) ? Number(d.avg_rating) : 0;
   const hot = (d && d.hot_topic) ? d.hot_topic : null;
 
@@ -2566,20 +2572,25 @@ function applyDerivedNumbers(){
   setNum('heatConcern', pct('concern'));
   setNum('heatFunction', pct('function'));
 
+  /* Hero overview: show total opinions (same metric as dashboard "意见总数")
+     so the two panels always agree. */
   setNum('stat1', zones);
-  setNum('stat2', submissions.toLocaleString('en-US'));
+  setNum('stat2', opinions.toLocaleString('en-US'));
 
+  /* Dashboard KPIs */
   setNum('dashTotal', opinions.toLocaleString('en-US'));
   setNum('dashAvg', avg ? avg.toFixed(1) : '—');
   setNum('dashZones', zones);
   setNum('dashHot', hot ? heatT(hot) : '—');
 
+  /* Survey result panel: these are submission-level facts */
   setNum('totalSurveys', submissions.toLocaleString('en-US'));
   setNum('todaySurveys', d ? (d.today_new || 0) : 0);
   setNum('avgRating', avg ? avg.toFixed(1) : '—');
   setNum('activeZones', d ? (d.active_zones || 0) : 0);
 
   window.derivedStats = {opinions: opinions, submissions: submissions,
+                         residentOpinions: residentOpinions,
                          zones: zones, avg: avg,
                          heatPoints: hpTotal, types: hpCount,
                          hotTopic: hot, connected: appData.connected};
@@ -3696,9 +3707,9 @@ window.addEventListener('load',()=>{
   /* Pull the real data. loadAll() re-renders every view once it arrives, so
      the placeholders above only ever show the empty/offline state briefly. */
   loadAll().then(function(){
-    const d = window.derivedStats || {zones:0, submissions:0};
+    const d = window.derivedStats || {zones:0, opinions:0};
     animateNumber(document.getElementById('stat1'), d.zones);
-    animateNumber(document.getElementById('stat2'), d.submissions);
+    animateNumber(document.getElementById('stat2'), d.opinions);
     mapCam.render(mapCam.view());
     heatCam.render(heatCam.view());
   });

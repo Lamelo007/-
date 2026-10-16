@@ -87,7 +87,10 @@ app.get("/api/zones/:id", (req, res) => {
   zone.functions_zh_cn = zone.functions_zh_cn ? zone.functions_zh_cn.split("|") : [];
   zone.functions_zh_tw = zone.functions_zh_tw ? zone.functions_zh_tw.split("|") : [];
 
-  zone.opinion_count = db.prepare("SELECT COUNT(*) as c FROM surveys WHERE zone_id = ?").get(zone.id).c;
+  /* Use heat_points for opinion_count (same as /api/zones) so the two
+     endpoints never disagree. Surveys give us submission_count and avg. */
+  zone.opinion_count = db.prepare("SELECT COUNT(*) as c FROM heat_points WHERE zone_id = ?").get(zone.id).c;
+  zone.submission_count = db.prepare("SELECT COUNT(*) as c FROM surveys WHERE zone_id = ?").get(zone.id).c;
   const avg = db.prepare("SELECT AVG(rating) as a FROM surveys WHERE zone_id = ?").get(zone.id).a;
   zone.avg_satisfaction = avg ? parseFloat(avg.toFixed(1)) : 0;
 
@@ -279,12 +282,17 @@ app.get("/api/dashboard", (req, res) => {
   /* Per-zone row: opinion points from heat_points, submissions from surveys. */
   const zoneTable = stats.zone_stats.map(r => Object.assign({}, r, {
     opinions: zoneOpinions[r.id] || 0,
-    submissions: r.opinions || 0,
+    submissions: r.survey_count || 0,
   }));
+
+  /* Count survey-originated heat points so the dashboard can distinguish
+     seed baseline opinions from real resident submissions. */
+  const surveyHpCount = db.prepare("SELECT COUNT(*) as c FROM heat_points WHERE source = 'survey'").get().c;
 
   res.json({
     total_surveys: stats.total,
     total_opinions: totalOpinions,
+    resident_opinions: surveyHpCount,   /* opinions that came from real survey submissions */
     today_new: todayNew,
     avg_rating: stats.avg_rating,
     active_zones: stats.active_zones,

@@ -96,13 +96,13 @@ function aggregateStats(db) {
   const byZone = db.prepare(`
     SELECT z.id, z.name_en, z.name_zh_cn, z.name_zh_tw, z.type,
            z.type_label_en, z.type_label_zh_cn, z.type_label_zh_tw,
-           COUNT(s.id) as opinions,
+           COUNT(s.id) as survey_count,
            ROUND(AVG(s.rating),1) as avg_rating,
            z.attention
     FROM zones z
     LEFT JOIN surveys s ON s.zone_id = z.id
     GROUP BY z.id
-    ORDER BY opinions DESC
+    ORDER BY survey_count DESC
   `).all();
 
   const totalRating = db.prepare("SELECT AVG(rating) as avg FROM surveys").get().avg;
