@@ -263,8 +263,8 @@ function processChat(db, message, lang) {
       const highPri = allStats.filter(r => r.s.priority === "high");
 
       answer = isZh
-        ? `【综合数据概览】\n\n北部都会区绿化空间平台目前覆盖 **${st.zoneCount} 个规划绿化区域**，已聚合 **${st.total.toLocaleString()} 条**意见，生成 **${st.heatCount} 个**空间意见热力点。\n\n📊 **意见类型分布**\n• 正面评价：${st.typePercent.positive}%\n• 改进建议：${st.typePercent.improve}%\n• 担忧反馈：${st.typePercent.concern}%\n• 功能需求：${st.typePercent.function}%\n\n⭐ **平均满意度**：${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **高优先级区域（需重点关注）**：${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join("、") : "暂无"}\n\n您可以输入具体区域名称（如「米埔」「塱原」）查看详情，或输入「报告」生成完整建设建议报告。`
-        : `【Overview】\n\nThe platform covers **${st.zoneCount} planned green zones** with **${st.total.toLocaleString()} aggregated opinions** and **${st.heatCount} spatial heat points**.\n\n📊 **Opinion types**: Positive ${st.typePercent.positive}% · Improvement ${st.typePercent.improve}% · Concerns ${st.typePercent.concern}% · Function needs ${st.typePercent.function}%\n\n⭐ **Avg satisfaction**: ${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **High-priority zones**: ${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join(", ") : "none"}\n\nType a zone name (e.g. "Mai Po") for details, or "report" for a full suggestion report.`;
+        ? `【综合数据概览】\n\n北部都会区（总面积约30,000公顷）绿化空间平台目前覆盖 **${st.zoneCount} 个规划绿化区域**，已聚合 **${st.total.toLocaleString()} 条**意见，生成 **${st.heatCount} 个**空间意见热力点。北部都会区发展策略拟建立约2,000公顷的湿地及海岸保育系统。\n\n📊 **意见类型分布**\n• 正面评价：${st.typePercent.positive}%\n• 改进建议：${st.typePercent.improve}%\n• 担忧反馈：${st.typePercent.concern}%\n• 功能需求：${st.typePercent.function}%\n\n⭐ **平均满意度**：${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **高优先级区域（需重点关注）**：${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join("、") : "暂无"}\n\n您可以输入具体区域名称（如「米埔」「塱原」）查看详情，或输入「报告」生成完整建设建议报告。\n\n数据来源：渔护署(AFCD)、WWF-HK、北部都会区发展策略`
+        : `【Overview】\n\nThe Northern Metropolis (~30,000 ha) green space platform covers **${st.zoneCount} planned green zones** with **${st.total.toLocaleString()} aggregated opinions** and **${st.heatCount} spatial heat points**. The development strategy plans a ~2,000-ha wetland and coastal conservation system.\n\n📊 **Opinion types**: Positive ${st.typePercent.positive}% · Improvement ${st.typePercent.improve}% · Concerns ${st.typePercent.concern}% · Function needs ${st.typePercent.function}%\n\n⭐ **Avg satisfaction**: ${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **High-priority zones**: ${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join(", ") : "none"}\n\nType a zone name (e.g. "Mai Po") for details, or "report" for a full suggestion report.\n\nSources: AFCD, WWF-HK, Northern Metropolis Development Strategy`;
       tags = [
         { text: `${st.zoneCount} zones`, type: "info" },
         { text: `${st.total} opinions`, type: "info" },
@@ -418,8 +418,8 @@ function processChat(db, message, lang) {
     case "location": {
       dataSources = ["zones"];
       answer = isZh
-        ? "【绿化区域位置】\n\n所有 7 个规划绿化区域均位于**北部都会区**范围内，横跨元朗区、北区、大埔区等。您可以在「绿化地图」板块中点击任意区域查看其精确地理位置、边界和周边水系道路。\n\n区域分布：\n• 后海湾沿岸：米埔湿地、后海湾湿地\n• 河谷平原：塱原及河上乡\n• 内陆山谷：凤园、沙罗洞\n• 沙头角海沿岸：鹿颈沼泽\n• 船湾郊野公园北缘：乌蛟腾"
-        : "【Locations】\n\nAll 7 planned green zones are within the **Northern Metropolis**, spanning Yuen Long, North, and Tai Po districts. See the \"Green Map\" section for precise boundaries.\n\n• Deep Bay coast: Mai Po, Deep Bay wetland\n• River valley: Long Valley\n• Inland valleys: Fung Yuen, Sha Lo Tung\n• Starling Inlet coast: Luk Keng\n• Plover Cove edge: Wu Kau Tang";
+        ? "【绿化区域位置】\n\n北部都会区总面积约30,000公顷，沿深圳河与后海湾分布，涵盖香港最大的连片低地。规划中拟建立约2,000公顷的湿地及海岸保育系统，包括五个主动管理的湿地保育公园。\n\n7个规划绿化区域分布：\n• 后海湾沿岸：米埔拉姆萨尔湿地（1,540公顷，1995年列入）、后海湾鱼塘湿地（600+公顷）\n• 河谷平原：塱原及河上乡（37公顷，2024年11月启用）\n• 内陆山谷：凤园（SSSI，200+种蝴蝶）、沙罗洞（SSSI，56公顷，全港第二优先保育地点）\n• 沙头角海沿岸：鹿颈沼泽\n• 船湾郊野公园北缘：乌蛟腾\n\n数据来源：渔护署(AFCD)、世界自然基金会香港分会(WWF-HK)、北部都会区发展策略"
+        : "【Locations】\n\nThe Northern Metropolis covers ~30,000 ha along the Shenzhen River and Deep Bay. A ~2,000-ha wetland and coastal conservation system is planned, including five proactively managed wetland conservation parks.\n\n7 green zones:\n• Deep Bay coast: Mai Po Ramsar Site (1,540 ha, listed 1995), Deep Bay fishponds (600+ ha)\n• River valley: Long Valley (37 ha, opened Nov 2024)\n• Inland valleys: Fung Yuen (SSSI, 200+ butterfly species), Sha Lo Tung (SSSI, 56 ha, #2 priority site)\n• Starling Inlet: Luk Keng Marsh\n• Plover Cove edge: Wu Kau Tang\n\nSources: AFCD, WWF-HK, Northern Metropolis Development Strategy";
       break;
     }
 
@@ -546,7 +546,8 @@ function generateReport(db, lang) {
   /* ---- Build Markdown ---- */
   let md = `# ${isZh ? "北部都会区绿化空间 · 建设建议报告" : "Northern Metropolis Green Space · Construction Report"}\n\n`;
   md += `> ${isZh ? "生成时间" : "Generated"}: ${new Date().toISOString()}  \n`;
-  md += `> ${isZh ? "数据源" : "Sources"}: zones, surveys, heat_points, dashboard\n\n`;
+  md += `> ${isZh ? "数据源" : "Sources"}: zones, surveys, heat_points, dashboard\n`;
+  md += `> ${isZh ? "参考资料" : "References"}: AFCD (渔护署), WWF-Hong Kong, HKUST IEnv, Northern Metropolis Development Strategy, BSAP\n\n`;
 
   sections.forEach(sec => {
     md += `## ${sec.title}\n\n`;
