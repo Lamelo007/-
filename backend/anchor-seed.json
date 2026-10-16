@@ -1,0 +1,1102 @@
+[
+  {
+    "id": "a1",
+    "zone_id": "z1",
+    "x": 136,
+    "y": 201,
+    "name": {
+      "zh-CN": "基围木栈道与观鸟屋",
+      "zh-TW": "基圍木棧道與觀鳥屋",
+      "en": "Gei Wai Boardwalk & Bird Hides"
+    },
+    "desc": {
+      "zh-CN": "米埔的传统基围兼具水产养殖与湿地保育功能。木栈道和观鸟设施让访客在减少干扰的情况下观察水鸟。",
+      "zh-TW": "米埔的傳統基圍兼具水產養殖與溼地保育功能。木棧道和觀鳥設施讓訪客在減少干擾的情況下觀察水鳥。",
+      "en": "Traditional gei wai at Mai Po combine fishery heritage with wetland conservation. Boardwalks and bird hides let visitors watch waterbirds with less disturbance."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/a1_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "米埔基围木栈道",
+          "zh-TW": "米埔基圍木棧道",
+          "en": "Mai Po gei wai boardwalk"
+        }
+      },
+      {
+        "url": "/anchor-photos/a1_1.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "米埔基围桥与湿地",
+          "zh-TW": "米埔基圍橋與溼地",
+          "en": "Mai Po gei wai bridge and wetland"
+        }
+      },
+      {
+        "url": "/anchor-photos/a1_2.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "米埔基围宽幅景观（非球面全景）",
+          "zh-TW": "米埔基圍寬幅景觀（非球面全景）",
+          "en": "Wide gei wai view, not a spherical panorama"
+        }
+      }
+    ]
+  },
+  {
+    "id": "a2",
+    "zone_id": "z1",
+    "x": 83,
+    "y": 237,
+    "name": {
+      "zh-CN": "后海湾低潮泥滩",
+      "zh-TW": "后海灣低潮泥灘",
+      "en": "Inner Deep Bay Mudflat at Low Tide"
+    },
+    "desc": {
+      "zh-CN": "后海湾潮间带泥滩在退潮时露出，是迁徙和越冬水鸟的重要觅食生境；展出的海岸照片不一定摄于同一泥滩。",
+      "zh-TW": "后海灣潮間帶泥灘在退潮時露出，是遷徙和越冬水鳥的重要覓食生境；展出的海岸照片不一定攝於同一泥灘。",
+      "en": "Intertidal mudflats emerge at low tide in Deep Bay, providing feeding habitat for migratory and wintering waterbirds. The coast photos are not necessarily from this exact mudflat."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/a2_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "后海湾晒蚝与沿岸景观",
+          "zh-TW": "后海灣曬蠔與沿岸景觀",
+          "en": "Oyster-drying and coast at Deep Bay"
+        }
+      }
+    ]
+  },
+  {
+    "id": "a3",
+    "zone_id": "z1",
+    "x": 151,
+    "y": 247,
+    "name": {
+      "zh-CN": "米埔斯科特访客中心",
+      "zh-TW": "米埔斯科特訪客中心",
+      "en": "Peter Scott Visitor Centre (WWF)"
+    },
+    "desc": {
+      "zh-CN": "斯科特访客中心是认识米埔湿地与参加导赏活动的入口之一。进入米埔自然保护区须遵守现行许可和参观安排。",
+      "zh-TW": "斯科特訪客中心是認識米埔溼地與參加導賞活動的入口之一。進入米埔自然保護區須遵守現行許可和參觀安排。",
+      "en": "The Peter Scott visitor facilities introduce Mai Po and its guided activities. Entry to the nature reserve remains subject to current permit and visit arrangements."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": []
+  },
+  {
+    "id": "a4",
+    "zone_id": "z1",
+    "x": 60,
+    "y": 275,
+    "name": {
+      "zh-CN": "香港湿地公园",
+      "zh-TW": "香港溼地公園",
+      "en": "Hong Kong Wetland Park"
+    },
+    "desc": {
+      "zh-CN": "位于天水围的香港湿地公园结合湿地生态、访客中心和环境教育，是已开放的公共保育设施，不等同米埔自然保护区。",
+      "zh-TW": "位於天水圍的香港溼地公園結合溼地生態、訪客中心和環境教育，是已開放的公共保育設施，不等同米埔自然保護區。",
+      "en": "Hong Kong Wetland Park in Tin Shui Wai combines wetland habitats, a visitor centre and environmental education. It is an existing public facility, distinct from Mai Po Nature Reserve."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港湿地公园｜关于我们",
+        "zh-TW": "香港溼地公園｜關於我們",
+        "en": "Hong Kong Wetland Park | About us"
+      },
+      "url": "https://www.wetlandpark.gov.hk/sc/aboutus/index"
+    },
+    "caveat": {
+      "zh-CN": "区域关联点，在米埔拉姆萨尔湿地保护区之外。",
+      "zh-TW": "區域關聯點，在米埔拉姆薩爾溼地保護區之外。",
+      "en": "Related site outside Mai Po Nature Reserve."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/a4_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "香港湿地公园访客中心",
+          "zh-TW": "香港溼地公園訪客中心",
+          "en": "Hong Kong Wetland Park visitor centre"
+        }
+      },
+      {
+        "url": "/anchor-photos/a4_1.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "香港湿地公园外围湿地景观",
+          "zh-TW": "香港溼地公園外圍溼地景觀",
+          "en": "Wetland landscape at Hong Kong Wetland Park"
+        }
+      }
+    ]
+  },
+  {
+    "id": "b1",
+    "zone_id": "z2",
+    "x": 161,
+    "y": 278,
+    "name": {
+      "zh-CN": "南生围湿地",
+      "zh-TW": "南生圍溼地",
+      "en": "Nam Sang Wai Wetland"
+    },
+    "desc": {
+      "zh-CN": "南生围的鱼塘、河道及草地构成后海湾湿地景观。本地点展示现有生境，不能将仍在讨论的保育公园当作已建成。",
+      "zh-TW": "南生圍的魚塘、河道及草地構成后海灣溼地景觀。本地點展示現有生境，不能將仍在討論的保育公園當作已建成。",
+      "en": "Fishponds, waterways and grassland shape Nam Sang Wai's wetland landscape. This marker shows existing habitats, not a completed conservation park."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/b1_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "南生围宽幅景观（非球面全景）",
+          "zh-TW": "南生圍寬幅景觀（非球面全景）",
+          "en": "Wide view of Nam Sang Wai; not a spherical panorama"
+        }
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "zone_id": "z2",
+    "x": 216,
+    "y": 190,
+    "name": {
+      "zh-CN": "丰乐围鱼塘",
+      "zh-TW": "豐樂圍魚塘",
+      "en": "Fung Lok Wai Fish Ponds"
+    },
+    "desc": {
+      "zh-CN": "丰乐围的鱼塘属于拉姆萨尔湿地以外的后海湾湿地系统。传统鱼塘管理与水鸟觅食空间的关系，是这里的保育重点。",
+      "zh-TW": "豐樂圍的魚塘屬於拉姆薩爾溼地以外的后海灣溼地系統。傳統魚塘管理與水鳥覓食空間的關係，是這裏的保育重點。",
+      "en": "Fung Lok Wai's fishponds form part of the Deep Bay wetlands outside the Ramsar site. Their management matters to waterbird feeding habitat."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/b2_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "丰乐围湿地景观 1",
+          "zh-TW": "豐樂圍溼地景觀 1",
+          "en": "Fung Lok Wai wetlands, view 1"
+        }
+      },
+      {
+        "url": "/anchor-photos/b2_1.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "丰乐围湿地景观 2",
+          "zh-TW": "豐樂圍溼地景觀 2",
+          "en": "Fung Lok Wai wetlands, view 2"
+        }
+      },
+      {
+        "url": "/anchor-photos/b2_2.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "丰乐围湿地及远处建成区",
+          "zh-TW": "豐樂圍溼地及遠處建成區",
+          "en": "Fung Lok Wai wetlands and distant built-up area"
+        }
+      }
+    ]
+  },
+  {
+    "id": "b3",
+    "zone_id": "z2",
+    "x": 187,
+    "y": 264,
+    "name": {
+      "zh-CN": "大生围鱼塘",
+      "zh-TW": "大生圍魚塘",
+      "en": "Tai Sang Wai Fish Ponds"
+    },
+    "desc": {
+      "zh-CN": "大生围连片鱼塘展示了后海湾的传统养殖地貌。鱼塘生态管理和土地利用变化值得持续观察；图库暂无该点实景图。",
+      "zh-TW": "大生圍連片魚塘展示了后海灣的傳統養殖地貌。魚塘生態管理和土地利用變化值得持續觀察；圖庫暫無該點實景圖。",
+      "en": "Tai Sang Wai's connected fishponds reflect the traditional aquaculture landscape of Deep Bay. Their ecological management and changing land use merit close observation; no matching photo was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": []
+  },
+  {
+    "id": "b4",
+    "zone_id": "z2",
+    "x": 44,
+    "y": 297,
+    "name": {
+      "zh-CN": "流浮山 / 下白泥海岸",
+      "zh-TW": "流浮山 / 下白泥海岸",
+      "en": "Lau Fau Shan & Ha Pak Nai Coast"
+    },
+    "desc": {
+      "zh-CN": "流浮山及白泥一带有海岸、泥滩与蚝养殖景观。政府正研究在尖鼻咀、流浮山及白泥设立海岸保护公园，尚属可行性研究。",
+      "zh-TW": "流浮山及白泥一帶有海岸、泥灘與蠔養殖景觀。政府正研究在尖鼻咀、流浮山及白泥設立海岸保護公園，尚屬可行性研究。",
+      "en": "Lau Fau Shan and Pak Nai have coastlines, mudflats and oyster-farming scenery. The proposed coastal protection park is still undergoing a feasibility study."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "北部都会区｜行动纲领",
+        "zh-TW": "北部都會區｜行動綱領",
+        "en": "Northern Metropolis | Action Agenda"
+      },
+      "url": "https://www.nm.gov.hk/sc/action-agenda"
+    },
+    "caveat": {
+      "zh-CN": "拟议项目，尚非已建成保护公园。",
+      "zh-TW": "擬議項目，尚非已建成保護公園。",
+      "en": "Proposed project; not a completed protected park."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/b4_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "流浮山沿岸实景（不代表整个拟议公园）",
+          "zh-TW": "流浮山沿岸實景（不代表整個擬議公園）",
+          "en": "Lau Fau Shan coast; not the entire proposed park"
+        }
+      }
+    ]
+  },
+  {
+    "id": "c1",
+    "zone_id": "z3",
+    "x": 348,
+    "y": 148,
+    "name": {
+      "zh-CN": "塱原自然生态中心",
+      "zh-TW": "塱原自然生態中心",
+      "en": "Long Valley Nature Centre (LVNC)"
+    },
+    "desc": {
+      "zh-CN": "塱原自然生态公园于2024年11月开放，结合湿地保育、农耕及自然教育。自然生态中心是访客认识这些生境的设施。",
+      "zh-TW": "塱原自然生態公園於2024年11月開放，結合溼地保育、農耕及自然教育。自然生態中心是訪客認識這些生境的設施。",
+      "en": "Opened in November 2024, Long Valley Nature Park brings together wetland conservation, farming and nature education. Its Nature Centre introduces these habitats to visitors."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "塱原自然生态公园｜官方网站",
+        "zh-TW": "塱原自然生態公園｜官方網站",
+        "en": "Long Valley Nature Park | Official site"
+      },
+      "url": "https://www.lvnp.gov.hk/sc/index.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": []
+  },
+  {
+    "id": "c2",
+    "zone_id": "z3",
+    "x": 368,
+    "y": 159,
+    "name": {
+      "zh-CN": "河上乡洪圣古庙与风水林",
+      "zh-TW": "河上鄉洪聖古廟與風水林",
+      "en": "Ho Sheung Heung Hung Shing Temple"
+    },
+    "desc": {
+      "zh-CN": "河上乡保留乡郊村落、农地与林地景观。管理协议项目强调与村民协作改善生境；所提供照片展示乡郊环境，并非古庙本体。",
+      "zh-TW": "河上鄉保留鄉郊村落、農地與林地景觀。管理協議項目強調與村民協作改善生境；所提供照片展示鄉郊環境，並非古廟本體。",
+      "en": "Ho Sheung Heung retains a rural mosaic of village, farmland and woodland. A management-agreement project works with the community on habitat stewardship. Supplied photos show the area, not the temple itself."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "长春社｜河上乡自然保育管理计划",
+        "zh-TW": "長春社｜河上鄉自然保育管理計劃",
+        "en": "The Conservancy Association | Ho Sheung Heung management"
+      },
+      "url": "https://www.cahk.org.hk/zh-hant/work/hshmanagement/"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/c2_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "河上乡乡郊景观（非古庙本体）",
+          "zh-TW": "河上鄉鄉郊景觀（非古廟本體）",
+          "en": "Ho Sheung Heung landscape, not the temple itself"
+        }
+      },
+      {
+        "url": "/anchor-photos/c2_1.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "河上乡排峰路一带（非洪圣古庙）",
+          "zh-TW": "河上鄉排峯路一帶（非洪聖古廟）",
+          "en": "Pai Fung Road area, not Hung Shing Temple"
+        }
+      }
+    ]
+  },
+  {
+    "id": "c3",
+    "zone_id": "z3",
+    "x": 331,
+    "y": 166,
+    "name": {
+      "zh-CN": "古洞鱼塘群（马草垄）",
+      "zh-TW": "古洞魚塘羣（馬草壟）",
+      "en": "Kwu Tung / Ma Tso Lung Fish Ponds"
+    },
+    "desc": {
+      "zh-CN": "古洞北发展区与塱原湿地相邻，鱼塘及农地可用来观察发展与保育的空间关系。本地点为区域对照，并非已指定的新保护区。",
+      "zh-TW": "古洞北發展區與塱原溼地相鄰，魚塘及農地可用來觀察發展與保育的空間關係。本地點爲區域對照，並非已指定的新保護區。",
+      "en": "Kwu Tung North adjoins Long Valley's wetlands. Its fishponds and farmland help illustrate the spatial relationship between development and conservation; this is a comparison marker, not a newly designated reserve."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "北部都会区｜行动纲领",
+        "zh-TW": "北部都會區｜行動綱領",
+        "en": "Northern Metropolis | Action Agenda"
+      },
+      "url": "https://www.nm.gov.hk/sc/action-agenda"
+    },
+    "caveat": {
+      "zh-CN": "位置为区域示意，具体鱼塘边界待核对。",
+      "zh-TW": "位置爲區域示意，具體魚塘邊界待覈對。",
+      "en": "Indicative location; exact pond boundary not verified."
+    },
+    "images": []
+  },
+  {
+    "id": "c4",
+    "zone_id": "z3",
+    "x": 355,
+    "y": 184,
+    "name": {
+      "zh-CN": "料壆村鱼塘",
+      "zh-TW": "料壆村魚塘",
+      "en": "Liu Pok Fishponds"
+    },
+    "desc": {
+      "zh-CN": "料壆一带有乡村及鱼塘地貌，可作为理解北区湿地网络的辅助观察点。具体鱼塘位置及用地性质仍需测绘资料核实。",
+      "zh-TW": "料壆一帶有鄉村及魚塘地貌，可作爲理解北區溼地網絡的輔助觀察點。具體魚塘位置及用地性質仍需測繪資料覈實。",
+      "en": "The Liu Pok area includes rural land and fishpond landscapes, offering a supporting view of North District's wetland network. The precise pond location and land status need survey verification."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "示意定位，待实测核对。",
+      "zh-TW": "示意定位，待實測覈對。",
+      "en": "Indicative location pending survey verification."
+    },
+    "images": []
+  },
+  {
+    "id": "d1",
+    "zone_id": "z4",
+    "x": 543,
+    "y": 270,
+    "name": {
+      "zh-CN": "凤园蝴蝶保育区（主区）",
+      "zh-TW": "鳳園蝴蝶保育區（主區）",
+      "en": "Fung Yuen Butterfly Reserve"
+    },
+    "desc": {
+      "zh-CN": "凤园是《新自然保育政策》的优先保育地点，以蝴蝶栖息地闻名。管理机构长期开展生境管理与自然教育。",
+      "zh-TW": "鳳園是《新自然保育政策》的優先保育地點，以蝴蝶棲息地聞名。管理機構長期開展生境管理與自然教育。",
+      "en": "Fung Yuen is a priority site under the New Nature Conservation Policy, noted for butterfly habitat. Its managing organisation conducts habitat management and nature education."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "凤园蝴蝶保育区｜管理机构",
+        "zh-TW": "鳳園蝴蝶保育區｜管理機構",
+        "en": "Fung Yuen Butterfly Reserve | Managing organisation"
+      },
+      "url": "https://fungyuen.org/"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": []
+  },
+  {
+    "id": "d2",
+    "zone_id": "z4",
+    "x": 557,
+    "y": 280,
+    "name": {
+      "zh-CN": "凤园蝴蝶园与蜻蜓池",
+      "zh-TW": "鳳園蝴蝶園與蜻蜓池",
+      "en": "Butterfly Garden & Dragonfly Pond"
+    },
+    "desc": {
+      "zh-CN": "蝴蝶园与周边小型湿地展示不同生境对昆虫的价值。这是凤园内部的体验型地点；当前图库没有可确认为该设施的照片。",
+      "zh-TW": "蝴蝶園與周邊小型溼地展示不同生境對昆蟲的價值。這是鳳園內部的體驗型地點；當前圖庫沒有可確認爲該設施的照片。",
+      "en": "The butterfly garden and nearby wet habitats help explain the value of varied insect habitats. This is an interpretive marker within Fung Yuen; no photo of this exact facility was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "凤园蝴蝶保育区｜管理机构",
+        "zh-TW": "鳳園蝴蝶保育區｜管理機構",
+        "en": "Fung Yuen Butterfly Reserve | Managing organisation"
+      },
+      "url": "https://fungyuen.org/"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": []
+  },
+  {
+    "id": "d3",
+    "zone_id": "z4",
+    "x": 591,
+    "y": 293,
+    "name": {
+      "zh-CN": "马屎洲自然教育径彩岩",
+      "zh-TW": "馬屎洲自然教育徑彩巖",
+      "en": "Ma Shi Chau Nature Trail (Colorful Mudstone)"
+    },
+    "desc": {
+      "zh-CN": "马屎洲自然教育径可观察不同年代的沉积岩和褶皱构造。它是大埔区的关联地质教育点，不在凤园蝴蝶保育区内。",
+      "zh-TW": "馬屎洲自然教育徑可觀察不同年代的沉積岩和褶皺構造。它是大埔區的關聯地質教育點，不在鳳園蝴蝶保育區內。",
+      "en": "The Ma Shi Chau nature trail reveals sedimentary rocks and folded strata of different ages. It is a related geological education stop in Tai Po, not part of Fung Yuen Butterfly Reserve."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港世界地质公园｜马屎洲",
+        "zh-TW": "香港世界地質公園｜馬屎洲",
+        "en": "Hong Kong UNESCO Global Geopark | Ma Shi Chau"
+      },
+      "url": "https://www.geopark.gov.hk/tc/discover/attractions/ma-shi-chau"
+    },
+    "caveat": {
+      "zh-CN": "关联点；图片为马屎洲海岸，并非指定彩岩的近景。",
+      "zh-TW": "關聯點；圖片爲馬屎洲海岸，並非指定彩巖的近景。",
+      "en": "Related site; photos show Ma Shi Chau coast, not specific colourful rocks."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/d3_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "马屎洲海岸远景（非指定彩岩特写）",
+          "zh-TW": "馬屎洲海岸遠景（非指定彩巖特寫）",
+          "en": "Ma Shi Chau coast, not a close-up of colourful rocks"
+        }
+      },
+      {
+        "url": "/anchor-photos/d3_1.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "马屎洲海岸实景（非指定彩岩特写）",
+          "zh-TW": "馬屎洲海岸實景（非指定彩巖特寫）",
+          "en": "Ma Shi Chau shoreline, not a close-up of colourful rocks"
+        }
+      }
+    ]
+  },
+  {
+    "id": "d4",
+    "zone_id": "z4",
+    "x": 516,
+    "y": 318,
+    "name": {
+      "zh-CN": "大埔创新园（规划张力对照点）",
+      "zh-TW": "大埔創新園（規劃張力對照點）",
+      "en": "Tai Po INNOPARK"
+    },
+    "desc": {
+      "zh-CN": "大埔创新园用作展示工业用地与凤园保育地的空间对照，不属于凤园保护区。图库没有可确认属于创新园的实景图。",
+      "zh-TW": "大埔創新園用作展示工業用地與鳳園保育地的空間對照，不屬於鳳園保護區。圖庫沒有可確認屬於創新園的實景圖。",
+      "en": "Tai Po INNOPARK is used here as a contrast between industrial land and the Fung Yuen conservation area. It is outside the reserve, and no matching INNOPARK photo was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "对照点，非凤园保育区内地点；位置仅示意。",
+      "zh-TW": "對照點，非鳳園保育區內地點；位置僅示意。",
+      "en": "Comparison point outside Fung Yuen reserve; location is indicative."
+    },
+    "images": []
+  },
+  {
+    "id": "e1",
+    "zone_id": "z5",
+    "x": 543,
+    "y": 245,
+    "name": {
+      "zh-CN": "沙罗洞保育区",
+      "zh-TW": "沙羅洞保育區",
+      "en": "Sha Lo Tung Conservation Area"
+    },
+    "desc": {
+      "zh-CN": "沙罗洞有风水林、淡水沼泽及具生态价值的溪流。政府于2022年完成非原址换地，推动逾50公顷土地的长远保育。",
+      "zh-TW": "沙羅洞有風水林、淡水沼澤及具生態價值的溪流。政府於2022年完成非原址換地，推動逾50公頃土地的長遠保育。",
+      "en": "Sha Lo Tung has feng shui woodland, freshwater marsh and ecologically important streams. An off-site land exchange completed in 2022 supports long-term conservation of more than 50 hectares."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港政府新闻网｜沙罗洞保育",
+        "zh-TW": "香港政府新聞網｜沙羅洞保育",
+        "en": "Hong Kong Government News | Sha Lo Tung conservation"
+      },
+      "url": "https://www.news.gov.hk/chi/2022/07/20220719/20220719_160501_191.html"
+    },
+    "caveat": {
+      "zh-CN": "保育敏感地带，游览应遵守现场管理。",
+      "zh-TW": "保育敏感地帶，遊覽應遵守現場管理。",
+      "en": "Sensitive habitat; respect current access restrictions."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/e1_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "沙罗洞农地及周边环境",
+          "zh-TW": "沙羅洞農地及周邊環境",
+          "en": "Sha Lo Tung farmland and surroundings"
+        }
+      }
+    ]
+  },
+  {
+    "id": "e2",
+    "zone_id": "z5",
+    "x": 557,
+    "y": 247,
+    "name": {
+      "zh-CN": "沙罗洞荒废农地与村屋",
+      "zh-TW": "沙羅洞荒廢農地與村屋",
+      "en": "Abandoned Farmland & Village Houses"
+    },
+    "desc": {
+      "zh-CN": "修复荒废农地是沙罗洞保育措施之一。此处标注农地景观，具体修复范围和施工进度应以管理机构公布为准。",
+      "zh-TW": "修復荒廢農地是沙羅洞保育措施之一。此處標註農地景觀，具體修復範圍和施工進度應以管理機構公佈爲準。",
+      "en": "Restoring abandoned farmland is part of Sha Lo Tung's conservation approach. This marker identifies the farmland landscape; restoration boundaries and progress should be confirmed with the managing body."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港政府新闻网｜沙罗洞保育",
+        "zh-TW": "香港政府新聞網｜沙羅洞保育",
+        "en": "Hong Kong Government News | Sha Lo Tung conservation"
+      },
+      "url": "https://www.news.gov.hk/chi/2022/07/20220719/20220719_160501_191.html"
+    },
+    "caveat": {
+      "zh-CN": "所给照片为沙罗洞农地景观，非每块修复地块的实拍。",
+      "zh-TW": "所給照片爲沙羅洞農地景觀，非每塊修復地塊的實拍。",
+      "en": "Photo shows the wider farmland setting, not each restoration plot."
+    },
+    "images": []
+  },
+  {
+    "id": "e3",
+    "zone_id": "z5",
+    "x": 574,
+    "y": 255,
+    "name": {
+      "zh-CN": "沙罗洞淡水沼泽与蜻蜓栖息地",
+      "zh-TW": "沙羅洞淡水沼澤與蜻蜓棲息地",
+      "en": "Freshwater Marsh & Dragonfly Habitat"
+    },
+    "desc": {
+      "zh-CN": "沙罗洞淡水沼泽和溪流是蜻蜓等物种的重要生境。此地点用来说明湿地生境保育，未提供可确认为该沼泽的实景图。",
+      "zh-TW": "沙羅洞淡水沼澤和溪流是蜻蜓等物種的重要生境。此地點用來說明溼地生境保育，未提供可確認爲該沼澤的實景圖。",
+      "en": "Freshwater marsh and streams at Sha Lo Tung support dragonflies and other wildlife. This marker explains wetland conservation; no photograph verified as showing this exact marsh was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港政府新闻网｜沙罗洞保育",
+        "zh-TW": "香港政府新聞網｜沙羅洞保育",
+        "en": "Hong Kong Government News | Sha Lo Tung conservation"
+      },
+      "url": "https://www.news.gov.hk/chi/2022/07/20220719/20220719_160501_191.html"
+    },
+    "caveat": {
+      "zh-CN": "示意定位，避免公开敏感生境的精确位置。",
+      "zh-TW": "示意定位，避免公開敏感生境的精確位置。",
+      "en": "Indicative point; exact sensitive habitat locations are not disclosed."
+    },
+    "images": []
+  },
+  {
+    "id": "e4",
+    "zone_id": "z5",
+    "x": 545,
+    "y": 262,
+    "name": {
+      "zh-CN": "沙罗洞萤火虫生境",
+      "zh-TW": "沙羅洞螢火蟲生境",
+      "en": "Fireflies Habitat"
+    },
+    "desc": {
+      "zh-CN": "官方资料提及沙罗洞孕育萤火虫等生物。地点介绍这种生境的保育意义，不以其他地点或日间照片冒充萤火虫夜景。",
+      "zh-TW": "官方資料提及沙羅洞孕育螢火蟲等生物。地點介紹這種生境的保育意義，不以其他地點或日間照片冒充螢火蟲夜景。",
+      "en": "Official information notes fireflies among Sha Lo Tung's wildlife. This marker explains their habitat without presenting unrelated or daytime photos as a firefly scene."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港政府新闻网｜沙罗洞保育",
+        "zh-TW": "香港政府新聞網｜沙羅洞保育",
+        "en": "Hong Kong Government News | Sha Lo Tung conservation"
+      },
+      "url": "https://www.news.gov.hk/chi/2022/07/20220719/20220719_160501_191.html"
+    },
+    "caveat": {
+      "zh-CN": "敏感生境仅作概念示意。",
+      "zh-TW": "敏感生境僅作概念示意。",
+      "en": "Sensitive habitat indicated schematically."
+    },
+    "images": []
+  },
+  {
+    "id": "f1",
+    "zone_id": "z6",
+    "x": 652,
+    "y": 117,
+    "name": {
+      "zh-CN": "鹿颈沼泽",
+      "zh-TW": "鹿頸沼澤",
+      "en": "Luk Keng Marsh"
+    },
+    "desc": {
+      "zh-CN": "鹿颈沼泽是《新自然保育政策》的优先保育地点，毗邻沙头角海；淡水湿地与周边村落、海岸形成连续景观。",
+      "zh-TW": "鹿頸沼澤是《新自然保育政策》的優先保育地點，毗鄰沙頭角海；淡水溼地與周邊村落、海岸形成連續景觀。",
+      "en": "Luk Keng Marsh is a priority conservation site beside Starling Inlet. Freshwater wetland, villages and coast form a connected landscape."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/f1_0.webp",
+        "relation": "direct",
+        "caption": {
+          "zh-CN": "鹿颈路旁湿地景观",
+          "zh-TW": "鹿頸路旁溼地景觀",
+          "en": "Wetland landscape beside Luk Keng Road"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f2",
+    "zone_id": "z6",
+    "x": 664,
+    "y": 125,
+    "name": {
+      "zh-CN": "鹿颈鱼塘",
+      "zh-TW": "鹿頸魚塘",
+      "en": "Fish Ponds at Luk Keng"
+    },
+    "desc": {
+      "zh-CN": "鹿颈一带的鱼塘是乡郊湿地景观的一部分。现有图库没有能确认拍到具体鱼塘的照片，本点仅展示简短介绍。",
+      "zh-TW": "鹿頸一帶的魚塘是鄉郊溼地景觀的一部分。現有圖庫沒有能確認拍到具體魚塘的照片，本點僅展示簡短介紹。",
+      "en": "Fishponds around Luk Keng contribute to its rural wetland landscape. No supplied photo reliably identifies these particular ponds, so this marker provides text only."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "具体鱼塘位置待核对。",
+      "zh-TW": "具體魚塘位置待覈對。",
+      "en": "Precise pond location awaits verification."
+    },
+    "images": []
+  },
+  {
+    "id": "f3",
+    "zone_id": "z6",
+    "x": 678,
+    "y": 135,
+    "name": {
+      "zh-CN": "沙头角海潮间带",
+      "zh-TW": "沙頭角海潮間帶",
+      "en": "Starling Inlet Intertidal Zone"
+    },
+    "desc": {
+      "zh-CN": "沙头角海的潮间带随潮汐变化，为水鸟和其他海岸生物提供觅食空间。这里展示海面实景，未将其标为低潮泥滩特写。",
+      "zh-TW": "沙頭角海的潮間帶隨潮汐變化，爲水鳥和其他海岸生物提供覓食空間。這裏展示海面實景，未將其標爲低潮泥灘特寫。",
+      "en": "Starling Inlet's intertidal zone changes with the tides and provides feeding habitat for coastal wildlife. The supplied photographs show the inlet, not a close-up of exposed mudflat."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/f3_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "沙头角海水面与海岸（非泥滩近景）",
+          "zh-TW": "沙頭角海水面與海岸（非泥灘近景）",
+          "en": "Starling Inlet waters and coast; not a mudflat close-up"
+        }
+      },
+      {
+        "url": "/anchor-photos/f3_1.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "沙头角海海岸及山景",
+          "zh-TW": "沙頭角海海岸及山景",
+          "en": "Starling Inlet coast and hills"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f4",
+    "zone_id": "z6",
+    "x": 638,
+    "y": 137,
+    "name": {
+      "zh-CN": "南涌村落群与协天宫",
+      "zh-TW": "南涌村落羣與協天宮",
+      "en": "Nam Chung Villages & Hip Tin Kung"
+    },
+    "desc": {
+      "zh-CN": "南涌村落与庙宇体现海岸乡郊文化。图库照片拍摄的是南涌天后宫，不是本地点名称中的协天宫，展示时会明确标注。",
+      "zh-TW": "南涌村落與廟宇體現海岸鄉郊文化。圖庫照片拍攝的是南涌天后宮，不是本地點名稱中的協天宮，展示時會明確標註。",
+      "en": "Nam Chung's villages and temples reflect coastal rural heritage. The supplied photographs show Nam Chung Tin Hau Temple, not the Hip Tin Kung named in this marker; the gallery labels this distinction clearly."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "周边参照照片；天后宫≠协天宫。",
+      "zh-TW": "周邊參照照片；天后宮≠協天宮。",
+      "en": "Position and interpretation are illustrative."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/f4_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "南涌天后宫（周边建筑，非协天宫）",
+          "zh-TW": "南涌天后宮（周邊建築，非協天宮）",
+          "en": "Nam Chung Tin Hau Temple; not Hip Tin Kung"
+        }
+      },
+      {
+        "url": "/anchor-photos/f4_1.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "南涌天后宫建筑（非协天宫）",
+          "zh-TW": "南涌天后宮建築（非協天宮）",
+          "en": "Nam Chung Tin Hau Temple complex; not Hip Tin Kung"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f5",
+    "zone_id": "z6",
+    "x": 676,
+    "y": 101,
+    "name": {
+      "zh-CN": "红花岭郊野公园",
+      "zh-TW": "紅花嶺郊野公園",
+      "en": "Robin's Nest Country Park"
+    },
+    "desc": {
+      "zh-CN": "红花岭郊野公园于2024年3月成立，面积约530公顷，并与深圳梧桐山一带构成跨境生态廊道；本图库无园内实景。",
+      "zh-TW": "紅花嶺郊野公園於2024年3月成立，面積約530公頃，並與深圳梧桐山一帶構成跨境生態廊道；本圖庫無園內實景。",
+      "en": "Robin's Nest Country Park was designated in March 2024. Covering about 530 hectares, it forms an ecological corridor with the Wutong Mountain area; no in-park photo was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "北部都会区｜行动纲领",
+        "zh-TW": "北部都會區｜行動綱領",
+        "en": "Northern Metropolis | Action Agenda"
+      },
+      "url": "https://www.nm.gov.hk/sc/action-agenda"
+    },
+    "caveat": {
+      "zh-CN": "区域关联点，位于鹿颈沼泽范围以外。",
+      "zh-TW": "區域關聯點，位於鹿頸沼澤範圍以外。",
+      "en": "Related site outside Luk Keng Marsh."
+    },
+    "images": []
+  },
+  {
+    "id": "g1",
+    "zone_id": "z7",
+    "x": 721,
+    "y": 163,
+    "name": {
+      "zh-CN": "乌蛟腾村",
+      "zh-TW": "烏蛟騰村",
+      "en": "Wu Kau Tang Village"
+    },
+    "desc": {
+      "zh-CN": "乌蛟腾位于船湾郊野公园一带，是通往荔枝窝等村落和古道的起点之一。提供的照片为乌蛟腾周边环境。",
+      "zh-TW": "烏蛟騰位於船灣郊野公園一帶，是通往荔枝窩等村落和古道的起點之一。提供的照片爲烏蛟騰周邊環境。",
+      "en": "Wu Kau Tang lies by Plover Cove Country Park and is a starting point for paths to villages such as Lai Chi Wo. The supplied photo shows the surrounding Wu Kau Tang area."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港旅游发展局｜船湾郊野公园",
+        "zh-TW": "香港旅遊發展局｜船灣郊野公園",
+        "en": "Hong Kong Tourism Board | Plover Cove Country Park"
+      },
+      "url": "https://www.discoverhongkong.com/tc/explore/great-outdoor/plover-cove-country-park.html"
+    },
+    "caveat": {
+      "zh-CN": "",
+      "zh-TW": "",
+      "en": ""
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/g1_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "乌蛟腾乡郊环境（原文件误置于凤坑文件夹）",
+          "zh-TW": "烏蛟騰鄉郊環境（原文件誤置於鳳坑文件夾）",
+          "en": "Wu Kau Tang surroundings; file was placed in the Fung Hang folder"
+        }
+      }
+    ]
+  },
+  {
+    "id": "g2",
+    "zone_id": "z7",
+    "x": 738,
+    "y": 185,
+    "name": {
+      "zh-CN": "凤坑荒村",
+      "zh-TW": "鳳坑荒村",
+      "en": "Abandoned Village Fung Hang"
+    },
+    "desc": {
+      "zh-CN": "凤坑位于船湾郊野公园西北岸、沙头角海沿岸，是区域关联的村落地点，并非乌蛟腾村内的精确点位。图库中标为凤坑的文件实为乌蛟腾照片，故此处不显示。",
+      "zh-TW": "鳳坑位於船灣郊野公園西北岸、沙頭角海沿岸，是區域關聯的村落地點，並非烏蛟騰村內的精確點位。圖庫中標爲鳳坑的文件實爲烏蛟騰照片，故此處不顯示。",
+      "en": "Fung Hang is on the north-western shore of Plover Cove Country Park by Starling Inlet. It is a related village marker, not a verified point inside Wu Kau Tang. The file in its folder is labelled Wu Kau Tang, so no photo is shown here."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "城规会｜凤坑、谷埔及榕树凹会议记录",
+        "zh-TW": "城規會｜鳳坑、谷埔及榕樹凹會議記錄",
+        "en": "Town Planning Board | Fung Hang and adjacent villages"
+      },
+      "url": "https://www.tpb.gov.hk/sc/meetings/TPB/Minutes/m1029tpb_c1.pdf"
+    },
+    "caveat": {
+      "zh-CN": "地理关联及具体点位待核；仅作区域示意。",
+      "zh-TW": "地理關聯及具體點位待覈；僅作區域示意。",
+      "en": "Geographic association and exact position await verification."
+    },
+    "images": []
+  },
+  {
+    "id": "g3",
+    "zone_id": "z7",
+    "x": 731,
+    "y": 153,
+    "name": {
+      "zh-CN": "乌蛟腾风水林与烈士纪念园",
+      "zh-TW": "烏蛟騰風水林與烈士紀念園",
+      "en": "Feng Shui Woodland & Martyrs' Memorial"
+    },
+    "desc": {
+      "zh-CN": "乌蛟腾一带的风水林与乡村文化景观值得留意。此地点将林地与纪念园作为解说对象；没有可确认为这两处本体的图片。",
+      "zh-TW": "烏蛟騰一帶的風水林與鄉村文化景觀值得留意。此地點將林地與紀念園作爲解說對象；沒有可確認爲這兩處本體的圖片。",
+      "en": "Feng shui woodland and rural cultural landmarks near Wu Kau Tang deserve careful interpretation. This marker introduces the woodland and memorial area; no photograph verified for either specific place was supplied."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "环境及生态局｜新自然保育政策",
+        "zh-TW": "環境及生態局｜新自然保育政策",
+        "en": "Environment and Ecology Bureau | New Nature Conservation Policy"
+      },
+      "url": "https://www.eeb.gov.hk/sc/conservation/new_policy.html"
+    },
+    "caveat": {
+      "zh-CN": "林地位置仅为示意，不公布敏感物种点位。",
+      "zh-TW": "林地位置僅爲示意，不公佈敏感物種點位。",
+      "en": "Woodland position is illustrative; sensitive species locations are not disclosed."
+    },
+    "images": []
+  },
+  {
+    "id": "g4",
+    "zone_id": "z7",
+    "x": 751,
+    "y": 169,
+    "name": {
+      "zh-CN": "苗三古道 / 荔枝窝古道",
+      "zh-TW": "苗三古道 / 荔枝窩古道",
+      "en": "Miu Sam & Lai Chi Wo Ancient Trails"
+    },
+    "desc": {
+      "zh-CN": "苗三古道串连乌蛟腾与荔枝窝一带的乡郊路径。所提供照片拍摄的是荔枝窝村景，属于古道沿线参照，并非步道实拍或360°全景。",
+      "zh-TW": "苗三古道串連烏蛟騰與荔枝窩一帶的鄉郊路徑。所提供照片拍攝的是荔枝窩村景，屬於古道沿線參照，並非步道實拍或360°全景。",
+      "en": "The Miu Sam trails link Wu Kau Tang and the Lai Chi Wo area. Supplied photos depict Lai Chi Wo village along the route; they are not photographs of the trail itself or 360° panoramas."
+    },
+    "source": {
+      "title": {
+        "zh-CN": "香港旅游发展局｜船湾郊野公园",
+        "zh-TW": "香港旅遊發展局｜船灣郊野公園",
+        "en": "Hong Kong Tourism Board | Plover Cove Country Park"
+      },
+      "url": "https://www.discoverhongkong.com/tc/explore/great-outdoor/plover-cove-country-park.html"
+    },
+    "caveat": {
+      "zh-CN": "相关村落照片，非古道或球面全景。",
+      "zh-TW": "相關村落照片，非古道或球面全景。",
+      "en": "Nearby-village images, not the trail or a spherical panorama."
+    },
+    "images": [
+      {
+        "url": "/anchor-photos/g4_0.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "荔枝窝村景（古道沿线村落，非步道实拍）",
+          "zh-TW": "荔枝窩村景（古道沿線村落，非步道實拍）",
+          "en": "Lai Chi Wo village along the route, not the trail itself"
+        }
+      },
+      {
+        "url": "/anchor-photos/g4_1.webp",
+        "relation": "nearby",
+        "caption": {
+          "zh-CN": "荔枝窝村及山景（非古道实拍或球面全景）",
+          "zh-TW": "荔枝窩村及山景（非古道實拍或球面全景）",
+          "en": "Lai Chi Wo village and hills; not the trail or a spherical panorama"
+        }
+      }
+    ]
+  }
+]

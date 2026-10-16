@@ -26,6 +26,9 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.static(path.join(__dirname, ".."), { dotfiles: "deny" }));
+/* Static mount for /public — serves anchor photos and other assets.
+   /public/anchor-photos/*.webp → /anchor-photos/*.webp in URLs. */
+app.use("/anchor-photos", express.static(path.join(__dirname, "..", "public", "anchor-photos")));
 
 /* ================================================================
    GET /api/zones  — return all green space zones
@@ -295,6 +298,72 @@ app.get("/api/dashboard", (req, res) => {
 });
 
 /* ================================================================
+   GET /api/anchors  — return all map site markers
+   query: ?zone=z1  (optional — filter by zone_id)
+   ================================================================ */
+app.get("/api/anchors", (req, res) => {
+  const zone = req.query.zone;
+  let rows;
+  if (zone) {
+    rows = db.prepare(`
+      SELECT id, zone_id, x, y, name, desc, source, caveat, images
+      FROM anchors
+      WHERE zone_id = ?
+      ORDER BY id
+    `).all(zone);
+  } else {
+    rows = db.prepare(`
+      SELECT id, zone_id, x, y, name, desc, source, caveat, images
+      FROM anchors
+      ORDER BY zone_id, id
+    `).all();
+  }
+
+  const anchors = rows.map(r => ({
+    id: r.id,
+    zone: r.zone_id,
+    x: r.x,
+    y: r.y,
+    name: JSON.parse(r.name || "{}"),
+    desc: JSON.parse(r.desc || "{}"),
+    source: JSON.parse(r.source || "{}"),
+    caveat: JSON.parse(r.caveat || "{}"),
+    images: JSON.parse(r.images || "[]"),
+  }));
+
+  res.json({ anchors, total: anchors.length });
+});
+
+/* ================================================================
+   GET /api/anchors/:zoneId  — return anchors for a specific zone
+   ================================================================ */
+app.get("/api/anchors/:zoneId", (req, res) => {
+  const rows = db.prepare(`
+    SELECT id, zone_id, x, y, name, desc, source, caveat, images
+    FROM anchors
+    WHERE zone_id = ?
+    ORDER BY id
+  `).all(req.params.zoneId);
+
+  if (rows.length === 0)
+    return res.status(404).json({ error: "No anchors found for this zone" });
+
+  const anchors = rows.map(r => ({
+    id: r.id,
+    zone: r.zone_id,
+    x: r.x,
+    y: r.y,
+    name: JSON.parse(r.name || "{}"),
+    desc: JSON.parse(r.desc || "{}"),
+    source: JSON.parse(r.source || "{}"),
+    caveat: JSON.parse(r.caveat || "{}"),
+    images: JSON.parse(r.images || "[]"),
+  }));
+
+  res.json({ anchors, total: anchors.length });
+});
+
+/* ================================================================
    POST /api/ai/chat  — AI assistant chat
    body: { message, lang }
    Returns: { answer, intent, tags, quickActions, dataSources, lang }
@@ -363,6 +432,8 @@ app.listen(PORT, () => {
   console.log(`  Endpoints:`);
   console.log(`    GET  /api/zones         - all green space zones`);
   console.log(`    GET  /api/zones/:id     - single zone detail`);
+  console.log(`    GET  /api/anchors      - all map site markers`);
+  console.log(`    GET  /api/anchors/:zid  - site markers by zone`);
   console.log(`    POST /api/surveys       - submit a survey`);
   console.log(`    GET  /api/heatmap       - opinion heat points`);
   console.log(`    GET  /api/dashboard     - dashboard statistics`);

@@ -61,8 +61,22 @@ db.exec(`
     FOREIGN KEY (zone_id) REFERENCES zones(id)
   );
 
+  CREATE TABLE IF NOT EXISTS anchors (
+    id          TEXT PRIMARY KEY,
+    zone_id     TEXT NOT NULL,
+    x           REAL,
+    y           REAL,
+    name        TEXT,    -- JSON: { "zh-CN": ..., "zh-TW": ..., "en": ... }
+    desc        TEXT,    -- JSON: trilingual description
+    source      TEXT,    -- JSON: { title: {trilingual}, url: string }
+    caveat      TEXT,    -- JSON: trilingual caveat / location note
+    images      TEXT,    -- JSON array: [{ url, relation, caption:{trilingual} }]
+    FOREIGN KEY (zone_id) REFERENCES zones(id)
+  );
+
   CREATE INDEX IF NOT EXISTS idx_surveys_zone ON surveys(zone_id);
   CREATE INDEX IF NOT EXISTS idx_heat_zone ON heat_points(zone_id);
+  CREATE INDEX IF NOT EXISTS idx_anchors_zone ON anchors(zone_id);
 `);
 
 const ZONE_SEED = [
@@ -238,6 +252,35 @@ function seedIfEmpty() {
       (zone_id,x,y,radius,intensity,type,text_en,text_zh_cn,text_zh_tw,tag,source)
       VALUES (@zone_id,@x,@y,@radius,@intensity,@type,@text_en,@text_zh_cn,@text_zh_tw,@tag,'seed')`);
     HEAT_SEED.forEach(h => insertHeat.run(h));
+  }
+  /* ---- anchors (map site markers with photos) ----
+     The seed data lives in anchor-seed.json (sibling file).
+     Images are served as static files from /public/anchor-photos/
+     so the DB only stores metadata — no base64 blobs in SQLite. */
+  const anchorCount = db.prepare("SELECT COUNT(*) as c FROM anchors").get();
+  if (anchorCount.c === 0) {
+    let seed;
+    try {
+      seed = require("./anchor-seed.json");
+    } catch {
+      seed = [];
+    }
+    if (seed.length) {
+      const insertAnchor = db.prepare(`INSERT INTO anchors
+        (id, zone_id, x, y, name, desc, source, caveat, images)
+        VALUES (@id, @zone_id, @x, @y, @name, @desc, @source, @caveat, @images)`);
+      seed.forEach(a => insertAnchor.run({
+        id: a.id,
+        zone_id: a.zone_id,
+        x: a.x,
+        y: a.y,
+        name: JSON.stringify(a.name),
+        desc: JSON.stringify(a.desc),
+        source: JSON.stringify(a.source),
+        caveat: JSON.stringify(a.caveat),
+        images: JSON.stringify(a.images || []),
+      }));
+    }
   }
 }
 
