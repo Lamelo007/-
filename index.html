@@ -55,11 +55,11 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,213,79,0.45)}
 .btn-outline{background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;padding:14px 36px;border-radius:12px;font-weight:600;font-size:16px;cursor:pointer;border:1.5px solid rgba(255,255,255,0.35);transition:all var(--transition)}
 .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.15);transform:translateY(-3px)}
-.hero-stats{display:flex;justify-content:center;gap:32px;margin-top:60px;flex-wrap:wrap}
-.hero-stat{text-align:center;background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:20px 28px;transition:all var(--transition)}
+.hero-stats{display:flex;justify-content:center;gap:24px;margin-top:60px;flex-wrap:nowrap}
+.hero-stat{text-align:center;background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:18px 22px;transition:all var(--transition);flex:1 1 0;min-width:0}
 .hero-stat:hover{transform:translateY(-4px);background:rgba(255,255,255,0.12);box-shadow:0 12px 36px rgba(0,0,0,0.15)}
 .hero-stat .num{font-size:40px;font-weight:900;color:#FFD54F;line-height:1}
-.hero-stat .label{font-size:14px;color:rgba(255,255,255,0.7);margin-top:8px}
+.hero-stat .label{font-size:13px;color:rgba(255,255,255,0.7);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #problem{background:var(--gray-bg)}
 .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
 .problem-card{background:#fff;border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);transition:all 0.3s;border-top:4px solid transparent}
@@ -103,7 +103,7 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 .survey-progress-bar{height:6px;background:#E0F2F1;border-radius:10px;margin-bottom:28px;overflow:hidden}
 .survey-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-primary),var(--teal-light));border-radius:10px;transition:width 0.4s ease}
 .survey-step-indicator{display:flex;justify-content:space-between;margin-bottom:24px}
-.step-dot{flex:1;text-align:center;font-size:12px;color:#999;font-weight:600;position:relative;padding-bottom:24px}
+.step-dot{flex:1;text-align:center;font-size:12px;color:#999;font-weight:600;position:relative;padding-bottom:18px}
 .step-dot::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#E0F2F1;display:flex;align-items:center;justify-content:center;font-size:13px;color:#999;border:3px solid #E0F2F1;z-index:2}
 .step-dot.active::before{background:var(--teal-primary);color:#fff;border-color:var(--teal-primary)}
 .step-dot.done::before{background:var(--teal-light);color:#fff;border-color:var(--teal-light)}
@@ -473,6 +473,7 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 .anchor-availability{font-size:11px;color:#5b7563;line-height:1.5;margin:8px 0 0}
 .anchor-panel-note{border-top:1px solid #e7eee8;color:#647668;font-size:11px;line-height:1.55;padding:12px 2px 4px;margin-top:15px}
 @media(max-width:900px){.nav-right{gap:6px}.zone-panel{max-height:none}.anchor-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.hero-stats{flex-wrap:wrap;gap:16px}.hero-stat{flex:1 1 calc(50% - 16px)}}
 @media(max-width:520px){.anchor-list{grid-template-columns:1fr}.anchor-media-frame{height:200px}}
 
 
@@ -547,7 +548,7 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 
 <section class="section" id="hero">
   <div class="hero-content">
-    <div class="hero-badge"><span class="dot"></span> <span data-i18n="hero.badge">Hackathon Demo · 北部都会区绿化空间规划</span></div>
+    <div class="hero-badge"><span class="dot"></span> <span data-i18n="hero.badge">北部都会区绿化空间规划</span></div>
     <h1 class="hero-title"><span data-i18n="hero.title1">让绿化规划</span><span class="accent" data-i18n="hero.title2">看得见</span><br><span data-i18n="hero.title3">让居民声音</span><span class="accent" data-i18n="hero.title4">落得上图</span></h1>
     <p class="hero-desc" data-i18n="hero.desc">将官方文字版绿化空间规划转化为可视化互动地图，居民可查看规划信息并提交意见，AI 自动聚合公众反馈生成空间意见热图，帮助政府直观理解居民诉求。</p>
     <div class="hero-actions">
@@ -1352,10 +1353,10 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <div class="survey-form-card">
         <div class="survey-progress-bar"><div class="survey-progress-fill" id="progressFill" style="width:25%;"></div></div>
         <div class="survey-step-indicator">
-          <div class="step-dot active" data-step="0" data-i18n="survey.step0">区域</div>
-          <div class="step-dot" data-step="1" data-i18n="survey.step1">评分</div>
-          <div class="step-dot" data-step="2" data-i18n="survey.step2">功能</div>
-          <div class="step-dot" data-step="3" data-i18n="survey.step3">建议</div>
+          <div class="step-dot active" data-step="0" data-i18n="survey.step0"></div>
+          <div class="step-dot" data-step="1" data-i18n="survey.step1"></div>
+          <div class="step-dot" data-step="2" data-i18n="survey.step2"></div>
+          <div class="step-dot" data-step="3" data-i18n="survey.step3"></div>
         </div>
         <div class="survey-q active" data-step="0">
           <h3 data-i18n="survey.q0.title">您最关注的绿化区域是？</h3>
@@ -1833,7 +1834,7 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 
 <footer class="footer">
   <div class="footer-brand">🌿 GreenSpace NM · <span data-i18n="footer.brand">北部都会区绿化空间互动平台</span></div>
-  <p data-i18n="footer.info">Hackathon Demo | 客户：香港政府城市规划及土地发展部门 | 2026</p>
+  <p data-i18n="footer.info">客户：香港政府城市规划及土地发展部门 | 2026</p>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -1945,7 +1946,7 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
 const I18N = {
 'en':{
 'nav.overview':'Overview','nav.problem':'Problem','nav.map':'Green Map','nav.survey':'Survey','nav.opinion':'AI Opinion','nav.dashboard':'Dashboard','nav.roadmap':'Roadmap','nav.cta':'Participate','nav.ai':'AI Assistant',
-'hero.badge':'Hackathon Demo · Northern Metropolis Green Space Planning',
+'hero.badge':'Northern Metropolis Green Space Planning',
 'hero.title1':'Make Green Planning ','hero.title2':'Visible','hero.title3':'Put Resident Voices ','hero.title4':'On the Map',
 'hero.desc':'Transforming official text-based green space plans into interactive maps. Residents can view planning info and submit feedback. AI aggregates public input into spatial opinion, helping the government intuitively understand resident needs.',
 'hero.btn1':'Explore Green Map','hero.btn2':'View Dashboard',
@@ -1964,7 +1965,7 @@ const I18N = {
 'map.planningArea':'Planning Area','map.opinionCount':'Opinion Count','map.avgSatisfaction':'Avg. Satisfaction','map.attentionLevel':'Attention Level','map.planningData':'\ud83d\udcca Planning Data','map.planningFunctions':'\ud83c\udfaf Planned Functions','map.submitOpinion':'\ud83d\udcac Submit Opinion for This Zone',
 'map.level.high':'High','map.level.mid':'Medium','map.level.low':'Low',
 'survey.title':'Resident Opinion Survey','survey.subtitle':'Your feedback will be automatically aggregated by AI and shown on the opinion heatmap',
-'survey.step0':'Zone','survey.step1':'Rating','survey.step2':'Functions','survey.step3':'Suggestions',
+'survey.step0':'','survey.step1':'','survey.step2':'','survey.step3':'',
 'survey.prev':'Previous','survey.next':'Next','survey.submit':'Submit Survey','survey.selectRating':'Please select a rating',
 'survey.q0.title':'Which green zone do you care about most?','survey.q0.hint':'Select a planning zone you are most concerned about',
 'survey.q1.title':'How satisfied are you with the planning of this zone?','survey.q1.hint':'1 star = Very dissatisfied, 5 stars = Very satisfied',
@@ -1993,7 +1994,7 @@ const I18N = {
 'dash.col1':'Zone Name','dash.col2':'Type','dash.col3':'Opinions','dash.col4':'Avg. Satisfaction','dash.col5':'Hot Topic','dash.col6':'Priority',
 'dash.priority.high':'High','dash.priority.mid':'Medium','dash.priority.low':'Low',
 'roadmap.title':'Project Roadmap','roadmap.subtitle':'Complete milestones from planning to deployment',
-'footer.brand':'Northern Metropolis Green Space Interactive Platform','footer.info':'Hackathon Demo | Client: Hong Kong Government Urban Planning & Land Development Dept. | 2026',
+'footer.brand':'Northern Metropolis Green Space Interactive Platform','footer.info':'Client: Hong Kong Government Urban Planning & Land Development Dept. | 2026',
 'ai.name':'AI Assistant','ai.status':'Online · 7 data modules connected','ai.placeholder':'Ask me anything about the green space plan…',
 'ai.quick.report':'📋 Build Report','ai.quick.overview':'📊 Overview','ai.quick.hot':'🔥 Hot Topics','ai.quick.compare':'⚖️ Compare Zones','ai.quick.guide':'❓ How to Participate',
 'ai.report.title':'Northern Metropolis Green Space Construction Suggestion Report','ai.report.subtitle':'Synthesised from 7 zones, real-time resident opinions · AI-generated','ai.report.copy':'📋 Copy Markdown','ai.report.download':'⬇️ Download .md','ai.report.html':'⬇️ Download .html','ai.report.print':'🖨️ Print / PDF',
@@ -2040,7 +2041,7 @@ const I18N = {
 },
 'zh-CN':{
 'nav.overview':'概览','nav.problem':'问题','nav.map':'绿化地图','nav.survey':'居民问卷','nav.opinion':'AI意见热图','nav.dashboard':'政府看板','nav.roadmap':'项目路线','nav.cta':'立即参与','nav.ai':'AI 助手',
-'hero.badge':'Hackathon Demo · 北部都会区绿化空间规划',
+'hero.badge':'北部都会区绿化空间规划',
 'hero.title1':'让绿化规划','hero.title2':'看得见','hero.title3':'让居民声音','hero.title4':'落得上图',
 'hero.desc':'将官方文字版绿化空间规划转化为可视化互动地图，居民可查看规划信息并提交意见，AI 自动聚合公众反馈生成空间意见热图，帮助政府直观理解居民诉求。',
 'hero.btn1':'探索绿化地图','hero.btn2':'查看政府看板',
@@ -2059,7 +2060,7 @@ const I18N = {
 'map.planningArea':'规划面积','map.opinionCount':'意见数','map.avgSatisfaction':'平均满意度','map.attentionLevel':'关注度等级','map.planningData':'📊 规划数据','map.planningFunctions':'🎯 规划功能','map.submitOpinion':'💬 对此区域发表意见',
 'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
 'survey.title':'居民意见问卷','survey.subtitle':'您的反馈将通过 AI 自动聚合，呈现在意见热图上',
-'survey.step0':'区域','survey.step1':'评分','survey.step2':'功能','survey.step3':'建议',
+'survey.step0':'','survey.step1':'','survey.step2':'','survey.step3':'',
 'survey.prev':'上一步','survey.next':'下一步','survey.submit':'提交问卷','survey.selectRating':'请选择评分',
 'survey.q0.title':'您最关注的绿化区域是？','survey.q0.hint':'选择一个您最关心的规划区域',
 'survey.q1.title':'您对该区域规划方案的满意度？','survey.q1.hint':'1 星 = 非常不满意，5 星 = 非常满意',
@@ -2088,7 +2089,7 @@ const I18N = {
 'dash.col1':'区域名称','dash.col2':'类型','dash.col3':'意见数','dash.col4':'平均满意度','dash.col5':'热门议题','dash.col6':'优先级',
 'dash.priority.high':'高优先','dash.priority.mid':'中优先','dash.priority.low':'低优先',
 'roadmap.title':'项目路线图','roadmap.subtitle':'从规划到部署的完整里程碑',
-'footer.brand':'北部都会区绿化空间互动平台','footer.info':'Hackathon Demo | 客户：香港政府城市规划及土地发展部门 | 2026',
+'footer.brand':'北部都会区绿化空间互动平台','footer.info':'客户：香港政府城市规划及土地发展部门 | 2026',
 'ai.name':'AI 智能助手','ai.status':'在线 · 已接入 7 个数据模块','ai.placeholder':'问我关于绿化规划的任何问题…',
 'ai.quick.report':'📋 生成建设报告','ai.quick.overview':'📊 综合数据','ai.quick.hot':'🔥 热门议题','ai.quick.compare':'⚖️ 区域对比','ai.quick.guide':'❓ 如何参与',
 'ai.report.title':'北部都会区绿化空间建设建议报告','ai.report.subtitle':'综合 7 个绿化区域、实时居民意见 · AI 自动生成','ai.report.copy':'📋 复制 Markdown','ai.report.download':'⬇️ 下载 .md','ai.report.html':'⬇️ 下载 .html','ai.report.print':'🖨️ 打印 / 导出 PDF',
@@ -2135,7 +2136,7 @@ const I18N = {
 },
 'zh-TW':{
 'nav.overview':'概覽','nav.problem':'問題','nav.map':'綠化地圖','nav.survey':'居民問卷','nav.opinion':'AI意見熱圖','nav.dashboard':'政府看板','nav.roadmap':'項目路線','nav.cta':'立即參與','nav.ai':'AI 助手',
-'hero.badge':'Hackathon Demo · 北部都會區綠化空間規劃',
+'hero.badge':'北部都會區綠化空間規劃',
 'hero.title1':'讓綠化規劃','hero.title2':'看得見','hero.title3':'讓居民聲音','hero.title4':'落得上圖',
 'hero.desc':'將官方文字版綠化空間規劃轉化為可視化互動地圖，居民可查看規劃資訊並提交意見，AI 自動聚合公眾反饋生成空間意見熱圖，幫助政府直觀理解居民訴求。',
 'hero.btn1':'探索綠化地圖','hero.btn2':'查看政府看板',
@@ -2154,7 +2155,7 @@ const I18N = {
 'map.planningArea':'規劃面積','map.opinionCount':'意見數','map.avgSatisfaction':'平均滿意度','map.attentionLevel':'關注度等級','map.planningData':'📊 規劃數據','map.planningFunctions':'🎯 規劃功能','map.submitOpinion':'💬 對此區域發表意見',
 'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
 'survey.title':'居民意見問卷','survey.subtitle':'您的反饋將通過 AI 自動聚合，呈現在意見熱圖上',
-'survey.step0':'區域','survey.step1':'評分','survey.step2':'功能','survey.step3':'建議',
+'survey.step0':'','survey.step1':'','survey.step2':'','survey.step3':'',
 'survey.prev':'上一步','survey.next':'下一步','survey.submit':'提交問卷','survey.selectRating':'請選擇評分',
 'survey.q0.title':'您最關注的綠化區域是？','survey.q0.hint':'選擇一個您最關心的規劃區域',
 'survey.q1.title':'您對該區域規劃方案的滿意度？','survey.q1.hint':'1 星 = 非常不滿意，5 星 = 非常滿意',
@@ -2183,7 +2184,7 @@ const I18N = {
 'dash.col1':'區域名稱','dash.col2':'類型','dash.col3':'意見數','dash.col4':'平均滿意度','dash.col5':'熱門議題','dash.col6':'優先級',
 'dash.priority.high':'高優先','dash.priority.mid':'中優先','dash.priority.low':'低優先',
 'roadmap.title':'項目路線圖','roadmap.subtitle':'從規劃到部署的完整里程碑',
-'footer.brand':'北部都會區綠化空間互動平台','footer.info':'Hackathon Demo | 客戶：香港政府城市規劃及土地發展部門 | 2026',
+'footer.brand':'北部都會區綠化空間互動平台','footer.info':'客戶：香港政府城市規劃及土地發展部門 | 2026',
 'ai.name':'AI 智能助手','ai.status':'線上 · 已接入 7 個數據模組','ai.placeholder':'問我關於綠化規劃的任何問題…',
 'ai.quick.report':'📋 生成建設報告','ai.quick.overview':'📊 綜合數據','ai.quick.hot':'🔥 熱門議題','ai.quick.compare':'⚖️ 區域對比','ai.quick.guide':'❓ 如何參與',
 'ai.report.title':'北部都會區綠化空間建設建議報告','ai.report.subtitle':'綜合 7 個綠化區域、即時居民意見 · AI 自動生成','ai.report.copy':'📋 複製 Markdown','ai.report.download':'⬇️ 下載 .md','ai.report.html':'⬇️ 下載 .html','ai.report.print':'🖨️ 列印 / 匯出 PDF',
