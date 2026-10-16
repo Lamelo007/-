@@ -135,7 +135,10 @@ app.post("/api/surveys", (req, res) => {
 
   const opinionType = classifyOpinion(ratingNum, text, funcs);
   const keywords = extractKeywords(text);
-  if (funcs.length) keywords.push(...funcs);
+  /* De-duplicate: a ticked function may already have been matched from the
+     free text (e.g. "儿童" -> func.children), which would otherwise store the
+     same keyword twice. */
+  funcs.forEach(f => { if (!keywords.includes(f)) keywords.push(f); });
 
   /* ---- atomic write: survey + heat point ----
      Wrapped in a transaction so a failure never leaves an orphan survey
@@ -242,7 +245,7 @@ app.get("/api/dashboard", (req, res) => {
      map therefore all read the same rows and can never disagree.
      `surveys` only supplies submission-level facts: how many people
      submitted, when, and what they rated. */
-  const hpRows = db.prepare("SELECT zone_id, type, tag FROM heat_points").all();
+  const hpRows = db.prepare("SELECT zone_id, type, tag, source FROM heat_points").all();
 
   const totalOpinions = hpRows.length;
   const opTypeCount = { positive: 0, improve: 0, concern: 0, function: 0 };
@@ -254,10 +257,29 @@ app.get("/api/dashboard", (req, res) => {
   hpRows.forEach(r => {
     if (opTypeCount[r.type] !== undefined) opTypeCount[r.type]++;
     zoneOpinions[r.zone_id] = (zoneOpinions[r.zone_id] || 0) + 1;
-    if (r.tag) {
-      tagCount[r.tag] = (tagCount[r.tag] || 0) + 1;
-      if (r.tag.indexOf("func.") === 0) funcCount[r.tag] = (funcCount[r.tag] || 0) + 1;
-    }
+    if (r.tag) tagCount[r.tag] = (tagCount[r.tag] || 0) + 1;
+  });
+
+  /* ---- function-demand distribution (the pie chart) -------------------
+     A heat point carries only ONE tag. When a resident's free text matches a
+     keyword ("遮阳" -> tag.shade) that keyword takes the tag slot and pushes
+     out the function they actually ticked — so the pie never moved even
+     though the submission was saved. Read the ticked functions straight from
+     `surveys` (the authoritative record, immune to the free text) and take
+     only the SEED baseline from heat_points, so a submission is never
+     counted twice. */
+  hpRows.forEach(r => {
+    if (r.source === "seed" && r.tag && r.tag.indexOf("func.") === 0)
+      funcCount[r.tag] = (funcCount[r.tag] || 0) + 1;
+  });
+  db.prepare("SELECT functions FROM surveys").all().forEach(s => {
+    let list;
+    try { list = JSON.parse(s.functions || "[]"); } catch { list = []; }
+    if (!Array.isArray(list)) return;
+    list.forEach(f => {
+      if (typeof f === "string" && f.indexOf("func.") === 0)
+        funcCount[f] = (funcCount[f] || 0) + 1;
+    });
   });
 
   if (totalOpinions > 0) {
