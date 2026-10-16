@@ -1,15 +1,31 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const { db } = require("./database");
 const { extractKeywords, classifyOpinion, generateHeatPoint, aggregateStats } = require("./ai-engine");
 const { processChat, generateReport, getSuggestedQuestions } = require("./ai-assistant");
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname + "/.."));
+/* CORS — permissive by default so the demo also works when index.html is
+   opened directly from the filesystem. Set CORS_ORIGIN (comma-separated)
+   to restrict it, e.g. CORS_ORIGIN="http://localhost:3000" */
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
+app.use(cors(CORS_ORIGIN ? { origin: CORS_ORIGIN.split(",").map(s => s.trim()) } : {}));
+app.use(express.json({ limit: "64kb" }));
+
+/* ---- Static frontend ------------------------------------------------
+   express.static is mounted on the project root so index.html is served.
+   The backend directory must stay unreachable: it holds the source code
+   AND the SQLite database file (greenspace.db). This guard runs first. */
+app.use((req, res, next) => {
+  if (/^\/backend(\/|$)/i.test(req.path)) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  next();
+});
+app.use(express.static(path.join(__dirname, ".."), { dotfiles: "deny" }));
 
 /* ================================================================
    GET /api/zones  — return all green space zones
@@ -63,44 +79,76 @@ app.get("/api/zones/:id", (req, res) => {
    body: { zone_id, rating, functions[], suggestion }
    ================================================================ */
 app.post("/api/surveys", (req, res) => {
-  const { zone_id, rating, functions, suggestion } = req.body;
+  const body = req.body || {};
+  const { zone_id, rating, functions, suggestion } = body;
 
-  if (!zone_id) return res.status(400).json({ error: "zone_id is required" });
-  if (!rating || rating < 1 || rating > 5) return res.status(400).json({ error: "rating must be 1-5" });
+  /* ---- validation ---- */
+  if (typeof zone_id !== "string" || !zone_id.trim())
+    return res.status(400).json({ error: "zone_id must be a non-empty string" });
+
+  const ratingNum = Number(rating);
+  if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5)
+    return res.status(400).json({ error: "rating must be an integer between 1 and 5" });
+
+  let funcs = [];
+  if (functions !== undefined && functions !== null) {
+    if (!Array.isArray(functions))
+      return res.status(400).json({ error: "functions must be an array" });
+    funcs = functions
+      .filter(f => typeof f === "string" && f.trim())
+      .map(f => f.trim().slice(0, 60))
+      .slice(0, 20);
+  }
+
+  let text = "";
+  if (suggestion !== undefined && suggestion !== null) {
+    if (typeof suggestion !== "string")
+      return res.status(400).json({ error: "suggestion must be a string" });
+    text = suggestion.trim().slice(0, 2000);
+  }
 
   const zone = db.prepare("SELECT * FROM zones WHERE id = ?").get(zone_id);
   if (!zone) return res.status(404).json({ error: "Zone not found" });
 
-  const opinionType = classifyOpinion(rating, suggestion, functions);
-  const keywords = extractKeywords(suggestion);
-  if (functions && functions.length) keywords.push(...functions);
+  const opinionType = classifyOpinion(ratingNum, text, funcs);
+  const keywords = extractKeywords(text);
+  if (funcs.length) keywords.push(...funcs);
 
-  const result = db.prepare(`
-    INSERT INTO surveys (zone_id, rating, functions, suggestion, opinion_type, keywords)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(
-    zone_id,
-    rating,
-    JSON.stringify(functions || []),
-    suggestion || "",
-    opinionType,
-    JSON.stringify(keywords)
-  );
+  /* ---- atomic write: survey + heat point ----
+     Wrapped in a transaction so a failure never leaves an orphan survey
+     without its heat point (or vice versa). */
+  const writeSurvey = db.transaction(() => {
+    const result = db.prepare(`
+      INSERT INTO surveys (zone_id, rating, functions, suggestion, opinion_type, keywords)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(
+      zone_id,
+      ratingNum,
+      JSON.stringify(funcs),
+      text,
+      opinionType,
+      JSON.stringify(keywords)
+    );
 
-  const heatPoint = generateHeatPoint(
-    { opinion_type: opinionType, suggestion, keywords },
-    zone
-  );
+    const heatPoint = generateHeatPoint(
+      { opinion_type: opinionType, suggestion: text, keywords },
+      zone
+    );
 
-  db.prepare(`
-    INSERT INTO heat_points (zone_id, x, y, radius, intensity, type, text_en, text_zh_cn, text_zh_tw, tag, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'survey')
-  `).run(
-    heatPoint.zone_id, heatPoint.x, heatPoint.y, heatPoint.radius,
-    heatPoint.intensity, heatPoint.type,
-    heatPoint.text_en, heatPoint.text_zh_cn, heatPoint.text_zh_tw,
-    heatPoint.tag
-  );
+    db.prepare(`
+      INSERT INTO heat_points (zone_id, x, y, radius, intensity, type, text_en, text_zh_cn, text_zh_tw, tag, source)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'survey')
+    `).run(
+      heatPoint.zone_id, heatPoint.x, heatPoint.y, heatPoint.radius,
+      heatPoint.intensity, heatPoint.type,
+      heatPoint.text_en, heatPoint.text_zh_cn, heatPoint.text_zh_tw,
+      heatPoint.tag
+    );
+
+    return { surveyId: result.lastInsertRowid, heatPoint };
+  });
+
+  const { surveyId, heatPoint } = writeSurvey();
 
   const totalSurveys = db.prepare("SELECT COUNT(*) as c FROM surveys").get().c;
   const todayNew = db.prepare(`
@@ -110,7 +158,7 @@ app.post("/api/surveys", (req, res) => {
 
   res.json({
     success: true,
-    survey_id: result.lastInsertRowid,
+    survey_id: surveyId,
     opinion_type: opinionType,
     keywords,
     total_surveys: totalSurveys,
@@ -177,22 +225,28 @@ app.get("/api/dashboard", (req, res) => {
     } catch(e) {}
   });
 
-  const topTags = db.prepare(`
-    SELECT keywords, COUNT(*) as c FROM surveys
+  /* Hot topics — count each keyword individually.
+     (The previous version grouped by the whole JSON array string, so two
+     submissions with the same tags in a different order counted as two
+     separate groups and never aggregated.) */
+  const kwRows = db.prepare(`
+    SELECT keywords FROM surveys
     WHERE keywords IS NOT NULL AND keywords != '[]'
-    GROUP BY keywords
-    ORDER BY c DESC
-    LIMIT 5
   `).all();
 
-  const hotTopic = topTags.length > 0
-    ? (() => {
-        try {
-          const kws = JSON.parse(topTags[0].keywords);
-          return kws[0] || "tag.shade";
-        } catch(e) { return "tag.shade"; }
-      })()
-    : "tag.shade";
+  const tagCount = {};
+  kwRows.forEach(r => {
+    try {
+      JSON.parse(r.keywords).forEach(k => { tagCount[k] = (tagCount[k] || 0) + 1; });
+    } catch(e) {}
+  });
+
+  const topTags = Object.entries(tagCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([tag, c]) => ({ tag, c }));
+
+  const hotTopic = topTags.length > 0 ? topTags[0].tag : "tag.shade";
 
   res.json({
     total_surveys: stats.total,
@@ -253,10 +307,25 @@ app.get("/api/ai/suggest", (req, res) => {
 });
 
 /* ================================================================
+   404 + error handling
+   ================================================================ */
+app.use((req, res) => {
+  res.status(404).json({ error: "Not found" });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error("[Server Error]", err.message);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ error: err.message || "Internal server error" });
+});
+
+/* ================================================================
    Start server
    ================================================================ */
 app.listen(PORT, () => {
   console.log(`\n  GreenSpace NM API Server running at http://localhost:${PORT}`);
+  console.log(`  Frontend: http://localhost:${PORT}/  (backend/ is blocked from static access)`);
   console.log(`  Endpoints:`);
   console.log(`    GET  /api/zones         - all green space zones`);
   console.log(`    GET  /api/zones/:id     - single zone detail`);
@@ -265,5 +334,5 @@ app.listen(PORT, () => {
   console.log(`    GET  /api/dashboard     - dashboard statistics`);
   console.log(`    POST /api/ai/chat       - AI assistant chat`);
   console.log(`    POST /api/ai/report     - generate construction report`);
-  console.log(`    GET  /api/ai/suggest     - suggested questions\n`);
+  console.log(`    GET  /api/ai/suggest    - suggested questions\n`);
 });

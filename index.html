@@ -2320,6 +2320,14 @@ function heatT(key){
   if(heatTexts['zh-CN'][key] !== undefined) return heatTexts['zh-CN'][key];
   return t(key);
 }
+/* Escape text before inserting it into innerHTML. User-submitted suggestions
+   are stored in heatTexts under 'heat.custom' and rendered into popups and
+   table cells, so they must never be treated as markup. */
+function escHTML(s){
+  return String(s === undefined || s === null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 const zoneCoords = {
   'z1':{x:122,y:219},
   'z2':{x:254,y:136},
@@ -2634,11 +2642,10 @@ function renderDashTable(){
     '<td>'+t(r.typeKey)+'</td>'+
     '<td>'+r.opinions+'</td>'+
     '<td>'+r.avg+' \u2b50</td>'+
-    '<td>'+heatT(r.topicKey)+'</td>'+
+    '<td>'+escHTML(heatT(r.topicKey))+'</td>'+
     '<td><span class="badge '+bc+'">'+bt+'</span></td></tr>';
   }).join('');
 }
-
 window.selectedZoneId = null;
 function selectZone(id){
   const zk = id;
@@ -3045,9 +3052,9 @@ function submitSurvey(){
   const kw = surveyData.functions.length ? surveyData.functions.map(f=>t(f)).join(', ') : t('survey.fb.general');
   const fb=document.getElementById('surveyFeedback');
   fb.innerHTML = t('survey.fb.success')
-    .replace('{zone}', zoneName)
-    .replace('{rating}', surveyData.rating)
-    .replace('{keywords}', kw + (surveyData.suggestion ? ', '+surveyData.suggestion.substring(0,20)+'...' : ''));
+    .replace('{zone}', escHTML(zoneName))
+    .replace('{rating}', escHTML(surveyData.rating))
+    .replace('{keywords}', escHTML(kw) + (surveyData.suggestion ? ', '+escHTML(surveyData.suggestion.substring(0,20))+'...' : ''));
   fb.classList.add('show');
   addHeatPoint(surveyData);
   showToast(t('survey.toast.success'));
@@ -3135,7 +3142,7 @@ function showHeatPopup(nd){
   const typeLabels={positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
   popup.innerHTML='<h5>'+t('zone.'+nd.zoneKey+'.name')+'</h5>'+
     '<div class="tag">'+nd.n+' '+t('opinion.unitOpinions')+' \u00b7 '+typeLabels[nd.type]+'</div>'+
-    '<div class="text">"'+heatT(nd.topicKey)+'"</div>';
+    '<div class="text">"'+escHTML(heatT(nd.topicKey))+'"</div>';
   popup.classList.add('show');
   const canvas=document.getElementById('heatCanvas');
   const cr=canvas.getBoundingClientRect();

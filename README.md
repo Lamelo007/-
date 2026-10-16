@@ -13,6 +13,9 @@ Metropolis (Hong Kong).
 - **AI Opinion Heatmap** — spatial visualisation of aggregated public feedback,
   overlaid on the same real geography
 - **Government Dashboard** — KPI cards, Chart.js bar / pie charts, opinion table
+- **AI Assistant** — intent-based Q&A over the zone / opinion / dashboard data,
+  plus one-click generation of a construction-suggestion report
+  (Markdown / HTML / print-to-PDF)
 - **Trilingual Support** — English / 简体中文 / 繁體中文 with live switching
 
 ## Map data sources
@@ -60,14 +63,66 @@ Douglas–Peucker to keep the SVG light.
 
 ## Usage
 
-Open `index.html` in any modern browser. No server required.
+### Frontend only (no backend)
+
+Open `index.html` in any modern browser. The page runs standalone using its
+built-in demo corpus; the AI assistant automatically falls back to the
+client-side engine when no API is reachable.
+
+### With the backend (recommended for the full demo)
+
+The backend is an Express + SQLite service that serves the frontend **and**
+exposes the REST API.
+
+**Requirement: Node.js 22.** `better-sqlite3` is a native module, so the
+Node major version used to install must match the one used to run. If you see
+`NODE_MODULE_VERSION ... requires ...`, either switch to the matching Node
+version or run `npm rebuild better-sqlite3` inside `backend/`.
+
+```bash
+cd backend
+npm ci          # or: npm install
+node server.js
+```
+
+Then open <http://localhost:3000>.
+
+Set `PORT` to change the port, and `CORS_ORIGIN` (comma-separated) to restrict
+cross-origin access:
+
+```bash
+PORT=8080 CORS_ORIGIN="http://localhost:8080" node server.js
+```
+
+#### API endpoints
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/api/zones` | all green space zones |
+| GET | `/api/zones/:id` | single zone detail |
+| POST | `/api/surveys` | submit a survey |
+| GET | `/api/heatmap` | opinion heat points (`?type=all\|positive\|improve\|concern\|function`) |
+| GET | `/api/dashboard` | dashboard statistics |
+| POST | `/api/ai/chat` | AI assistant chat |
+| POST | `/api/ai/report` | generate construction report |
+| GET | `/api/ai/suggest` | suggested questions (`?lang=`) |
+
+> The `backend/` directory is intentionally **not** served statically — it holds
+> the source code and the SQLite database file.
 
 ## File Structure
 
 - `index.html` — self-contained single-file demo (all CSS + JS inlined)
 - `i18n.js` — translation dictionaries (EN / zh-CN / zh-TW), reference only
 - `app.js` — application logic, reference only
-- `backend/` — optional Express + SQLite reference backend (same seed data)
+- `backend/` — Express + SQLite reference backend
+  - `server.js` — HTTP routes and static hosting
+  - `database.js` — schema and seed data
+  - `ai-engine.js` — keyword extraction, opinion classification, heat-point generation
+  - `ai-assistant.js` — intent detection, chat answers, report generation
+
+`node_modules/` and the generated `greenspace.db` are git-ignored; the database
+is created and seeded automatically on first run.
 
 ## License
 

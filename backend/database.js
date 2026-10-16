@@ -5,6 +5,7 @@ const DB_PATH = path.join(__dirname, "greenspace.db");
 const db = new Database(DB_PATH);
 
 db.pragma("journal_mode = WAL");
+db.pragma("foreign_keys = ON");
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS zones (
