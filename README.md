@@ -38,16 +38,18 @@ the Northern Metropolis window:
 
 | id | Site | Type | Area |
 | --- | --- | --- | --- |
-| z1 | 拉姆薩爾濕地 / Mai Po Ramsar Site | Wetland | 1,551 ha |
-| z2 | 拉姆薩爾濕地以外的后海灣濕地 / Deep Bay Wetland outside Ramsar Site | Wetland | 1,012 ha |
-| z3 | 塱原及河上鄉 / Long Valley & Ho Sheung Heung | Eco Park | 151 ha |
+| z1 | 拉姆薩爾濕地 / Mai Po Ramsar Site | Wetland | 1,540 ha |
+| z2 | 拉姆薩爾濕地以外的后海灣濕地 / Deep Bay Wetland outside Ramsar Site | Wetland | 600+ ha fishponds |
+| z3 | 塱原及河上鄉 / Long Valley & Ho Sheung Heung | Eco Park | 37 ha |
 | z4 | 鳳園 / Fung Yuen | Conservation Reserve | 42 ha |
-| z5 | 沙羅洞 / Sha Lo Tung | Conservation Reserve | 55 ha |
+| z5 | 沙羅洞 / Sha Lo Tung | Conservation Reserve | 56 ha |
 | z6 | 鹿頸沼澤 / Luk Keng Marsh | Wetland | 37 ha |
 | z7 | 烏蛟騰 / Wu Kau Tang | Eco Park | 103 ha |
 
-Cross-check: the Ramsar polygon measures ≈1,551 ha, matching the official
-published figure of ≈1,540 ha.
+Data verified from: AFCD, WWF-HK, HKUST IEnv, AECOM/LVNP, BSAP.
+Ramsar Site designated 4 Sept 1995; Mai Po Nature Reserve (380 ha) managed by
+WWF-HK since 1983; 20,000+ winter waterbirds; 17 mammal / 21 reptile / 7
+amphibian / 37 fish / 400+ invertebrate / 140 plant species.
 
 Geometry is projected with a cos(22.5°) latitude correction so the map is
 equidistant-cylindrical on an 800×560 canvas, then simplified with
