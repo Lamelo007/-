@@ -65,11 +65,15 @@ Douglas–Peucker to keep the SVG light.
 
 ### Frontend only (no backend)
 
-Open `index.html` in any modern browser. The page runs standalone using its
-built-in demo corpus; the AI assistant automatically falls back to the
-client-side engine when no API is reachable.
+Open `index.html` in any modern browser. The page renders, but it will show a
+**"后端未连接"** banner and every figure will read `0` / `—`.
 
-### With the backend (recommended for the full demo)
+That is deliberate. The frontend has **no built-in demo corpus** — it reads
+every number from the REST API so there is exactly one source of truth. If the
+API is unreachable the page reports that honestly instead of showing
+plausible-looking invented data.
+
+### With the backend (required for real data)
 
 The backend is an Express + SQLite service that serves the frontend **and**
 exposes the REST API.
@@ -94,15 +98,31 @@ cross-origin access:
 PORT=8080 CORS_ORIGIN="http://localhost:8080" node server.js
 ```
 
+## Data model
+
+Two tables describe public opinion, and they mean different things:
+
+| Table | Means | Drives |
+| --- | --- | --- |
+| `heat_points` | **one aggregated opinion** (a seed baseline sample, or one row auto-generated per submission) | the heat map, the "意见总数" KPI, the pie chart, the per-zone opinion counts, hot topics, function distribution |
+| `surveys` | **one resident submission** (rating 1–5 + chosen functions + free text) | "居民意见提交" / "总问卷数", today's new submissions, average satisfaction, active zones |
+
+Because `heat_points` is the single opinion dataset, the map, the pie chart and
+the dashboard table can never disagree about how many opinions exist. A seeded
+database starts with 7 zones and 11 baseline heat points and **zero** surveys.
+
+A zone nobody has rated has **no** satisfaction score — the API returns `null`
+and the UI shows `—`, never `0`, so "no data" is never mistaken for "rated 1".
+
 #### API endpoints
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| GET | `/api/zones` | all green space zones |
+| GET | `/api/zones` | all green space zones, incl. `opinion_count`, `avg_satisfaction` (`null` if unrated), `submission_count` |
 | GET | `/api/zones/:id` | single zone detail |
-| POST | `/api/surveys` | submit a survey |
+| POST | `/api/surveys` | submit a survey (validates rating 1–5, zone existence, array-typed functions) |
 | GET | `/api/heatmap` | opinion heat points (`?type=all\|positive\|improve\|concern\|function`) |
-| GET | `/api/dashboard` | dashboard statistics |
+| GET | `/api/dashboard` | dashboard statistics: `total_opinions`, `total_surveys`, `today_new`, `avg_rating`, `active_zones`, `type_percent`, `hot_topic`, `func_distribution`, `zone_table` |
 | POST | `/api/ai/chat` | AI assistant chat |
 | POST | `/api/ai/report` | generate construction report |
 | GET | `/api/ai/suggest` | suggested questions (`?lang=`) |

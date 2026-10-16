@@ -415,6 +415,20 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
   .ai-action-card{padding:24px 20px;min-height:160px}
   .ai-action-card h4{font-size:17px}
 }
+
+/* ===== backend connection notice ===== */
+.offline-bar{
+  position:sticky;top:0;z-index:1200;
+  background:#FFF4E5;color:#8A4B00;
+  border-bottom:1px solid #FFD8A8;
+  padding:10px 18px;font-size:13px;line-height:1.55;
+  text-align:center;
+}
+.offline-bar code{
+  background:#FFE7C7;color:#7A3F00;
+  padding:1px 6px;border-radius:4px;font-size:12px;
+}
+.offline-bar strong{margin-right:4px}
 </style>
 </head>
 <body>
@@ -450,8 +464,8 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <button class="btn-outline" onclick="scrollToSection('dashboard-section')" data-i18n="hero.btn2">查看政府看板</button>
     </div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="num" id="stat1">7</div><div class="label" data-i18n="hero.stat1">规划绿化区域</div></div>
-      <div class="hero-stat"><div class="num" id="stat2">1,284</div><div class="label" data-i18n="hero.stat2">居民意见提交</div></div>
+      <div class="hero-stat"><div class="num" id="stat1">0</div><div class="label" data-i18n="hero.stat1">规划绿化区域</div></div>
+      <div class="hero-stat"><div class="num" id="stat2">0</div><div class="label" data-i18n="hero.stat2">居民意见提交</div></div>
       <div class="hero-stat"><div class="num" id="stat3">6</div><div class="label" data-i18n="hero.stat3">功能类型</div></div>
       <div class="hero-stat"><div class="num" id="stat4">6</div><div class="label" data-i18n="hero.stat4">示范区覆盖</div></div>
     </div>
@@ -1294,10 +1308,10 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <div class="survey-result-card">
         <div class="result-header" data-i18n="survey.resultHeader">📊 实时聚合统计</div>
         <div class="result-stat-grid">
-          <div class="result-stat"><div class="num" id="totalSurveys">1,284</div><div class="lbl" data-i18n="survey.totalSurvey">总问卷数</div></div>
-          <div class="result-stat"><div class="num" id="todaySurveys">37</div><div class="lbl" data-i18n="survey.todayNew">今日新增</div></div>
-          <div class="result-stat"><div class="num" id="avgRating">3.8</div><div class="lbl" data-i18n="survey.avgRating">平均满意度</div></div>
-          <div class="result-stat"><div class="num" id="activeZones">8</div><div class="lbl" data-i18n="survey.activeZones">活跃区域</div></div>
+          <div class="result-stat"><div class="num" id="totalSurveys">0</div><div class="lbl" data-i18n="survey.totalSurvey">总问卷数</div></div>
+          <div class="result-stat"><div class="num" id="todaySurveys">0</div><div class="lbl" data-i18n="survey.todayNew">今日新增</div></div>
+          <div class="result-stat"><div class="num" id="avgRating">—</div><div class="lbl" data-i18n="survey.avgRating">平均满意度</div></div>
+          <div class="result-stat"><div class="num" id="activeZones">0</div><div class="lbl" data-i18n="survey.activeZones">活跃区域</div></div>
         </div>
         <div class="result-chart-box"><canvas id="surveyChart"></canvas></div>
         <div class="result-feedback" id="surveyFeedback"></div>
@@ -1641,13 +1655,13 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
         <div class="heat-popup" id="heatPopup"></div>
       </div>
       <div class="heatmap-stats">
-        <div class="heatmap-stat"><div class="num" id="heatTotal">1,284</div><div class="lbl" data-i18n="opinion.stat1">已聚合意见</div></div>
-        <div class="heatmap-stat"><div class="num" id="heatPositive">42%</div><div class="lbl" data-i18n="opinion.stat2">正面评价</div></div>
-        <div class="heatmap-stat"><div class="num" id="heatImprove">38%</div><div class="lbl" data-i18n="opinion.stat3">改进建议</div></div>
-        <div class="heatmap-stat"><div class="num" id="heatConcern">20%</div><div class="lbl" data-i18n="opinion.stat4">担忧反馈</div></div>
-        <div class="heatmap-stat"><div class="num" id="heatFunction">21%</div><div class="lbl" data-i18n="opinion.stat5">功能需求</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatTotal">0</div><div class="lbl" data-i18n="opinion.stat1">已聚合意见</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatPositive">0%</div><div class="lbl" data-i18n="opinion.stat2">正面评价</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatImprove">0%</div><div class="lbl" data-i18n="opinion.stat3">改进建议</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatConcern">0%</div><div class="lbl" data-i18n="opinion.stat4">担忧反馈</div></div>
+        <div class="heatmap-stat"><div class="num" id="heatFunction">0%</div><div class="lbl" data-i18n="opinion.stat5">功能需求</div></div>
       </div>
-      <div class="heatmap-note" data-i18n="opinion.demoNote">意见数据为演示用合成数据，在浏览器中实时聚合。</div>
+      <div class="heatmap-note" data-i18n="opinion.demoNote">意见点位读取自规划数据库，居民新提交的意见会立即显示在此。</div>
       <div class="heatmap-legend">
         <div class="heat-legend-group">
           <span class="heat-legend-title" data-i18n="opinion.legendType">意见类型</span>
@@ -1675,10 +1689,10 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <p class="section-subtitle" data-i18n="dash.subtitle">规划官员可直观查看公众意见分布、满意度趋势和热门议题</p>
     </div>
     <div class="dash-grid">
-      <div class="dash-kpi"><div class="icon">📝</div><div class="val" id="dashTotal">1,284</div><div class="lbl" data-i18n="dash.kpi1">意见总数</div><div class="trend trend-up" data-i18n="dash.trend1">↑ 12% 本周</div></div>
-      <div class="dash-kpi"><div class="icon">⭐</div><div class="val" id="dashAvg">3.8</div><div class="lbl" data-i18n="dash.kpi2">平均满意度</div><div class="trend trend-up" data-i18n="dash.trend2">↑ 0.3 较上周</div></div>
-      <div class="dash-kpi"><div class="icon">🎯</div><div class="val" id="dashZones">7</div><div class="lbl" data-i18n="dash.kpi3">覆盖区域</div><div class="trend trend-up" data-i18n="dash.trend3">↑ 2 新增</div></div>
-      <div class="dash-kpi"><div class="icon">🔥</div><div class="val" id="dashHot" data-i18n="dash.hotTopic">遮阴设施</div><div class="lbl" data-i18n="dash.kpi4">热门议题</div><div class="trend trend-down" data-i18n="dash.trend4">↓ 需关注</div></div>
+      <div class="dash-kpi"><div class="icon">📝</div><div class="val" id="dashTotal">0</div><div class="lbl" data-i18n="dash.kpi1">意见总数</div></div>
+      <div class="dash-kpi"><div class="icon">⭐</div><div class="val" id="dashAvg">—</div><div class="lbl" data-i18n="dash.kpi2">平均满意度</div></div>
+      <div class="dash-kpi"><div class="icon">🎯</div><div class="val" id="dashZones">0</div><div class="lbl" data-i18n="dash.kpi3">覆盖区域</div></div>
+      <div class="dash-kpi"><div class="icon">🔥</div><div class="val" id="dashHot">—</div><div class="lbl" data-i18n="dash.kpi4">热门议题</div></div>
     </div>
     <div class="dash-charts">
       <div class="dash-chart-box"><h4 data-i18n="dash.chart1">各区域满意度对比</h4><div class="chart-container"><canvas id="dashBarChart"></canvas></div></div>
@@ -1860,7 +1874,7 @@ const I18N = {
 'problem.after.title':'\u2705 Solution: Map-Driven','problem.after.1':'Official plans converted to interactive visual maps with one click','problem.after.2':'Residents view plans on the map and submit spatial feedback','problem.after.3':'AI automatically aggregates feedback into opinion heatmaps','problem.after.4':'Government sees opinion distribution intuitively for decision support',
 'type.park':'Eco Park','type.wetland':'Wetland','type.corridor':'Eco-Corridor','type.reserve':'Conservation Reserve',
 'map.title':'Interactive Green Space Map','map.subtitle':'Click green zones on the map to view planning details, function types, and area info',
-'map.filter.all':'All','map.zoomIn':'Zoom In','map.zoomOut':'Zoom Out','map.reset':'Reset','map.builtArea':'Built-up Area','map.demoArea':'Northern Metropolis · Demo Area','opinion.stat5':'Function Needs','opinion.unitOpinions':'opinions','opinion.demoNote':'Opinion figures are synthesised demo data, aggregated live in your browser.','opinion.legendType':'Opinion Type','opinion.legendDensity':'Opinion Density','map.water':'Water','map.road':'Main Road','map.deepBay':'Deep Bay','district.YL':'Yuen Long','district.NTH':'North','district.TP':'Tai Po','district.ST':'Sha Tin','district.TM':'Tuen Mun','district.TW':'Tsuen Wan','map.ecoStream':'Important Stream','map.oldTree':'Old & Valuable Tree','map.hkWeatherPark':'HK Wetland Park','map.highway':'Fanling Highway',
+'map.filter.all':'All','map.zoomIn':'Zoom In','map.zoomOut':'Zoom Out','map.reset':'Reset','map.builtArea':'Built-up Area','map.demoArea':'Northern Metropolis · Demo Area','opinion.stat5':'Function Needs','opinion.unitOpinions':'opinions','opinion.demoNote':'Opinion points are read from the planning database; new resident submissions appear here immediately.','opinion.legendType':'Opinion Type','opinion.legendDensity':'Opinion Density','map.water':'Water','map.road':'Main Road','map.deepBay':'Deep Bay','district.YL':'Yuen Long','district.NTH':'North','district.TP':'Tai Po','district.ST':'Sha Tin','district.TM':'Tuen Mun','district.TW':'Tsuen Wan','map.ecoStream':'Important Stream','map.oldTree':'Old & Valuable Tree','map.hkWeatherPark':'HK Wetland Park','map.highway':'Fanling Highway',
 'map.panelTitle':'\ud83d\udccb Zone Details','map.emptyHint':'\ud83d\udc46 Click a green zone on the map<br>to view detailed planning info',
 'map.planningArea':'Planning Area','map.opinionCount':'Opinion Count','map.avgSatisfaction':'Avg. Satisfaction','map.attentionLevel':'Attention Level','map.planningData':'\ud83d\udcca Planning Data','map.planningFunctions':'\ud83c\udfaf Planned Functions','map.submitOpinion':'\ud83d\udcac Submit Opinion for This Zone',
 'map.level.high':'High','map.level.mid':'Medium','map.level.low':'Low',
@@ -1955,7 +1969,7 @@ const I18N = {
 'problem.after.title':'✅ 方案：地图驱动','problem.after.1':'官方规划一键转化为互动可视化地图','problem.after.2':'居民在地图上查看规划并提交空间意见','problem.after.3':'AI 自动聚合反馈生成意见热图','problem.after.4':'政府直观查看意见分布，辅助决策',
 'type.park':'生态公园','type.wetland':'湿地','type.corridor':'生态走廊','type.reserve':'自然保育地',
 'map.title':'互动绿化空间地图','map.subtitle':'点击地图上的绿化区域，查看规划详情、功能类型和面积信息',
-'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'缩小','map.reset':'重置','map.builtArea':'已建设区域','map.demoArea':'北部都会区 · 示范区域','opinion.stat5':'功能需求','opinion.unitOpinions':'条意见','opinion.demoNote':'意见数据为演示用合成数据，由浏览器实时聚合得出。','opinion.legendType':'意见类型','opinion.legendDensity':'意见密度','map.water':'水域','map.road':'主干道','map.deepBay':'后海湾','district.YL':'元朗区','district.NTH':'北区','district.TP':'大埔区','district.ST':'沙田区','district.TM':'屯门区','district.TW':'荃湾区','map.ecoStream':'生态河溪','map.oldTree':'古树名木','map.hkWeatherPark':'香港湿地公园','map.highway':'粉岭公路',
+'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'缩小','map.reset':'重置','map.builtArea':'已建设区域','map.demoArea':'北部都会区 · 示范区域','opinion.stat5':'功能需求','opinion.unitOpinions':'条意见','opinion.demoNote':'意见点位读取自规划数据库，居民新提交的意见会立即显示在此。','opinion.legendType':'意见类型','opinion.legendDensity':'意见密度','map.water':'水域','map.road':'主干道','map.deepBay':'后海湾','district.YL':'元朗区','district.NTH':'北区','district.TP':'大埔区','district.ST':'沙田区','district.TM':'屯门区','district.TW':'荃湾区','map.ecoStream':'生态河溪','map.oldTree':'古树名木','map.hkWeatherPark':'香港湿地公园','map.highway':'粉岭公路',
 'map.panelTitle':'📋 区域详情','map.emptyHint':'👆 点击地图上的绿化区域<br>查看详细规划信息',
 'map.planningArea':'规划面积','map.opinionCount':'意见数','map.avgSatisfaction':'平均满意度','map.attentionLevel':'关注度等级','map.planningData':'📊 规划数据','map.planningFunctions':'🎯 规划功能','map.submitOpinion':'💬 对此区域发表意见',
 'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
@@ -2050,7 +2064,7 @@ const I18N = {
 'problem.after.title':'✅ 方案：地圖驅動','problem.after.1':'官方規劃一鍵轉化為互動可視化地圖','problem.after.2':'居民在地圖上查看規劃並提交空間意見','problem.after.3':'AI 自動聚合反饋生成意見熱圖','problem.after.4':'政府直觀查看意見分佈，輔助決策',
 'type.park':'生態公園','type.wetland':'濕地','type.corridor':'生態走廊','type.reserve':'自然保育地',
 'map.title':'互動綠化空間地圖','map.subtitle':'點擊地圖上的綠化區域，查看規劃詳情、功能類型和面積資訊',
-'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'縮小','map.reset':'重置','map.builtArea':'已建設區域','map.demoArea':'北部都會區 · 示範區域','opinion.stat5':'功能需求','opinion.unitOpinions':'則意見','opinion.demoNote':'意見數據為演示用合成資料，由瀏覽器實時聚合得出。','opinion.legendType':'意見類型','opinion.legendDensity':'意見密度','map.water':'水域','map.road':'主幹道','map.deepBay':'后海灣','district.YL':'元朗區','district.NTH':'北區','district.TP':'大埔區','district.ST':'沙田區','district.TM':'屯門區','district.TW':'荃灣區','map.ecoStream':'生態河溪','map.oldTree':'古樹名木','map.hkWeatherPark':'香港濕地公園','map.highway':'粉嶺公路',
+'map.filter.all':'全部','map.zoomIn':'放大','map.zoomOut':'縮小','map.reset':'重置','map.builtArea':'已建設區域','map.demoArea':'北部都會區 · 示範區域','opinion.stat5':'功能需求','opinion.unitOpinions':'則意見','opinion.demoNote':'意見點位讀取自規劃資料庫，居民新提交的意見會立即顯示於此。','opinion.legendType':'意見類型','opinion.legendDensity':'意見密度','map.water':'水域','map.road':'主幹道','map.deepBay':'后海灣','district.YL':'元朗區','district.NTH':'北區','district.TP':'大埔區','district.ST':'沙田區','district.TM':'屯門區','district.TW':'荃灣區','map.ecoStream':'生態河溪','map.oldTree':'古樹名木','map.hkWeatherPark':'香港濕地公園','map.highway':'粉嶺公路',
 'map.panelTitle':'📋 區域詳情','map.emptyHint':'👆 點擊地圖上的綠化區域<br>查看詳細規劃資訊',
 'map.planningArea':'規劃面積','map.opinionCount':'意見數','map.avgSatisfaction':'平均滿意度','map.attentionLevel':'關注度等級','map.planningData':'📊 規劃數據','map.planningFunctions':'🎯 規劃功能','map.submitOpinion':'💬 對此區域發表意見',
 'map.level.high':'高','map.level.mid':'中','map.level.low':'低',
@@ -2338,232 +2352,219 @@ const zoneCoords = {
   'z7':{x:736,y:163}
 };
 
-/* ==================== demo opinion corpus + aggregation ====================
-   The MAP on this page is real: coastlines, conservation-site boundaries and
-   the watercourse network come from the Hong Kong CSDI platform. The OPINIONS
-   are not — no public consultation has actually been run for this demo.
+/* ==================== backend data layer ====================
+   "Real system" mode: every figure on this page is read from the
+   Express + SQLite backend. When the API is unreachable the page shows an
+   offline notice instead of fabricating numbers.
+   ============================================================ */
 
-   Rather than hand-drawing a handful of blobs and calling them "AI aggregated",
-   we synthesise a corpus of 1,284 submissions and then aggregate it for real.
-   Every figure on this page — the totals, the type shares, the per-district
-   table, the satisfaction scores, and every heat blob — is computed from this
-   one corpus, so they cannot drift apart.
-
-   To run on real submissions, replace buildOpinionCorpus() with a fetch that
-   returns the same shape; nothing downstream needs to change.
-   ========================================================================= */
-
-const OPINION_TOTAL = 1284;      // submissions this demo claims
-const HEAT_CELL = 20;            // density grid cell size, in viewBox units
-
-/* deterministic PRNG, so the demo renders identically on every load */
-function mulberry32(seed){
-  return function(){
-    seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-
-/* ---- the synthetic input ------------------------------------------------
-   SITE_VOLUME: how many submissions each site drew (sums to OPINION_TOTAL).
-   TOPIC_MIX:   how that volume splits across the topics raised there.
-                dx/dy offsets a topic away from the site centre so the field
-                spreads instead of stacking on a single point; sigma is its
-                spread in viewBox units.
-   Everything below this block is derived. */
-const SITE_VOLUME = {z1:200, z2:251, z3:167, z4:105, z5:216, z6:155, z7:190};
-const TOPIC_MIX = [
-  {zoneKey:'z1', textKey:'heat.p1',  tagKey:'func.birdwatch', type:'positive', share:0.45, dx:-18, dy: 24, sigma:17},
-  {zoneKey:'z1', textKey:'heat.p9',  tagKey:'heat.birdwatch', type:'positive', share:0.25, dx: 30, dy:-26, sigma:20},
-  {zoneKey:'z1', textKey:'heat.p12', tagKey:'heat.shade',     type:'improve',  share:0.18, dx:  6, dy: 40, sigma:15},
-  {zoneKey:'z1', textKey:'heat.p13', tagKey:'func.eco',       type:'concern',  share:0.12, dx:-30, dy: -8, sigma:14},
-
-  {zoneKey:'z2', textKey:'heat.p2',  tagKey:'heat.wetlandManage', type:'improve',  share:0.40, dx: 26, dy:-20, sigma:20},
-  {zoneKey:'z2', textKey:'heat.p10', tagKey:'heat.lighting',      type:'improve',  share:0.20, dx:-32, dy:-24, sigma:17},
-  {zoneKey:'z2', textKey:'heat.p14', tagKey:'heat.pondLoss',      type:'concern',  share:0.22, dx:-10, dy:-34, sigma:18},
-  {zoneKey:'z2', textKey:'heat.p15', tagKey:'func.birdwatch',     type:'function', share:0.18, dx: 20, dy:  6, sigma:16},
-
-  {zoneKey:'z3', textKey:'heat.p3',  tagKey:'func.education', type:'function', share:0.40, dx:-24, dy:-18, sigma:17},
-  {zoneKey:'z3', textKey:'heat.p11', tagKey:'heat.accessible',type:'function', share:0.22, dx: 26, dy: 26, sigma:15},
-  {zoneKey:'z3', textKey:'heat.p16', tagKey:'heat.farmland',  type:'positive', share:0.22, dx: -6, dy:-30, sigma:16},
-  {zoneKey:'z3', textKey:'heat.p17', tagKey:'heat.farmland',  type:'concern',  share:0.16, dx: 10, dy: 34, sigma:15},
-
-  {zoneKey:'z4', textKey:'heat.p4',  tagKey:'func.eco', type:'concern',  share:0.55, dx: 20, dy: 18, sigma:16},
-  {zoneKey:'z4', textKey:'heat.p18', tagKey:'func.eco', type:'positive', share:0.45, dx:-16, dy:-14, sigma:14},
-
-  {zoneKey:'z5', textKey:'heat.p6',  tagKey:'heat.restricted', type:'concern',  share:0.50, dx:-20, dy: 20, sigma:19},
-  {zoneKey:'z5', textKey:'heat.p19', tagKey:'heat.ecofence',   type:'improve',  share:0.28, dx: 24, dy:-16, sigma:16},
-  {zoneKey:'z5', textKey:'heat.p20', tagKey:'func.education',  type:'function', share:0.22, dx: -4, dy:-30, sigma:15},
-
-  {zoneKey:'z6', textKey:'heat.p5',  tagKey:'heat.access',   type:'improve',  share:0.48, dx: 24, dy:-16, sigma:17},
-  {zoneKey:'z6', textKey:'heat.p21', tagKey:'heat.pavement', type:'improve',  share:0.28, dx:-22, dy:  8, sigma:15},
-  {zoneKey:'z6', textKey:'heat.p22', tagKey:'func.eco',      type:'positive', share:0.24, dx: 10, dy: 24, sigma:16},
-
-  {zoneKey:'z7', textKey:'heat.p8',  tagKey:'func.education', type:'function', share:0.40, dx: 18, dy: 22, sigma:18},
-  {zoneKey:'z7', textKey:'heat.p7',  tagKey:'heat.ecoConn',   type:'positive', share:0.32, dx:-28, dy:-22, sigma:17},
-  {zoneKey:'z7', textKey:'heat.p23', tagKey:'heat.crowding',  type:'concern',  share:0.28, dx: -6, dy:-34, sigma:15},
-];
+const API_BASE = 'http://localhost:3000/api';
 
 const OPINION_TYPES = ['positive','improve','concern','function'];
 const ZONE_TYPE_KEY = {z1:'type.wetland', z2:'type.wetland', z3:'type.park',
                        z4:'type.reserve', z5:'type.reserve', z6:'type.wetland',
                        z7:'type.park'};
 
-/* a rating follows from what the comment is about: praise scores high, worry
-   scores low, and there is spread around each */
-function ratingFor(type, r){
-  const base = {positive:4.6, improve:3.6, concern:2.5, function:3.7}[type] || 3.5;
-  return Math.max(1, Math.min(5, Math.round(base + (r - 0.5) * 1.8)));
-}
+/* shared application state, filled by loadAll() */
+const appData = {
+  connected: false,
+  zones: [],
+  heatPoints: [],
+  dashboard: null,
+  byZone: {},
+  tableData: []
+};
 
-/* Split `total` across `shares` in whole numbers with largest-remainder, so the
-   parts always add back up to the total instead of drifting on rounding. */
-function splitExact(total, shares){
-  const raw = shares.map(s => s * total);
-  const out = raw.map(v => Math.floor(v));
-  let left = total - out.reduce((a, b) => a + b, 0);
-  const order = raw.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0]);
-  for(let i = 0; left > 0; i++, left--) out[order[i % order.length][1]]++;
-  return out;
-}
-
-function buildOpinionCorpus(){
-  const rnd = mulberry32(20261015);
-  const out = [];
-  Object.keys(SITE_VOLUME).forEach(zoneKey => {
-    const c = zoneCoords[zoneKey];
-    const topics = TOPIC_MIX.filter(t => t.zoneKey === zoneKey);
-    const counts = splitExact(SITE_VOLUME[zoneKey], topics.map(t => t.share));
-    topics.forEach((tp, ti) => {
-      for(let k = 0; k < counts[ti]; k++){
-        /* sum of three uniforms ≈ a bell shape, cheap and deterministic */
-        const g1 = rnd() + rnd() + rnd() - 1.5;
-        const g2 = rnd() + rnd() + rnd() - 1.5;
-        out.push({
-          x: c.x + tp.dx + g1 * tp.sigma * 1.4,
-          y: c.y + tp.dy + g2 * tp.sigma * 1.4,
-          zoneKey: tp.zoneKey, type: tp.type,
-          topicKey: tp.textKey, tagKey: tp.tagKey,
-          rating: ratingFor(tp.type, rnd()),
-        });
-      }
-    });
+function apiGet(path){
+  return fetch(API_BASE + path).then(r=>{
+    if(!r.ok) throw new Error('API ' + r.status);
+    return r.json();
   });
-  return out;
+}
+function apiPost(path, body){
+  return fetch(API_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body || {})
+  }).then(r => r.json().then(data => {
+    if(!r.ok) throw new Error((data && data.error) || ('API ' + r.status));
+    return data;
+  }));
 }
 
-const OPINIONS = buildOpinionCorpus();
-
-/* ---- aggregation ------------------------------------------------------- */
-function topKey(counts){
-  let best = null, bv = -1;
-  for(const k in counts){ if(counts[k] > bv){ bv = counts[k]; best = k; } }
-  return best;
-}
-function countBy(points, key){
-  const m = {};
-  points.forEach(p => { m[p[key]] = (m[p[key]] || 0) + 1; });
-  return m;
-}
-/* percentages that always add to exactly 100 */
-function percentShares(counts, total){
-  const keys = Object.keys(counts);
-  const raw = keys.map(k => counts[k] / total * 100);
-  const out = {};
-  raw.forEach((v, i) => { out[keys[i]] = Math.floor(v); });
-  let left = 100 - Object.keys(out).reduce((a, k) => a + out[k], 0);
-  const order = raw.map((v, i) => [v - Math.floor(v), keys[i]]).sort((a, b) => b[0] - a[0]);
-  for(let i = 0; left > 0; i++, left--) out[order[i % order.length][1]]++;
-  return out;
+/* A zone with no opinions is never "high priority" — an empty database must
+   not make every zone look urgent. A zone nobody has rated yet has no
+   satisfaction score at all, so a missing rating must not count as a bad one. */
+function computePriority(opinions, avg, hasRating){
+  if(!opinions) return 'low';
+  if(hasRating && avg < 3.5) return 'high';
+  if(opinions > 80) return 'high';
+  if(hasRating && avg < 4.0) return 'mid';
+  if(opinions > 30) return 'mid';
+  return 'low';
 }
 
-function buildTableData(){
-  return Object.keys(zoneCoords).map(zoneKey => {
-    const rows = OPINIONS.filter(o => o.zoneKey === zoneKey);
-    const types = countBy(rows, 'type');
-    const topics = countBy(rows, 'topicKey');
-    const avg = rows.reduce((s, o) => s + o.rating, 0) / rows.length;
-    const concernShare = (types.concern || 0) / rows.length;
-    /* a site needs attention when people are unhappy AND worried */
-    const score = (5 - avg) + concernShare * 2;
+/* A running count-up tween must never overwrite a value that a later
+   re-render has already written. Each element keeps one animation slot; any
+   fresh write cancels it. */
+const _numAnim = new WeakMap();
+function cancelNumAnim(el){
+  const s = _numAnim.get(el);
+  if(s){
+    s.cancelled = true;
+    if(s.raf) cancelAnimationFrame(s.raf);
+    _numAnim.delete(el);
+  }
+}
+
+function setNum(id, value){
+  const el = document.getElementById(id);
+  if(!el) return;
+  cancelNumAnim(el);
+  el.textContent = value;
+}
+
+/* Most-raised tag inside one zone, taken from the real heat points. */
+function topTopicForZone(zoneKey){
+  const pts = appData.heatPoints.filter(p => p.zone_id === zoneKey && p.tag);
+  if(!pts.length) return null;
+  const c = {};
+  pts.forEach(p => { c[p.tag] = (c[p.tag] || 0) + 1; });
+  return Object.keys(c).sort((a,b) => c[b] - c[a])[0];
+}
+
+/* Build the dashboard table rows from the API payload. */
+function buildTableFromDashboard(){
+  const d = appData.dashboard;
+  if(!d || !Array.isArray(d.zone_table)) return [];
+  return d.zone_table.map(r => {
+    const opinions = r.opinions || 0;
+    const hasRating = (r.avg_rating !== null && r.avg_rating !== undefined);
+    const avg = hasRating ? Number(r.avg_rating) : 0;
     return {
-      zoneKey: zoneKey,
-      typeKey: ZONE_TYPE_KEY[zoneKey],
-      opinions: rows.length,
-      avg: Math.round(avg * 10) / 10,
-      topicKey: topKey(topics),
-      priority: score >= 2.4 ? 'high' : score >= 1.7 ? 'mid' : 'low',
-      score: Math.round(score * 100) / 100,
+      zoneKey: r.id,
+      typeKey: ZONE_TYPE_KEY[r.id] || 'type.park',
+      opinions: opinions,
+      submissions: r.submissions || 0,
+      avg: avg,
+      hasRating: hasRating,
+      hasData: opinions > 0,
+      priority: computePriority(opinions, avg, hasRating),
+      attention: r.attention || 'mid'
     };
   });
 }
 
-/* Density field: bucket the corpus onto a grid and emit one node per occupied
-   cell. This is what the heat map draws — the blobs are computed from the
-   opinions, not positioned by hand. */
-function densityNodes(points){
-  const cells = new Map();
-  points.forEach(p => {
-    const k = Math.floor(p.x / HEAT_CELL) + ',' + Math.floor(p.y / HEAT_CELL);
-    let c = cells.get(k);
-    if(!c){ c = {n:0, sx:0, sy:0, types:{}, topics:{}, zoneKey:p.zoneKey}; cells.set(k, c); }
-    c.n++; c.sx += p.x; c.sy += p.y;
-    c.types[p.type] = (c.types[p.type] || 0) + 1;
-    c.topics[p.topicKey] = (c.topics[p.topicKey] || 0) + 1;
-  });
-  const out = [];
-  cells.forEach(c => {
-    const type = topKey(c.types);
-    const topicKey = topKey(c.topics);
-    out.push({x: c.sx / c.n, y: c.sy / c.n, n: c.n, type: type,
-              topicKey: topicKey, zoneKey: c.zoneKey,
-              tagKey: (TOPIC_MIX.find(t => t.textKey === topicKey) || {}).tagKey});
-  });
-  return out;
-}
-
-const tableData = buildTableData();
-
-/* ---- every figure on the page, derived from the corpus ------------------ */
-function setNum(id, value){
-  const el = document.getElementById(id);
-  if(el) el.textContent = value;
-}
+/* ---- every figure on the page, read from the API ---------------------- */
 function applyDerivedNumbers(){
-  const total = OPINIONS.length;
-  const types = countBy(OPINIONS, 'type');
-  const shares = percentShares(types, total);
-  const avg = OPINIONS.reduce((s, o) => s + o.rating, 0) / total;
-  const zones = Object.keys(zoneCoords).length;
-  const hot = topKey(countBy(OPINIONS, 'topicKey'));
+  const d = appData.dashboard;
+  const zones = appData.zones.length;
+  const submissions = d ? (d.total_surveys || 0) : 0;   /* surveys submitted */
+  const opinions = d ? (d.total_opinions || 0) : 0;     /* aggregated opinions */
+  const avg = (d && d.avg_rating) ? Number(d.avg_rating) : 0;
+  const hot = (d && d.hot_topic) ? d.hot_topic : null;
 
-  setNum('heatTotal', total.toLocaleString('en-US'));
-  setNum('heatPositive', shares.positive + '%');
-  setNum('heatImprove', shares.improve + '%');
-  setNum('heatConcern', shares.concern + '%');
-  setNum('heatFunction', shares.function + '%');
+  /* The heat-map counters describe the opinion points actually drawn on the
+     map, so "aggregated opinions" and the type split can never disagree with
+     the number of visible blobs. */
+  const hp = appData.heatPoints;
+  const hpTotal = hp.length;
+  const hpCount = {positive:0, improve:0, concern:0, function:0};
+  hp.forEach(p => { if(hpCount[p.type] !== undefined) hpCount[p.type]++; });
+  const pct = k => hpTotal ? Math.round(hpCount[k] / hpTotal * 100) + '%' : '0%';
+
+  setNum('heatTotal', hpTotal.toLocaleString('en-US'));
+  setNum('heatPositive', pct('positive'));
+  setNum('heatImprove', pct('improve'));
+  setNum('heatConcern', pct('concern'));
+  setNum('heatFunction', pct('function'));
 
   setNum('stat1', zones);
-  setNum('stat2', total.toLocaleString('en-US'));
+  setNum('stat2', submissions.toLocaleString('en-US'));
 
-  setNum('dashTotal', total.toLocaleString('en-US'));
-  setNum('dashAvg', avg.toFixed(1));
+  setNum('dashTotal', opinions.toLocaleString('en-US'));
+  setNum('dashAvg', avg ? avg.toFixed(1) : '—');
   setNum('dashZones', zones);
-  setNum('dashHot', heatT(hot));
+  setNum('dashHot', hot ? heatT(hot) : '—');
 
-  setNum('totalSurveys', total.toLocaleString('en-US'));
-  setNum('avgRating', avg.toFixed(1));
-  setNum('activeZones', zones);
+  setNum('totalSurveys', submissions.toLocaleString('en-US'));
+  setNum('todaySurveys', d ? (d.today_new || 0) : 0);
+  setNum('avgRating', avg ? avg.toFixed(1) : '—');
+  setNum('activeZones', d ? (d.active_zones || 0) : 0);
 
-  window.derivedStats = {total: total, types: types, shares: shares, avg: avg,
-                         zones: zones, hotTopic: hot};
+  window.derivedStats = {opinions: opinions, submissions: submissions,
+                         zones: zones, avg: avg,
+                         heatPoints: hpTotal, types: hpCount,
+                         hotTopic: hot, connected: appData.connected};
 }
+
+/* ---- connection banner ------------------------------------------------ */
+function setConnectionState(online){
+  let bar = document.getElementById('offlineBar');
+  if(!bar){
+    bar = document.createElement('div');
+    bar.id = 'offlineBar';
+    bar.className = 'offline-bar';
+    document.body.appendChild(bar);
+  }
+  const en = (window.currentLang === 'en');
+  bar.innerHTML = online ? '' : (
+    '<strong>' + (en ? 'Backend not connected' : '后端未连接') + '</strong>' +
+    (en
+      ? ' — start it with <code>cd backend &amp;&amp; node server.js</code>, then reload. All figures are empty until then.'
+      : ' — 请先运行 <code>cd backend &amp;&amp; node server.js</code>，然后刷新页面。在此之前所有数据均为空。')
+  );
+  bar.style.display = online ? 'none' : 'block';
+}
+
+/* ---- load everything from the backend --------------------------------- */
+function loadAll(){
+  return Promise.all([
+    apiGet('/zones'),
+    apiGet('/heatmap'),
+    apiGet('/dashboard')
+  ]).then(function(res){
+    appData.connected = true;
+    appData.zones = res[0].zones || [];
+    appData.heatPoints = res[1].points || [];
+    appData.dashboard = res[2];
+    appData.byZone = {};
+    appData.zones.forEach(z => { appData.byZone[z.id] = z; });
+    appData.tableData = buildTableFromDashboard();
+
+    tableData.length = 0;
+    appData.tableData.forEach(r => tableData.push(r));
+
+    setConnectionState(true);
+    applyDerivedNumbers();
+    renderHeatPoints(window.currentHeatFilter || 'all');
+    renderDashTable();
+    safeUpdateCharts();
+    if(window.selectedZoneId) selectZone(window.selectedZoneId);
+  }).catch(function(err){
+    console.warn('[API] backend unavailable:', err.message);
+    appData.connected = false;
+    appData.zones = [];
+    appData.heatPoints = [];
+    appData.dashboard = null;
+    appData.byZone = {};
+    appData.tableData = [];
+    tableData.length = 0;
+
+    setConnectionState(false);
+    applyDerivedNumbers();
+    renderHeatPoints('all');
+    renderDashTable();
+    safeUpdateCharts();
+  });
+}
+
+/* `tableData` stays a module-level array so the existing render code keeps
+   working; loadAll() refills it from the API. */
+const tableData = [];
 
 const surveyData = {zoneKey:null,rating:0,functions:[],suggestion:''};
 let currentStep = 0;
-let surveyCount = 1284;
 let surveyChartInst=null, dashBarInst=null, dashPieInst=null;
 
 function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
@@ -2635,15 +2636,23 @@ function renderRoadmap(){
 function renderDashTable(){
   const tb = document.getElementById('dashTableBody');
   if(!tb) return;
+  if(!tableData.length){
+    const en = (window.currentLang === 'en');
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#9aa;padding:20px;">'+
+      (en ? 'No data yet — the backend is not connected.' : '暂无数据 — 后端未连接。')+'</td></tr>';
+    return;
+  }
   tb.innerHTML = tableData.map(r=>{
     const bc = r.priority==='high'?'badge-high':r.priority==='mid'?'badge-mid':'badge-low';
     const bt = t('dash.priority.'+r.priority);
-    return '<tr><td>'+t('zone.'+r.zoneKey+'.name')+'</td>'+
-    '<td>'+t(r.typeKey)+'</td>'+
+    const hotKey = topTopicForZone(r.zoneKey);
+    const avgTxt = r.hasRating ? (r.avg.toFixed(1)+' \u2b50') : '\u2014';
+    return '<tr><td>'+escHTML(t('zone.'+r.zoneKey+'.name'))+'</td>'+
+    '<td>'+escHTML(t(r.typeKey))+'</td>'+
     '<td>'+r.opinions+'</td>'+
-    '<td>'+r.avg+' \u2b50</td>'+
-    '<td>'+escHTML(heatT(r.topicKey))+'</td>'+
-    '<td><span class="badge '+bc+'">'+bt+'</span></td></tr>';
+    '<td>'+avgTxt+'</td>'+
+    '<td>'+escHTML(hotKey ? heatT(hotKey) : '\u2014')+'</td>'+
+    '<td><span class="badge '+bc+'">'+escHTML(bt)+'</span></td></tr>';
   }).join('');
 }
 window.selectedZoneId = null;
@@ -2654,26 +2663,33 @@ function selectZone(id){
   document.getElementById('zoneEmpty').style.display='none';
   const detail = document.getElementById('zoneDetail');
   detail.style.display='block';
-  const attentionLevels = ['high','mid','high','mid'];
-  const al = attentionLevels[Math.floor(Math.random()*4)];
+
+  /* real figures from the API — no random values */
+  const z = appData.byZone[zk];
+  const opinions = z ? (z.opinion_count || 0) : 0;
+  const hasRating = !!(z && z.avg_satisfaction !== null && z.avg_satisfaction !== undefined);
+  const avg = hasRating ? Number(z.avg_satisfaction) : 0;
+  const pri = computePriority(opinions, avg, hasRating);
+  const avgTxt = hasRating ? (avg.toFixed(1)+' / 5.0') : '\u2014';
+
   detail.innerHTML =
     '<div class="zone-info-card">'+
-    '<h4>\ud83d\udccd '+t('zone.'+zk+'.name')+'</h4>'+
+    '<h4>\ud83d\udccd '+escHTML(t('zone.'+zk+'.name'))+'</h4>'+
     '<div class="meta">'+
-    '<span class="zone-tag tag-'+getZoneType(zk)+'">'+t('zone.'+zk+'.typeLabel')+'</span>'+
-    '<span class="zone-tag" style="background:#f5f5f5;color:#666;">'+t('zone.status.'+t('zone.'+zk+'.statusKey'))+'</span>'+
+    '<span class="zone-tag tag-'+getZoneType(zk)+'">'+escHTML(t('zone.'+zk+'.typeLabel'))+'</span>'+
+    '<span class="zone-tag" style="background:#f5f5f5;color:#666;">'+escHTML(t('zone.status.'+t('zone.'+zk+'.statusKey')))+'</span>'+
     '</div>'+
-    '<p>'+t('zone.'+zk+'.desc')+'</p></div>'+
+    '<p>'+escHTML(t('zone.'+zk+'.desc'))+'</p></div>'+
     '<div class="zone-info-card">'+
     '<h4>'+t('map.planningData')+'</h4>'+
-    '<div class="zone-stat"><span>'+t('map.planningArea')+'</span><span class="val">'+t('zone.'+zk+'.area')+'</span></div>'+
-    '<div class="zone-stat"><span>'+t('map.opinionCount')+'</span><span class="val">'+Math.floor(Math.random()*200+50)+'</span></div>'+
-    '<div class="zone-stat"><span>'+t('map.avgSatisfaction')+'</span><span class="val">'+(Math.random()*2+3).toFixed(1)+' / 5.0</span></div>'+
-    '<div class="zone-stat"><span>'+t('map.attentionLevel')+'</span><span class="val">'+t('map.level.'+al)+'</span></div></div>'+
+    '<div class="zone-stat"><span>'+t('map.planningArea')+'</span><span class="val">'+escHTML(t('zone.'+zk+'.area'))+'</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.opinionCount')+'</span><span class="val">'+opinions+'</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.avgSatisfaction')+'</span><span class="val">'+avgTxt+'</span></div>'+
+    '<div class="zone-stat"><span>'+t('map.attentionLevel')+'</span><span class="val">'+t('map.level.'+pri)+'</span></div></div>'+
     '<div class="zone-info-card">'+
     '<h4>'+t('map.planningFunctions')+'</h4>'+
     '<div class="meta" style="margin-top:8px;">'+
-    t('zone.'+zk+'.functions').map(f=>'<span class="zone-tag tag-'+getZoneType(zk)+'">'+f+'</span>').join('')+
+    t('zone.'+zk+'.functions').map(f=>'<span class="zone-tag tag-'+getZoneType(zk)+'">'+escHTML(f)+'</span>').join('')+
     '</div></div>'+
     '<button class="btn-survey btn-next" style="width:100%;margin-top:8px;padding:12px;" onclick="scrollToSection(\'survey-section\')">'+t('map.submitOpinion')+'</button>';
 }
@@ -3045,31 +3061,56 @@ function submitSurvey(){
     surveyData.functions.push(o.dataset.fkey);
   });
   surveyData.suggestion=document.getElementById('suggestionText').value;
-  surveyCount++;
-  document.getElementById('totalSurveys').textContent=surveyCount.toLocaleString();
-  document.getElementById('todaySurveys').textContent=parseInt(document.getElementById('todaySurveys').textContent)+1;
-  const zoneName = surveyData.zoneKey ? t('zone.'+surveyData.zoneKey+'.name') : t('survey.fb.unknownZone');
-  const kw = surveyData.functions.length ? surveyData.functions.map(f=>t(f)).join(', ') : t('survey.fb.general');
-  const fb=document.getElementById('surveyFeedback');
-  fb.innerHTML = t('survey.fb.success')
-    .replace('{zone}', escHTML(zoneName))
-    .replace('{rating}', escHTML(surveyData.rating))
-    .replace('{keywords}', escHTML(kw) + (surveyData.suggestion ? ', '+escHTML(surveyData.suggestion.substring(0,20))+'...' : ''));
-  fb.classList.add('show');
-  addHeatPoint(surveyData);
-  showToast(t('survey.toast.success'));
-  setTimeout(()=>{
-    document.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
-    document.querySelectorAll('.rating-star').forEach(s=>s.classList.remove('active'));
-    document.getElementById('suggestionText').value='';
-    document.getElementById('ratingLabel').textContent=t('survey.selectRating');
-    Object.assign(surveyData,{zoneKey:null,rating:0,functions:[],suggestion:''});
-    document.querySelector('.survey-q.active').classList.remove('active');
-    document.querySelector('.survey-q[data-step="0"]').classList.add('active');
-    document.querySelectorAll('.step-dot').forEach((d,i)=>{d.classList.remove('done','active');if(i===0)d.classList.add('active');});
-    document.getElementById('progressFill').style.width='25%';
-    currentStep=0;
-  },2000);
+
+  if(!surveyData.zoneKey){ showToast(t('survey.toast.selectZone')); return; }
+  if(!surveyData.rating){ showToast(t('survey.toast.selectRating')); return; }
+
+  const submitBtn = document.querySelector('.btn-submit');
+  if(submitBtn) submitBtn.disabled = true;
+
+  /* The submission goes to the database; every figure on the page is then
+     re-read from the API so nothing can drift out of sync. */
+  apiPost('/surveys', {
+    zone_id: surveyData.zoneKey,
+    rating: surveyData.rating,
+    functions: surveyData.functions,
+    suggestion: surveyData.suggestion
+  }).then(res=>{
+    const zoneName = t('zone.'+surveyData.zoneKey+'.name');
+    const kw = surveyData.functions.length ? surveyData.functions.map(f=>t(f)).join(', ') : t('survey.fb.general');
+    const fb=document.getElementById('surveyFeedback');
+    fb.innerHTML = t('survey.fb.success')
+      .replace('{zone}', escHTML(zoneName))
+      .replace('{rating}', escHTML(surveyData.rating))
+      .replace('{keywords}', escHTML(kw) + (surveyData.suggestion ? ', '+escHTML(surveyData.suggestion.substring(0,20))+'...' : ''));
+    fb.classList.add('show');
+    showToast(t('survey.toast.success'));
+    setTimeout(resetSurveyForm, 2000);
+    return loadAll();
+  }).catch(err=>{
+    console.error('[Survey] submit failed:', err.message);
+    const en = (window.currentLang === 'en');
+    const fb=document.getElementById('surveyFeedback');
+    fb.innerHTML = '<strong>'+(en?'Submission failed':'提交失败')+'</strong> \u2014 '+
+      (en?'the backend is unreachable or rejected the data. ':'后端无法连接或拒绝了该数据。')+escHTML(err.message);
+    fb.classList.add('show');
+  }).finally(()=>{
+    if(submitBtn) submitBtn.disabled = false;
+  });
+}
+
+function resetSurveyForm(){
+  document.querySelectorAll('.option-item').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.rating-star').forEach(s=>s.classList.remove('active'));
+  document.getElementById('suggestionText').value='';
+  document.getElementById('ratingLabel').textContent=t('survey.selectRating');
+  Object.assign(surveyData,{zoneKey:null,rating:0,functions:[],suggestion:''});
+  const activeQ = document.querySelector('.survey-q.active');
+  if(activeQ) activeQ.classList.remove('active');
+  document.querySelector('.survey-q[data-step="0"]').classList.add('active');
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{d.classList.remove('done','active');if(i===0)d.classList.add('active');});
+  document.getElementById('progressFill').style.width='25%';
+  currentStep=0;
 }
 
 function showToast(msg){
@@ -3083,38 +3124,36 @@ const SVGNS='http://www.w3.org/2000/svg';
 const HEAT_COLORS={positive:'#4CAF6F',improve:'#FF9800',concern:'#EF5350',function:'#42A5F5'};
 const HEAT_GRADS ={positive:'heatGradPositive',improve:'heatGradImprove',concern:'heatGradConcern',function:'heatGradFunction'};
 
-/* Draw the density field: one soft halo per occupied grid cell, sized and
-   faded by how many opinions landed in it. Nothing here is positioned by hand
-   — the blobs come out of densityNodes(). Halos blend with
-   `mix-blend-mode:multiply`, so where opinions pile up the colour deepens
-   instead of merely stacking flat discs. */
+/* Draw one soft halo per heat point returned by the API. Size comes from the
+   point's radius, opacity from its intensity, colour from its opinion type.
+   Halos blend with `mix-blend-mode:multiply`, so where points overlap the
+   colour deepens instead of merely stacking flat discs. */
 function renderHeatPoints(filter){
   filter = filter || 'all';
   window.currentHeatFilter = filter;
   const container=document.getElementById('heatCircles');
   if(!container) return;
   container.innerHTML='';
-  const pts = filter==='all' ? OPINIONS : OPINIONS.filter(p=>p.type===filter);
-  const nodes = densityNodes(pts);
-  if(!nodes.length) return;
-  const maxN = nodes.reduce((m,n)=>Math.max(m,n.n),1);
+  const pts = appData.heatPoints.filter(p => filter==='all' || p.type===filter);
+  if(!pts.length) return;
+  const maxI = pts.reduce((m,p)=>Math.max(m, Number(p.intensity)||0), 0.0001);
 
-  // biggest first, so the small ones stay reachable on top
-  nodes.slice().sort((a,b)=>b.n-a.n).forEach(nd=>{
-    const w = Math.sqrt(nd.n/maxN);        // 0..1; sqrt keeps sparse cells visible
-    const r = 18 + w*34;                   // user units
-    const opacity = 0.14 + w*0.62;
-    const grad = 'url(#'+(HEAT_GRADS[nd.type]||'heatGradImprove')+')';
+  // weakest first, so the strongest blobs end up on top
+  pts.slice().sort((a,b)=>(Number(a.intensity)||0)-(Number(b.intensity)||0)).forEach(p=>{
+    const w = Math.max(0, Math.min(1, (Number(p.intensity)||0)/maxI));
+    const r = Number(p.radius) || 24;          // already in viewBox units
+    const opacity = 0.16 + w*0.58;
+    const grad = 'url(#'+(HEAT_GRADS[p.type]||'heatGradImprove')+')';
 
     const g=document.createElementNS(SVGNS,'g');
     g.setAttribute('class','heat-blob');
     g.setAttribute('tabindex','0');
     g.setAttribute('role','button');
-    g.setAttribute('aria-label', heatNodeLabel(nd));
+    g.setAttribute('aria-label', heatNodeLabel(p));
 
     const halo=document.createElementNS(SVGNS,'circle');
     halo.setAttribute('class','halo');
-    halo.setAttribute('cx',nd.x.toFixed(1)); halo.setAttribute('cy',nd.y.toFixed(1));
+    halo.setAttribute('cx',Number(p.x).toFixed(1)); halo.setAttribute('cy',Number(p.y).toFixed(1));
     halo.setAttribute('r',r.toFixed(1));
     halo.style.setProperty('--hr',r.toFixed(1)+'px');
     halo.setAttribute('fill',grad);
@@ -3122,7 +3161,7 @@ function renderHeatPoints(filter){
 
     g.appendChild(halo);
 
-    const show=()=>showHeatPopup(nd);
+    const show=()=>showHeatPopup(p);
     const hide=()=>hideHeatPopup();
     g.addEventListener('mouseenter',show);
     g.addEventListener('mouseleave',hide);
@@ -3132,21 +3171,34 @@ function renderHeatPoints(filter){
     container.appendChild(g);
   });
 }
-function heatNodeLabel(nd){
-  return t('zone.'+nd.zoneKey+'.name')+', '+nd.n+' '+t('opinion.unitOpinions');
+
+/* text of a heat point in the current language, straight from the API */
+function heatPointText(p){
+  const lang = window.currentLang || 'zh-CN';
+  if(lang === 'en') return p.text_en || '';
+  if(lang === 'zh-TW') return p.text_zh_tw || '';
+  return p.text_zh_cn || '';
+}
+function heatNodeLabel(p){
+  const tag = p.tag ? heatT(p.tag) : '';
+  return t('zone.'+p.zone_id+'.name') + (tag ? ', '+tag : '');
 }
 /* viewBox -> canvas pixels via the live camera, so the popup stays on the blob
    it belongs to after any amount of zooming and panning */
-function showHeatPopup(nd){
+function showHeatPopup(p){
   const popup=document.getElementById('heatPopup');
   const typeLabels={positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
-  popup.innerHTML='<h5>'+t('zone.'+nd.zoneKey+'.name')+'</h5>'+
-    '<div class="tag">'+nd.n+' '+t('opinion.unitOpinions')+' \u00b7 '+typeLabels[nd.type]+'</div>'+
-    '<div class="text">"'+escHTML(heatT(nd.topicKey))+'"</div>';
+  const en = (window.currentLang === 'en');
+  const srcLabel = p.source==='survey'
+    ? (en ? 'resident submission' : '居民提交')
+    : (en ? 'baseline sample' : '基线示例');
+  popup.innerHTML='<h5>'+escHTML(t('zone.'+p.zone_id+'.name'))+'</h5>'+
+    '<div class="tag">'+escHTML(typeLabels[p.type]||p.type)+' \u00b7 '+escHTML(srcLabel)+'</div>'+
+    '<div class="text">"'+escHTML(heatPointText(p))+'"</div>';
   popup.classList.add('show');
   const canvas=document.getElementById('heatCanvas');
   const cr=canvas.getBoundingClientRect();
-  const pt=heatCam.viewToLocal(nd.x,nd.y);
+  const pt=heatCam.viewToLocal(Number(p.x),Number(p.y));
   const pw=popup.offsetWidth, ph=popup.offsetHeight;
   let left=pt.x+18;
   if(left+pw>cr.width-8) left=pt.x-pw-18;
@@ -3159,91 +3211,75 @@ function hideHeatPopup(){ document.getElementById('heatPopup').classList.remove(
 
 function filterOpinions(filter){
   document.querySelectorAll('.opinion-filter').forEach(f=>f.classList.remove('active'));
-  document.querySelector('.opinion-filter[data-filter="'+filter+'"]').classList.add('active');
+  const btn = document.querySelector('.opinion-filter[data-filter="'+filter+'"]');
+  if(btn) btn.classList.add('active');
   renderHeatPoints(filter);
   const typeMap={all:t('opinion.typeLabelAll'),positive:t('opinion.typeLabelPositive'),improve:t('opinion.typeLabelImprove'),concern:t('opinion.typeLabelConcern'),function:t('opinion.typeLabelFunction')};
-  const counts={all:OPINIONS.length};
-  OPINION_TYPES.forEach(k=>{ counts[k]=OPINIONS.filter(p=>p.type===k).length; });
+  const counts={all:appData.heatPoints.length};
+  OPINION_TYPES.forEach(k=>{ counts[k]=appData.heatPoints.filter(p=>p.type===k).length; });
   showToast(t('opinion.filterToast').replace('{type}',typeMap[filter]).replace('{count}',counts[filter]));
 }
 
-/* A submission from the survey form joins the same corpus, so every figure on
-   the page moves with it. */
-function addHeatPoint(data){
-  const zoneKey = data.zoneKey || 'z1';
-  const coord = zoneCoords[zoneKey] || {x:400,y:240};
-  const type = data.rating>=4?'positive':data.rating<=2?'concern':data.suggestion?'improve':'function';
-  const lang = window.currentLang || 'zh-CN';
-  const custom = data.suggestion || '';
-  if(custom){
-    heatTexts['en']['heat.custom']=custom;
-    heatTexts['zh-CN']['heat.custom']=custom;
-    heatTexts['zh-TW']['heat.custom']=custom;
-  } else if(!heatTexts[lang]['heat.custom']){
-    heatTexts['en']['heat.custom']='User opinion';
-    heatTexts['zh-CN']['heat.custom']='用户意见';
-    heatTexts['zh-TW']['heat.custom']='用戶意見';
-  }
-  const rnd = mulberry32(Date.now() & 0xffff);
-  OPINIONS.push({
-    x: coord.x + (rnd()-0.5)*36,
-    y: coord.y + (rnd()-0.5)*36,
-    zoneKey: zoneKey, type: type,
-    topicKey: custom ? 'heat.custom' : (data.functions && data.functions[0]) || 'heat.generalOpinion',
-    tagKey: (data.functions && data.functions[0]) || 'heat.generalOpinion',
-    rating: data.rating || 3
-  });
-  refreshDerived();
-}
-
-/* re-derive every figure and redraw whatever depends on the corpus */
-function refreshDerived(){
-  const fresh = buildTableData();
-  tableData.length = 0;
-  fresh.forEach(r=>tableData.push(r));
-  applyDerivedNumbers();
-  renderHeatPoints(window.currentHeatFilter || 'all');
-  renderDashTable();
-  safeUpdateCharts();
-}
+/* Chart order must match t('chart.labels.func'). */
+const FUNC_CHART_ORDER = ['func.sports','func.eco','func.children','func.cycling','func.education','func.birdwatch'];
 
 function updateCharts(){
-  if(surveyChartInst) surveyChartInst.destroy();
-  if(dashBarInst) dashBarInst.destroy();
-  if(dashPieInst) dashPieInst.destroy();
-  const sCtx=document.getElementById('surveyChart').getContext('2d');
-  surveyChartInst=new Chart(sCtx,{
-    type:'doughnut',
-    data:{labels:t('chart.labels.func'),datasets:[{data:[28,22,18,15,10,7],backgroundColor:['#4DB6AC','#66BB6A','#FFB74D','#BA68C8','#42A5F5','#26C6DA'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:'#333'}},title:{display:true,text:t('chart.funcDist'),font:{size:13}}}}
-  });
-  const bCtx=document.getElementById('dashBarChart').getContext('2d');
-  const bRows=tableData.map(r=>({n:t('zone.'+r.zoneKey+'.short'),v:r.avg,p:r.priority}));
-  dashBarInst=new Chart(bCtx,{
-    type:'bar',
-    data:{labels:bRows.map(r=>r.n),datasets:[{label:t('chart.satisfaction'),data:bRows.map(r=>r.v),backgroundColor:bRows.map(r=>r.p==='high'?'#FF9800':'#4CAF6F'),borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{color:'rgba(255,255,255,0.5)'},grid:{color:'rgba(255,255,255,0.08)'}},x:{ticks:{color:'rgba(255,255,255,0.5)',font:{size:10},maxRotation:45,minRotation:45,autoSkip:false},grid:{display:false}}}}
-  });
-  const pCtx=document.getElementById('dashPieChart').getContext('2d');
-  dashPieInst=new Chart(pCtx,{
-    type:'pie',
-    data:{labels:t('chart.labels.opinion'),datasets:[{data:[42,38,12,8],backgroundColor:['#4CAF6F','#FF9800','#ef5350','#42A5F5'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'rgba(255,255,255,0.7)',font:{size:11}}}}}
-  });
+  const d = appData.dashboard || {};
+  const fd = d.func_distribution || {};
+  const tp = d.type_percent || {positive:0,improve:0,concern:0,function:0};
+
+  if(surveyChartInst){ surveyChartInst.destroy(); surveyChartInst=null; }
+  if(dashBarInst){ dashBarInst.destroy(); dashBarInst=null; }
+  if(dashPieInst){ dashPieInst.destroy(); dashPieInst=null; }
+
+  const sEl=document.getElementById('surveyChart');
+  if(sEl){
+    surveyChartInst=new Chart(sEl.getContext('2d'),{
+      type:'doughnut',
+      data:{labels:t('chart.labels.func'),datasets:[{data:FUNC_CHART_ORDER.map(k=>fd[k]||0),backgroundColor:['#4DB6AC','#66BB6A','#FFB74D','#BA68C8','#42A5F5','#26C6DA'],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},color:'#333'}},title:{display:true,text:t('chart.funcDist'),font:{size:13}}}}
+    });
+  }
+
+  const bEl=document.getElementById('dashBarChart');
+  if(bEl){
+    const bRows=tableData.map(r=>({n:t('zone.'+r.zoneKey+'.short'),v:r.hasRating?r.avg:0,p:r.priority,has:r.hasRating}));
+    dashBarInst=new Chart(bEl.getContext('2d'),{
+      type:'bar',
+      data:{labels:bRows.map(r=>r.n),datasets:[{label:t('chart.satisfaction'),data:bRows.map(r=>r.v),backgroundColor:bRows.map(r=>!r.has?'rgba(255,255,255,0.14)':(r.p==='high'?'#FF9800':'#4CAF6F')),borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:5,ticks:{color:'rgba(255,255,255,0.5)'},grid:{color:'rgba(255,255,255,0.08)'}},x:{ticks:{color:'rgba(255,255,255,0.5)',font:{size:10},maxRotation:45,minRotation:45,autoSkip:false},grid:{display:false}}}}
+    });
+  }
+
+  const pEl=document.getElementById('dashPieChart');
+  if(pEl){
+    dashPieInst=new Chart(pEl.getContext('2d'),{
+      type:'pie',
+      data:{labels:t('chart.labels.opinion'),datasets:[{data:[tp.positive||0,tp.improve||0,tp.concern||0,tp.function||0],backgroundColor:['#4CAF6F','#FF9800','#ef5350','#42A5F5'],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'rgba(255,255,255,0.7)',font:{size:11}}}}}
+    });
+  }
 }
 
 function animateNumber(el,target,duration){
+  if(!el) return;
+  cancelNumAnim(el);
+  const state = {cancelled:false, raf:0};
+  _numAnim.set(el, state);
   duration=duration||1500;
   const startTime=performance.now();
+  const fmt = v => target>100 ? v.toLocaleString() : v;
   function update(now){
+    if(state.cancelled) return;
     const elapsed=now-startTime;
     const progress=Math.min(elapsed/duration,1);
     const eased=1-Math.pow(1-progress,3);
     const val=Math.floor(target*eased);
-    el.textContent=target>100?val.toLocaleString():val;
-    if(progress<1) requestAnimationFrame(update);
+    el.textContent=fmt(val);
+    if(progress<1){ state.raf=requestAnimationFrame(update); }
+    else { el.textContent=fmt(target); _numAnim.delete(el); }
   }
-  requestAnimationFrame(update);
+  state.raf=requestAnimationFrame(update);
 }
 
 /* Chart.js comes from a CDN. If it is blocked or slow the maps and every
@@ -3265,11 +3301,18 @@ window.addEventListener('load',()=>{
   /* re-publish once layout has settled, so both scale bars are truthful */
   mapCam.render(mapCam.view());
   heatCam.render(heatCam.view());
-  const d = window.derivedStats || {zones:7, total:1284};
-  animateNumber(document.getElementById('stat1'), d.zones);
-  animateNumber(document.getElementById('stat2'), d.total);
   animateNumber(document.getElementById('stat3'), funcKeys.length);
   animateNumber(document.getElementById('stat4'), 6);
+
+  /* Pull the real data. loadAll() re-renders every view once it arrives, so
+     the placeholders above only ever show the empty/offline state briefly. */
+  loadAll().then(function(){
+    const d = window.derivedStats || {zones:0, submissions:0};
+    animateNumber(document.getElementById('stat1'), d.zones);
+    animateNumber(document.getElementById('stat2'), d.submissions);
+    mapCam.render(mapCam.view());
+    heatCam.render(heatCam.view());
+  });
 
   /* ===== Scroll Reveal: auto-tag elements, then animate on scroll ===== */
   document.querySelectorAll(
@@ -3323,7 +3366,7 @@ var AI_I18N = {
     'ai.quick.report':'📋 Build Report','ai.quick.overview':'📊 Overview','ai.quick.hot':'🔥 Hot Topics','ai.quick.compare':'⚖️ Compare Zones','ai.quick.guide':'❓ How to Participate',
     'ai.greeting':"Hello! I'm the GreenSpace AI assistant. I can answer questions about the 7 planned green zones, resident opinions, and satisfaction scores — or generate a full construction-suggestion report. What would you like to know?",
     'ai.typing':'AI is analysing…',
-    'ai.report.title':'Northern Metropolis Green Space — Construction Suggestion Report','ai.report.subtitle':'Synthesised from 7 zones, '+OPINION_TOTAL+' resident opinions · AI-generated',
+    'ai.report.title':'Northern Metropolis Green Space — Construction Suggestion Report','ai.report.subtitle':'Based on the live zone, opinion and dashboard data · AI-generated',
     'ai.report.copy':'📋 Copy Markdown','ai.report.download':'⬇️ Download .md','ai.report.html':'⬇️ Download .html','ai.report.print':'🖨️ Print / PDF',
     'ai.copied':'✅ Markdown copied to clipboard','ai.downloaded':'✅ File downloaded','ai.noanswer':"I couldn't match that to a specific topic. Try asking about a zone name (e.g. Mai Po / 塱原), satisfaction scores, hot topics, or type 'report' for a full suggestion report.",
     'ai.sent.by':'Sent','ai.sent.now':'just now'
@@ -3334,7 +3377,7 @@ var AI_I18N = {
     'ai.quick.report':'📋 生成建设报告','ai.quick.overview':'📊 综合数据','ai.quick.hot':'🔥 热门议题','ai.quick.compare':'⚖️ 区域对比','ai.quick.guide':'❓ 如何参与',
     'ai.greeting':'您好！我是 GreenSpace AI 助手。我可以回答关于 7 个规划绿化区域、居民意见和满意度的问题，也可以生成一份完整的建设建议报告。请问您想了解什么？',
     'ai.typing':'AI 正在分析…',
-    'ai.report.title':'北部都会区绿化空间建设建议报告','ai.report.subtitle':'综合 7 个绿化区域、'+OPINION_TOTAL+' 条居民意见 · AI 自动生成',
+    'ai.report.title':'北部都会区绿化空间建设建议报告','ai.report.subtitle':'基于实时区域、意见与看板数据 · AI 自动生成',
     'ai.report.copy':'📋 复制 Markdown','ai.report.download':'⬇️ 下载 .md','ai.report.html':'⬇️ 下载 .html','ai.report.print':'🖨️ 打印 / 导出 PDF',
     'ai.copied':'✅ Markdown 已复制到剪贴板','ai.downloaded':'✅ 文件已下载','ai.noanswer':'抱歉，我没有匹配到具体话题。您可以试试：输入区域名称（如"米埔""塱原"），或询问满意度、热门议题，也可以输入"报告"生成完整的建设建议报告。',
     'ai.sent.by':'发送','ai.sent.now':'刚刚'
@@ -3345,7 +3388,7 @@ var AI_I18N = {
     'ai.quick.report':'📋 生成建設報告','ai.quick.overview':'📊 綜合數據','ai.quick.hot':'🔥 熱門議題','ai.quick.compare':'⚖️ 區域對比','ai.quick.guide':'❓ 如何參與',
     'ai.greeting':'您好！我是 GreenSpace AI 助手。我可以回答關於 7 個規劃綠化區域、居民意見和滿意度的問題，也可以生成一份完整的建設建議報告。請問您想了解什麼？',
     'ai.typing':'AI 正在分析…',
-    'ai.report.title':'北部都會區綠化空間建設建議報告','ai.report.subtitle':'綜合 7 個綠化區域、'+OPINION_TOTAL+' 條居民意見 · AI 自動生成',
+    'ai.report.title':'北部都會區綠化空間建設建議報告','ai.report.subtitle':'基於實時區域、意見與看板數據 · AI 自動生成',
     'ai.report.copy':'📋 複製 Markdown','ai.report.download':'⬇️ 下載 .md','ai.report.html':'⬇️ 下載 .html','ai.report.print':'🖨️ 列印 / 匯出 PDF',
     'ai.copied':'✅ Markdown 已複製到剪貼板','ai.downloaded':'✅ 檔案已下載','ai.noanswer':'抱歉，我沒有匹配到具體話題。您可以試試：輸入區域名稱（如"米埔""塱原"），或詢問滿意度、熱門議題，也可以輸入"報告"生成完整的建設建議報告。',
     'ai.sent.by':'傳送','ai.sent.now':'剛剛'
@@ -3358,177 +3401,19 @@ function aiT(key){
 }
 
 /* ---- helpers ---- */
-function aiZoneName(zk){ return t('zone.'+zk+'.name'); }
-function aiZoneShort(zk){ return t('zone.'+zk+'.short'); }
-function aiZoneType(zk){ return t(ZONE_TYPE_KEY[zk]); }
-function aiTopicText(topicKey){ return heatT(topicKey); }
-
-/* match user text to zone keys */
-function detectZones(text){
-  var lower = (text||'').toLowerCase();
-  var found = [];
-  zoneKeys.forEach(function(zk){
-    var names = [t('zone.'+zk+'.name'), t('zone.'+zk+'.short'), heatT('zone.'+zk+'.name')];
-    names.forEach(function(n){
-      if(n && lower.indexOf(String(n).toLowerCase()) >= 0) found.push(zk);
-    });
-  });
-  // also match by partial keywords
-  var kw = {'z1':['米埔','maipo','mai po','拉姆萨','拉姆薩'],'z2':['后海湾','后海灣','deep bay','深湾'],'z3':['塱原','long valley','河上乡','河上鄉'],'z4':['凤园','鳳園','fung yuen','蝴蝶'],'z5':['沙罗洞','沙羅洞','sha lo tung','蜻蜓'],'z6':['鹿颈','鹿頸','luk keng','鹭鸟','鷺鳥'],'z7':['乌蛟腾','烏蛟騰','wu kau tang','风水林','風水林']};
-  for(var zk in kw){ kw[zk].forEach(function(k){ if(lower.indexOf(k)>=0 && found.indexOf(zk)<0) found.push(zk); }); }
-  return found;
+/* The answer engine lives in the backend (backend/ai-assistant.js). The page
+   keeps only a fallback message for when the API cannot be reached — it never
+   invents figures of its own. */
+function aiOfflineMessage(){
+  var en = (window.currentLang||'zh-CN').indexOf('en') === 0;
+  return en
+    ? 'The AI assistant needs the backend to answer questions.\n\nStart it with:\n  cd backend\n  node server.js\n\nthen reload this page.'
+    : 'AI 助手需要后端支持才能回答问题。\n\n请先启动后端：\n  cd backend\n  node server.js\n\n然后刷新本页面。';
 }
 
-/* current table data snapshot (re-derived so it stays fresh) */
-function aiTableData(){ return buildTableData(); }
-function aiStats(){
-  var total = OPINIONS.length;
-  var types = countBy(OPINIONS,'type');
-  var avg = OPINIONS.reduce(function(s,o){return s+o.rating;},0)/total;
-  return {total:total, types:types, avg:avg, zones:Object.keys(zoneCoords).length};
-}
-
-/* ---- the main response function ---- */
+/* ---- fallback response when the backend is unreachable ---- */
 function aiChatRespond(message){
-  var lang = window.currentLang || 'zh-CN';
-  var m = (message||'').trim();
-  if(!m) return aiT('ai.greeting');
-  var lower = m.toLowerCase();
-
-  // ---- Report intent ----
-  if(/报告|報告|report|建议书|建議書/.test(lower) || (/(生成|產生|生成|build|generate)/.test(lower) && /(报告|報告|report)/.test(lower))){
-    openReportModal();
-    return lang.indexOf('zh')===0 ? '已为您生成建设建议报告，请查看弹出的报告窗口。您可以在窗口中复制 Markdown、下载 .md/.html 文件，或打印导出 PDF。' : 'The construction report has been generated in the popup window. You can copy Markdown, download .md/.html, or print to PDF from there.';
-  }
-
-  // ---- Guide: how to participate ----
-  if(/如何|怎么参与|怎麼參與|how to|参与|participat|问卷|問卷|submit/.test(lower)){
-    return lang.indexOf('zh')===0 ?
-      '【如何参与】\n\n您可以按以下步骤参与北部都会区绿化空间规划：\n\n1. 🗺️ **查看绿化地图** — 点击导航栏"绿化地图"，在地图上点击任意绿化区域查看规划详情、面积和功能。\n2. 📝 **填写居民问卷** — 点击"居民问卷"，选择您最关注的区域，给出满意度评分、选择期望功能并填写建议。\n3. 🗺️ **查看意见热图** — 提交后 AI 会自动聚合您的意见到"AI 意见热图"上。\n4. 📊 **政府看板** — 您的意见会实时反映到政府决策看板的统计中。\n\n您的每一条意见都会通过 AI 自动分析并空间化，帮助政府直观了解居民诉求。' :
-      '【How to Participate】\n\n1. 🗺️ **Explore the Green Map** — Click "Green Map" in the nav, then click any green zone for planning details.\n2. 📝 **Take the Survey** — Click "Survey", pick a zone, rate satisfaction, choose desired functions, and add suggestions.\n3. 🗺️ **See the Heatmap** — Your input is AI-aggregated onto the opinion heatmap.\n4. 📊 **Dashboard** — Your opinion updates the government dashboard in real time.';
-  }
-
-  // ---- Overview / summary ----
-  if(/总|全部|overview|概览|综合|整體|整体|summary|概况|概況/.test(lower) && !detectZones(m).length){
-    var st = aiStats();
-    var shares = percentShares(st.types, st.total);
-    var highPri = aiTableData().filter(function(r){return r.priority==='high';});
-    return lang.indexOf('zh')===0 ?
-      '【综合数据概览】\n\n北部都会区绿化空间平台目前覆盖 **'+st.zones+' 个规划绿化区域**，已聚合 **'+st.total.toLocaleString()+' 条**居民意见。\n\n📊 **意见类型分布**\n• 正面评价：'+shares.positive+'%\n• 改进建议：'+shares.improve+'%\n• 担忧反馈：'+shares.concern+'%\n• 功能需求：'+shares.function+'%\n\n⭐ **平均满意度**：'+st.avg.toFixed(1)+' / 5.0\n\n🔴 **高优先级区域（需重点关注）**：'+ (highPri.length ? highPri.map(function(r){return aiZoneShort(r.zoneKey)}).join('、') : '暂无') +'\n\n您可以输入具体区域名称（如"米埔""塱原"）查看详情，或输入"报告"生成完整建设建议报告。' :
-      '【Overview】\n\nThe platform covers **'+st.zones+' planned green zones** with **'+st.total.toLocaleString()+' aggregated opinions**.\n\n📊 **Opinion types**: Positive '+shares.positive+'% · Improvement '+shares.improve+'% · Concerns '+shares.concern+'% · Function needs '+shares.function+'%\n\n⭐ **Avg satisfaction**: '+st.avg.toFixed(1)+' / 5.0\n\n🔴 **High-priority zones**: '+ (highPri.length ? highPri.map(function(r){return aiZoneShort(r.zoneKey)}).join(', ') : 'none') +'\n\nType a zone name (e.g. "Mai Po") for details, or "report" for a full suggestion report.';
-  }
-
-  // ---- Hot topics ----
-  if(/热门|熱門|hot|议题|議題|关注|關注|topic|最多/.test(lower)){
-    var topicCounts = countBy(OPINIONS,'topicKey');
-    var topTopics = Object.keys(topicCounts).sort(function(a,b){return topicCounts[b]-topicCounts[a];}).slice(0,5);
-    var lines = lang.indexOf('zh')===0 ? ['【热门议题 TOP 5】\n'] : ['【Hot Topics TOP 5】\n'];
-    topTopics.forEach(function(tk,i){
-      lines.push((i+1)+'. '+aiTopicText(tk)+' — '+topicCounts[tk]+' 条意见');
-    });
-    lines.push('\n💡 这些议题集中在：遮阴设施、鱼塘管理、生态保育、交通接驳、人流管控等方面。');
-    return lines.join('\n');
-  }
-
-  // ---- Compare zones ----
-  if(/对比|對比|比较|比較|compare|哪个|哪個|which|versus|vs/.test(lower) || (detectZones(m).length>=2)){
-    var cz = detectZones(m);
-    if(cz.length<2) cz = zoneKeys.slice(0,4); // default compare top 4
-    cz = cz.slice(0,5);
-    var rows = aiTableData().filter(function(r){return cz.indexOf(r.zoneKey)>=0;});
-    var out = lang.indexOf('zh')===0 ? ['【区域对比】\n'] : ['【Zone Comparison】\n'];
-    rows.forEach(function(r){
-      var pri = r.priority==='high'?'🔴高':r.priority==='mid'?'🟡中':'🟢低';
-      out.push('• '+aiZoneShort(r.zoneKey)+'（'+aiZoneType(r.zoneKey)+'）：'+r.opinions+'条意见，满意度 '+r.avg+'，热门：'+aiTopicText(r.topicKey)+'，优先级 '+pri);
-    });
-    // best & worst
-    rows.sort(function(a,b){return b.avg-a.avg;});
-    out.push('\n⭐ 满意度最高：'+aiZoneShort(rows[0].zoneKey)+'（'+rows[0].avg+'）');
-    out.push('⚠️ 需重点关注：'+aiZoneShort(rows[rows.length-1].zoneKey)+'（'+rows[rows.length-1].avg+'）');
-    return out.join('\n');
-  }
-
-  // ---- Zone-specific query ----
-  var zmatch = detectZones(m);
-  if(zmatch.length>=1){
-    return answerZone(zmatch[0], lower);
-  }
-
-  // ---- Satisfaction query (general) ----
-  if(/满意|滿意|satisfaction|评分|評分|rating|score/.test(lower)){
-    var st2 = aiStats();
-    var td = aiTableData();
-    td.sort(function(a,b){return b.avg-a.avg;});
-    var lines = lang.indexOf('zh')===0 ? ['【满意度分析】\n\n整体平均满意度：'+st2.avg.toFixed(1)+' / 5.0\n\n各区域满意度（从高到低）：\n'] : ['【Satisfaction Analysis】\n\nOverall avg: '+st2.avg.toFixed(1)+' / 5.0\n\nBy zone (high → low):\n'];
-    td.forEach(function(r){
-      var bar = '';
-      for(var i=0;i<5;i++){ bar += i<Math.round(r.avg)?'★':'☆'; }
-      lines.push(aiZoneShort(r.zoneKey)+': '+r.avg+' '+bar);
-    });
-    lines.push('\n💡 满意度偏低的区域通常存在"担忧"类意见较多，建议优先关注。');
-    return lines.join('\n');
-  }
-
-  // ---- Area / size query ----
-  if(/面积|面積|area|公顷|公頃|多大|size/.test(lower)){
-    var lines2 = lang.indexOf('zh')===0 ? ['【各区域面积】\n'] : ['【Zone Areas】\n'];
-    zoneKeys.forEach(function(zk){
-      lines2.push('• '+aiZoneName(zk)+'（'+aiZoneType(zk)+'）：'+t('zone.'+zk+'.area'));
-    });
-    return lines2.join('\n');
-  }
-
-  // ---- Where / location ----
-  if(/在哪|在哪裡|在哪裏|where|位置|location|怎么去|怎麼去/.test(lower)){
-    return lang.indexOf('zh')===0 ?
-      '【绿化区域位置】\n\n所有 7 个规划绿化区域均位于**北部都会区**范围内，横跨元朗区、北区、大埔区等。您可以在"绿化地图"板块中点击任意区域查看其精确地理位置、边界和周边水系道路。\n\n区域分布：\n• 后海湾沿岸：米埔湿地、后海湾湿地\n• 河谷平原：塱原及河上乡\n• 内陆山谷：凤园、沙罗洞\n• 沙头角海沿岸：鹿颈沼泽\n• 船湾郊野公园北缘：乌蛟腾' :
-      '【Locations】\n\nAll 7 planned green zones are within the **Northern Metropolis**, spanning Yuen Long, North, and Tai Po districts. See the "Green Map" section for precise boundaries.\n\n• Deep Bay coast: Mai Po, Deep Bay wetland\n• River valley: Long Valley\n• Inland valleys: Fung Yuen, Sha Lo Tung\n• Starling Inlet coast: Luk Keng\n• Plover Cove edge: Wu Kau Tang';
-  }
-
-  // ---- Fallback ----
-  return aiT('ai.noanswer');
-}
-
-/* ---- detailed zone answer ---- */
-function answerZone(zk, lower){
-  var lang = window.currentLang || 'zh-CN';
-  var row = aiTableData().filter(function(r){return r.zoneKey===zk;})[0];
-  if(!row) return aiT('ai.noanswer');
-  var zoneOps = OPINIONS.filter(function(o){return o.zoneKey===zk;});
-  var types = countBy(zoneOps,'type');
-  var topicCounts = countBy(zoneOps,'topicKey');
-  var topTopics = Object.keys(topicCounts).sort(function(a,b){return topicCounts[b]-topicCounts[a];}).slice(0,3);
-  var pri = row.priority==='high'?'🔴 高优先级':row.priority==='mid'?'🟡 中优先级':'🟢 低优先级';
-
-  var out = [];
-  out.push('【'+aiZoneName(zk)+'】 '+pri+'\n');
-  out.push('📍 类型：'+aiZoneType(zk)+' ｜ 面积：'+t('zone.'+zk+'.area')+' ｜ 状态：'+t('zone.'+zk+'.statusKey')+'');
-  out.push('\n📋 规划简介：'+t('zone.'+zk+'.desc'));
-  var funcs = t('zone.'+zk+'.functions');
-  if(Array.isArray(funcs)){ out.push('\n🎯 规划功能：'+funcs.join('、')); }
-  out.push('\n📊 意见数据：');
-  out.push('• 意见总数：'+row.opinions+' 条');
-  out.push('• 平均满意度：'+row.avg+' / 5.0');
-  out.push('• 正面 '+(types.positive||0)+' ｜ 改进 '+(types.improve||0)+' ｜ 担忧 '+(types.concern||0)+' ｜ 功能 '+(types.function||0));
-  out.push('\n🔥 热门议题：');
-  topTopics.forEach(function(tk){ out.push('• '+aiTopicText(tk)+' ('+topicCounts[tk]+' 条)'); });
-
-  // recommendations based on data
-  out.push('\n💡 AI 建议：');
-  if((types.concern||0) > row.opinions*0.3){
-    out.push('• 该区域"担忧"类意见占比偏高（'+Math.round((types.concern||0)/row.opinions*100)+'%），建议加强公众沟通和生态保护措施。');
-  }
-  if(row.avg < 3.5){
-    out.push('• 满意度偏低，建议重新评估规划方案并增加居民参与环节。');
-  }
-  if((types.improve||0) > row.opinions*0.35){
-    out.push('• "改进建议"较多，建议重点梳理居民提出的具体改进项并纳入下一轮修订。');
-  }
-  if(row.priority==='high'){
-    out.push('• 已标记为高优先级，建议优先处理。');
-  }
-  out.push('\n输入"报告"可生成包含该区域的完整建设建议报告。');
-  return out.join('\n');
+  return aiOfflineMessage();
 }
 
 /* ==================== BACKEND API INTEGRATION ==================== */
@@ -3726,19 +3611,21 @@ function openReportModal(){
 
   fetchReport(lang).then(function(result){
     if(result.fromBackend && result.report){
-      // Use backend report
       var rpt = result.report;
-      _lastReportMD = rpt.markdown || buildReportMarkdown(lang);
+      _lastReportMD = rpt.markdown || '';
       _lastReportHTML = renderReportSections(rpt, lang);
       reportBody.innerHTML = _lastReportHTML;
       reportGenTime.textContent = (zh?'生成时间：':'Generated: ') + new Date(rpt.generatedAt || Date.now()).toLocaleString(lang.indexOf('en')===0?'en-US':'zh-CN');
     } else {
-      // Fallback to client-side
-      _lastReportMD = buildReportMarkdown(lang);
-      _lastReportHTML = buildReportHTML(lang);
-      reportBody.innerHTML = _lastReportHTML;
-      var now = new Date();
-      reportGenTime.textContent = (zh?'生成时间：':'Generated: ') + now.toLocaleString(lang.indexOf('en')===0?'en-US':'zh-CN');
+      /* The report is generated from live database figures, so it cannot be
+         produced without the backend. */
+      _lastReportMD = '';
+      _lastReportHTML = '';
+      reportBody.innerHTML = '<div style="text-align:center;padding:40px;color:#c62828;">'+
+        (zh?'无法生成报告：后端未连接。请先运行 <code>cd backend &amp;&amp; node server.js</code>。'
+           :'Cannot generate the report: the backend is not connected. Start it with <code>cd backend &amp;&amp; node server.js</code>.')+
+        '</div>';
+      reportGenTime.textContent = '';
     }
   });
 }
@@ -3789,255 +3676,6 @@ function renderReportSections(rpt, lang){
 reportClose.addEventListener('click', function(){ reportModal.classList.remove('show'); });
 reportModal.addEventListener('click', function(e){ if(e.target===reportModal) reportModal.classList.remove('show'); });
 
-/* ==================== REPORT GENERATION (HTML + Markdown) ==================== */
-/* Produces well-structured HTML directly (no fragile markdown-to-HTML parsing)
-   and a clean Markdown version for copy/download. */
-
-function buildReportHTML(lang){
-  var zh = lang.indexOf('zh')===0;
-  var st = aiStats();
-  var td = aiTableData();
-  var shares = percentShares(st.types, st.total);
-  var now = new Date().toLocaleString(lang.indexOf('en')===0?'en-US':'zh-CN');
-  var highPri = td.filter(function(r){return r.priority==='high';});
-  var midPri = td.filter(function(r){return r.priority==='mid';});
-  var priClass = function(p){ return p==='high'?'priority-high':p==='mid'?'priority-mid':'priority-low'; };
-  var priLabel = function(p){
-    if(p==='high') return zh?'🔴 高':'🔴 High';
-    if(p==='mid') return zh?'🟡 中':'🟡 Mid';
-    return zh?'🟢 低':'🟢 Low';
-  };
-  var esc = function(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
-  var B = function(s){ return '<strong>'+s+'</strong>'; };
-
-  var h = [];
-  h.push('<h2>'+esc(zh?'北部都会区绿化空间建设建议报告':'Northern Metropolis Green Space Construction Suggestion Report')+'</h2>');
-  h.push('<div class="exec">'+esc(zh?'本报告由 AI 综合分析平台 7 个绿化区域、'+st.total.toLocaleString()+' 条居民意见自动生成，涵盖区域现状、意见聚合、优先级评估与建设建议。':'This report is AI-generated from '+st.total.toLocaleString()+' resident opinions across 7 green zones, covering status, opinion aggregation, priority assessment, and construction recommendations.')+'</div>');
-  h.push('<div class="meta"><span>📅 '+esc(zh?'生成时间':'Generated')+': '+now+'</span><span>📊 '+esc(zh?'数据来源':'Sources')+': '+esc(zh?'互动地图、居民问卷、AI 意见热图、政府看板':'Map, Survey, Heatmap, Dashboard')+'</span></div>');
-
-  // Executive summary
-  h.push('<h2>'+(zh?'一、执行摘要':'1. Executive Summary')+'</h2>');
-  h.push('<p>'+(zh?'本平台对北部都会区 '+st.zones+' 个规划绿化区域进行了公众意见聚合分析，共收集 '+B(st.total.toLocaleString()+' 条')+'居民意见。整体平均满意度为 '+B(st.avg.toFixed(1)+'/5.0')+'，其中：':('The platform aggregated public opinions across '+st.zones+' planned green zones with '+B(st.total.toLocaleString()+' resident submissions')+'. Overall satisfaction averages '+B(st.avg.toFixed(1)+'/5.0')+':'))+'</p>');
-  h.push('<ul>');
-  h.push('<li>'+B((zh?'正面评价':'Positive')+': '+shares.positive+'%')+'</li>');
-  h.push('<li>'+B((zh?'改进建议':'Improvement')+': '+shares.improve+'%')+'</li>');
-  h.push('<li>'+B((zh?'担忧反馈':'Concerns')+': '+shares.concern+'%')+'</li>');
-  h.push('<li>'+B((zh?'功能需求':'Function needs')+': '+shares.function+'%')+'</li>');
-  h.push('</ul>');
-  if(highPri.length){
-    h.push('<div class="recommend-card">🔥 '+B(zh?'高优先级区域（需重点关注）':'High-priority zones')+'：'+highPri.map(function(r){return aiZoneShort(r.zoneKey);}).join('、')+'</div>');
-  }
-  h.push('<p>'+esc(zh?'本报告将依次分析各区域现状与意见焦点，并提出短、中、长期建设建议。':'This report analyses each zone and proposes short-, medium-, and long-term recommendations.')+'</p>');
-
-  // Per-zone summary table
-  h.push('<h2>'+(zh?'二、各区域现状与意见分析':'2. Per-Zone Analysis')+'</h2>');
-  h.push('<table>');
-  h.push('<thead><tr><th>'+esc(zh?'区域':'Zone')+'</th><th>'+esc(zh?'类型':'Type')+'</th><th>'+esc(zh?'面积':'Area')+'</th><th>'+esc(zh?'意见数':'Opinions')+'</th><th>'+esc(zh?'满意度':'Satisfaction')+'</th><th>'+esc(zh?'热门议题':'Hot Topic')+'</th><th>'+esc(zh?'优先级':'Priority')+'</th></tr></thead>');
-  h.push('<tbody>');
-  td.forEach(function(r){
-    h.push('<tr>');
-    h.push('<td>'+B(aiZoneShort(r.zoneKey))+'</td>');
-    h.push('<td>'+esc(aiZoneType(r.zoneKey))+'</td>');
-    h.push('<td>'+esc(t('zone.'+r.zoneKey+'.area'))+'</td>');
-    h.push('<td>'+r.opinions+'</td>');
-    h.push('<td>'+r.avg+'/5.0</td>');
-    h.push('<td>'+esc(aiTopicText(r.topicKey))+'</td>');
-    h.push('<td class="'+priClass(r.priority)+'">'+priLabel(r.priority)+'</td>');
-    h.push('</tr>');
-  });
-  h.push('</tbody></table>');
-
-  // Per-zone detail
-  td.forEach(function(r){
-    var zoneOps = OPINIONS.filter(function(o){return o.zoneKey===r.zoneKey;});
-    var types = countBy(zoneOps,'type');
-    var topicCounts = countBy(zoneOps,'topicKey');
-    var topTopics = Object.keys(topicCounts).sort(function(a,b){return topicCounts[b]-topicCounts[a];}).slice(0,3);
-    h.push('<h3>'+esc(aiZoneName(r.zoneKey))+' <span class="pill '+priClass(r.priority)+'">'+priLabel(r.priority)+'</span></h3>');
-    h.push('<p>'+B(zh?'类型':'Type')+'：'+esc(aiZoneType(r.zoneKey))+' ｜ '+B(zh?'面积':'Area')+'：'+esc(t('zone.'+r.zoneKey+'.area'))+' ｜ '+B(zh?'状态':'Status')+'：'+esc(t('zone.'+r.zoneKey+'.statusKey'))+'</p>');
-    h.push('<p>'+esc(t('zone.'+r.zoneKey+'.desc'))+'</p>');
-    h.push('<p><strong>'+(zh?'意见数据':'Opinion data')+'：</strong>'+(zh?'共 '+r.opinions+' 条，满意度 '+r.avg+'/5.0':r.opinions+' total, satisfaction '+r.avg+'/5.0')+'</p>');
-    h.push('<ul>');
-    h.push('<li>'+B(zh?'正面':'Positive')+': '+(types.positive||0)+' ｜ '+B(zh?'改进':'Improvement')+': '+(types.improve||0)+' ｜ '+B(zh?'担忧':'Concerns')+': '+(types.concern||0)+' ｜ '+B(zh?'功能':'Function')+': '+(types.function||0)+'</li>');
-    h.push('</ul>');
-    h.push('<p><strong>'+(zh?'热门议题':'Top topics')+'：</strong></p>');
-    h.push('<ul>');
-    topTopics.forEach(function(tk){
-      h.push('<li>'+esc(aiTopicText(tk))+' <em>('+topicCounts[tk]+(zh?' 条':' opinions')+')</em></li>');
-    });
-    h.push('</ul>');
-    // recommendations
-    h.push('<div class="recommend-card"><strong>💡 '+(zh?'区域建议':'Zone recommendation')+'：</strong>');
-    var recs = [];
-    if((types.concern||0) > r.opinions*0.3) recs.push(zh?'担忧占比偏高，建议加强生态保护与公众沟通':'High concern share — strengthen conservation & public communication');
-    if(r.avg < 3.5) recs.push(zh?'满意度偏低，建议重新评估规划方案':'Low satisfaction — re-evaluate the plan');
-    if((types.improve||0) > r.opinions*0.35) recs.push(zh?'改进建议丰富，建议逐项纳入修订':'Rich improvement suggestions — incorporate into revisions');
-    if(r.priority==='high') recs.push(zh?'高优先级，建议优先行动':'High priority — act first');
-    if(!recs.length) recs.push(zh?'整体反馈积极，建议维持现有规划方向':'Feedback positive — maintain current direction');
-    h.push('<ul>');
-    recs.forEach(function(rc){ h.push('<li>'+esc(rc)+'</li>'); });
-    h.push('</ul></div>');
-  });
-
-  // Cross-zone themes
-  h.push('<h2>'+(zh?'三、跨区域议题与建议':'3. Cross-Zone Themes & Recommendations')+'</h2>');
-  var allTopics = countBy(OPINIONS,'topicKey');
-  var topAll = Object.keys(allTopics).sort(function(a,b){return allTopics[b]-allTopics[a];}).slice(0,8);
-  h.push('<p>'+B(zh?'全平台热门议题 TOP 8':'Platform-wide top topics')+'：</p>');
-  h.push('<ul>');
-  topAll.forEach(function(tk){
-    h.push('<li>'+esc(aiTopicText(tk))+' <em>('+allTopics[tk]+(zh?' 条':' opinions')+')</em></li>');
-  });
-  h.push('</ul>');
-  h.push('<div class="recommend-card"><strong>💡 '+B(zh?'建议':'Suggestion')+'：</strong>'+esc(zh?'建议针对以上高频议题，制定跨区域的统一应对策略，如遮阴设施标准、鱼塘生态管理指引、生态走廊连通性提升等。':'Recommend cross-zone policies for these high-frequency topics: shade-facility standards, eco-fishpond management guidelines, ecological corridor connectivity, etc.')+'</div>');
-
-  // Phased recommendations
-  h.push('<h2>'+(zh?'四、分阶段建设建议':'4. Phased Recommendations')+'</h2>');
-  h.push('<h3>📌 '+(zh?'短期（0-6 个月）':'Short-term (0-6 months)')+'</h3>');
-  h.push('<ul>');
-  if(highPri.length){
-    highPri.forEach(function(r){
-      h.push('<li><strong>'+esc(aiZoneShort(r.zoneKey))+'</strong>：'+(zh?'优先处理高占比担忧议题，开展公众沟通活动':'Address high-concern topics, launch public engagement')+'</li>');
-    });
-  } else {
-    h.push('<li>'+(zh?'暂无高优先级区域，持续监测满意度变化':'No high-priority zones; keep monitoring satisfaction')+'</li>');
-  }
-  h.push('<li>'+esc(zh?'完善各区域基础导览设施（解说牌、步道铺装、遮阴休息点）':'Improve basic visitor facilities (interpretive signs, trail surfacing, shaded rest spots) across all zones')+'</li>');
-  h.push('<li>'+esc(zh?'上线意见反馈闭环机制，向居民公示意见处理进展':'Launch a feedback-loop mechanism showing residents how opinions are handled')+'</li>');
-  h.push('</ul>');
-
-  h.push('<h3>📌 '+(zh?'中期（6-18 个月）':'Medium-term (6-18 months)')+'</h3>');
-  h.push('<ul>');
-  if(midPri.length){
-    midPri.forEach(function(r){
-      h.push('<li><strong>'+esc(aiZoneShort(r.zoneKey))+'</strong>：'+(zh?'落实居民提出的改进建议，优化功能配置':'Implement resident improvement suggestions, optimise functions')+'</li>');
-    });
-  } else {
-    h.push('<li>'+(zh?'持续优化各区域功能配置':'Keep optimising each zone\'s function mix')+'</li>');
-  }
-  h.push('<li>'+esc(zh?'推进生态走廊连通性建设（鹿颈—红花岭、塱原—后海湾）':'Advance ecological corridor connectivity (Luk Keng–Robin\'s Nest, Long Valley–Deep Bay)')+'</li>');
-  h.push('<li>'+esc(zh?'建立鱼塘生态管理合作协议，保障越冬水鸟栖息地':'Establish eco-fishpond management agreements to protect wintering waterbird habitat')+'</li>');
-  h.push('<li>'+esc(zh?'增设预约制导赏与自然教育课程':'Add booking-based guided tours and nature education programmes')+'</li>');
-  h.push('</ul>');
-
-  h.push('<h3>📌 '+(zh?'长期（18 个月以上）':'Long-term (18+ months)')+'</h3>');
-  h.push('<ul>');
-  h.push('<li>'+esc(zh?'构建北部都会区生态走廊网络，实现 7 个区域的生态连通':'Build a Northern Metropolis ecological corridor network connecting all 7 zones')+'</li>');
-  h.push('<li>'+esc(zh?'建立长期监测体系，持续跟踪满意度与生态指标变化':'Establish long-term monitoring of satisfaction and ecological indicators')+'</li>');
-  h.push('<li>'+esc(zh?'推动乡郊生态旅游品牌建设，平衡保育与适度利用':'Develop rural eco-tourism branding balancing conservation and sustainable use')+'</li>');
-  h.push('<li>'+esc(zh?'探索社区参与式管理，让居民持续参与区域治理':'Explore community-based co-management for sustained resident participation')+'</li>');
-  h.push('</ul>');
-
-  h.push('<hr>');
-  h.push('<p style="text-align:center;color:#888;font-size:12px;font-style:italic;">'+esc(zh?'本报告由 GreenSpace NM AI 助手自动生成，数据基于演示用合成意见语料。实际应用时可对接真实公众咨询数据。':'Generated by GreenSpace NM AI assistant. Data is based on a synthetic demo opinion corpus; in production, connect real public consultation data.')+'</p>');
-
-  return h.join('\n');
-}
-
-/* generate a clean Markdown version for copy/download */
-function buildReportMarkdown(lang){
-  var zh = lang.indexOf('zh')===0;
-  var st = aiStats();
-  var td = aiTableData();
-  var shares = percentShares(st.types, st.total);
-  var now = new Date().toLocaleString(lang.indexOf('en')===0?'en-US':'zh-CN');
-  var highPri = td.filter(function(r){return r.priority==='high';});
-  var midPri = td.filter(function(r){return r.priority==='mid';});
-  var L = [];
-  L.push('# '+(zh?'北部都会区绿化空间建设建议报告':'Northern Metropolis Green Space Construction Suggestion Report'));
-  L.push('');
-  L.push('> '+(zh?'本报告由 AI 综合分析平台 7 个绿化区域、'+st.total.toLocaleString()+' 条居民意见自动生成':'This report is AI-generated from '+st.total.toLocaleString()+' resident opinions across 7 green zones'));
-  L.push('');
-  L.push('**'+(zh?'生成时间':'Generated')+'**: '+now+'  ｜  **'+(zh?'数据来源':'Sources')+'**: '+(zh?'互动地图、居民问卷、AI 意见热图、政府看板':'Map, Survey, Heatmap, Dashboard'));
-  L.push('');
-  L.push('## '+(zh?'一、执行摘要':'1. Executive Summary'));
-  L.push('');
-  L.push('- **'+(zh?'总意见数':'Total opinions')+'**: '+st.total.toLocaleString());
-  L.push('- **'+(zh?'平均满意度':'Avg satisfaction')+'**: '+st.avg.toFixed(1)+'/5.0');
-  L.push('- **'+(zh?'意见分布':'Distribution')+'**: '+(zh?'正面':'Positive')+' '+shares.positive+'% / '+(zh?'改进':'Improvement')+' '+shares.improve+'% / '+(zh?'担忧':'Concerns')+' '+shares.concern+'% / '+(zh?'功能':'Function')+' '+shares.function+'%');
-  if(highPri.length){
-    L.push('- **🔥 '+(zh?'高优先级区域':'High-priority zones')+'**: '+highPri.map(function(r){return aiZoneShort(r.zoneKey);}).join('、'));
-  }
-  L.push('');
-  L.push('## '+(zh?'二、各区域现状与意见分析':'2. Per-Zone Analysis'));
-  L.push('');
-  L.push('| '+(zh?'区域':'Zone')+' | '+(zh?'类型':'Type')+' | '+(zh?'面积':'Area')+' | '+(zh?'意见':'Opinions')+' | '+(zh?'满意度':'Sat.')+' | '+(zh?'热门议题':'Hot Topic')+' | '+(zh?'优先级':'Priority')+' |');
-  L.push('|---|---|---|---|---|---|---|');
-  td.forEach(function(r){
-    L.push('| '+aiZoneShort(r.zoneKey)+' | '+aiZoneType(r.zoneKey)+' | '+t('zone.'+r.zoneKey+'.area')+' | '+r.opinions+' | '+r.avg+' | '+aiTopicText(r.topicKey)+' | '+(r.priority==='high'?'🔴 高':r.priority==='mid'?'🟡 中':'🟢 低')+' |');
-  });
-  L.push('');
-  td.forEach(function(r){
-    var zoneOps = OPINIONS.filter(function(o){return o.zoneKey===r.zoneKey;});
-    var types = countBy(zoneOps,'type');
-    var topicCounts = countBy(zoneOps,'topicKey');
-    var topTopics = Object.keys(topicCounts).sort(function(a,b){return topicCounts[b]-topicCounts[a];}).slice(0,3);
-    L.push('### '+aiZoneName(r.zoneKey)+' '+(r.priority==='high'?'🔴':r.priority==='mid'?'🟡':'🟢'));
-    L.push('');
-    L.push('**'+(zh?'类型':'Type')+'**: '+aiZoneType(r.zoneKey)+' ｜ **'+(zh?'面积':'Area')+'**: '+t('zone.'+r.zoneKey+'.area')+' ｜ **'+(zh?'状态':'Status')+'**: '+t('zone.'+r.zoneKey+'.statusKey'));
-    L.push('');
-    L.push(t('zone.'+r.zoneKey+'.desc'));
-    L.push('');
-    L.push('**'+(zh?'意见数据':'Opinion data')+'**: '+r.opinions+(zh?' 条，满意度 ':' total, sat. ')+r.avg+'/5.0');
-    L.push('');
-    L.push('- '+(zh?'正面':'Positive')+' '+(types.positive||0)+' ｜ '+(zh?'改进':'Improvement')+' '+(types.improve||0)+' ｜ '+(zh?'担忧':'Concerns')+' '+(types.concern||0)+' ｜ '+(zh?'功能':'Function')+' '+(types.function||0));
-    L.push('');
-    L.push('**'+(zh?'热门议题':'Top topics')+'**:');
-    topTopics.forEach(function(tk){ L.push('- '+aiTopicText(tk)+' ('+topicCounts[tk]+(zh?' 条':' opinions')+')'); });
-    L.push('');
-    L.push('**💡 '+(zh?'区域建议':'Zone recommendation')+'**:');
-    var recs = [];
-    if((types.concern||0) > r.opinions*0.3) recs.push(zh?'担忧占比偏高，建议加强生态保护与公众沟通':'High concern share — strengthen conservation & public communication');
-    if(r.avg < 3.5) recs.push(zh?'满意度偏低，建议重新评估规划方案':'Low satisfaction — re-evaluate the plan');
-    if((types.improve||0) > r.opinions*0.35) recs.push(zh?'改进建议丰富，建议逐项纳入修订':'Rich improvement suggestions — incorporate into revisions');
-    if(r.priority==='high') recs.push(zh?'高优先级，建议优先行动':'High priority — act first');
-    if(!recs.length) recs.push(zh?'整体反馈积极，建议维持现有规划方向':'Feedback positive — maintain current direction');
-    recs.forEach(function(rc){ L.push('- '+rc); });
-    L.push('');
-  });
-
-  L.push('## '+(zh?'三、跨区域议题与建议':'3. Cross-Zone Themes & Recommendations'));
-  L.push('');
-  var allTopics = countBy(OPINIONS,'topicKey');
-  var topAll = Object.keys(allTopics).sort(function(a,b){return allTopics[b]-allTopics[a];}).slice(0,8);
-  L.push('**'+(zh?'全平台热门议题 TOP 8':'Platform-wide top topics')+'**:');
-  topAll.forEach(function(tk){ L.push('- '+aiTopicText(tk)+' ('+allTopics[tk]+(zh?' 条':' opinions')+')'); });
-  L.push('');
-  L.push('💡 '+(zh?'建议针对以上高频议题，制定跨区域的统一应对策略':'Recommend cross-zone policies for these high-frequency topics'));
-  L.push('');
-
-  L.push('## '+(zh?'四、分阶段建设建议':'4. Phased Recommendations'));
-  L.push('');
-  L.push('### 📌 '+(zh?'短期（0-6 个月）':'Short-term (0-6 months)'));
-  L.push('');
-  if(highPri.length){
-    highPri.forEach(function(r){ L.push('- **'+aiZoneShort(r.zoneKey)+'**：'+(zh?'优先处理高占比担忧议题':'Address high-concern topics')); });
-  }
-  L.push('- '+(zh?'完善各区域基础导览设施':'Improve basic visitor facilities across all zones'));
-  L.push('- '+(zh?'上线意见反馈闭环机制':'Launch a feedback-loop mechanism'));
-  L.push('');
-  L.push('### 📌 '+(zh?'中期（6-18 个月）':'Medium-term (6-18 months)'));
-  L.push('');
-  if(midPri.length){
-    midPri.forEach(function(r){ L.push('- **'+aiZoneShort(r.zoneKey)+'**：'+(zh?'落实居民提出的改进建议':'Implement resident improvement suggestions')); });
-  }
-  L.push('- '+(zh?'推进生态走廊连通性建设':'Advance ecological corridor connectivity'));
-  L.push('- '+(zh?'建立鱼塘生态管理合作协议':'Establish eco-fishpond management agreements'));
-  L.push('- '+(zh?'增设预约制导赏与自然教育课程':'Add booking-based guided tours and nature education programmes'));
-  L.push('');
-  L.push('### 📌 '+(zh?'长期（18 个月以上）':'Long-term (18+ months)'));
-  L.push('');
-  L.push('- '+(zh?'构建北部都会区生态走廊网络':'Build a Northern Metropolis ecological corridor network'));
-  L.push('- '+(zh?'建立长期监测体系':'Establish long-term monitoring'));
-  L.push('- '+(zh?'推动乡郊生态旅游品牌建设':'Develop rural eco-tourism branding'));
-  L.push('- '+(zh?'探索社区参与式管理':'Explore community-based co-management'));
-  L.push('');
-  L.push('---');
-  L.push('');
-  L.push('*'+(zh?'本报告由 GreenSpace NM AI 助手自动生成':'Generated by GreenSpace NM AI assistant')+'*');
-  return L.join('\n');
-}
-
 /* ---- export handlers ---- */
 /* ---- export handlers ---- */
 function showReportToast(msg){ reportToast.textContent=msg; reportToast.classList.add('show'); setTimeout(function(){reportToast.classList.remove('show');},2200); }
@@ -4061,9 +3699,13 @@ reportDownload.addEventListener('click', function(){
 
 reportHtml.addEventListener('click', function(){
   var lang = window.currentLang||'zh-CN';
+  if(!_lastReportHTML){
+    showReportToast(aiT('ai.report.none') || (lang.indexOf('zh')===0?'暂无报告内容，请先生成报告':'No report yet — generate one first'));
+    return;
+  }
   var html = '<!DOCTYPE html><html lang="'+lang+'"><head><meta charset="UTF-8"><title>'+aiT('ai.report.title')+'</title>';
   html += '<style>body{font-family:sans-serif;max-width:820px;margin:40px auto;padding:0 24px;line-height:1.75;color:#1a1a2e}h2{color:#1B5E3A;border-bottom:2px solid #E8F5E9;padding-bottom:6px;margin-top:28px}h3{color:#2D7A4E;margin-top:20px}p{margin:8px 0}ul{margin:8px 0;padding-left:22px}li{margin:4px 0}table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}th{background:#E8F5E9;color:#1B5E3A;padding:8px;text-align:left}td{padding:8px;border-bottom:1px solid #eee}.exec{background:#E8F5E9;border-left:4px solid #2D7A4E;padding:12px 16px;border-radius:8px;margin:14px 0}.meta{display:flex;gap:20px;font-size:12px;color:#666;margin:10px 0}.recommend-card{background:#F8FBF8;border:1px solid #E8F5E9;border-left:4px solid #4CAF6F;border-radius:10px;padding:12px 16px;margin:10px 0}.recommend-card strong{color:#1B5E3A}.pill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;margin:0 2px}.pill.priority-high{background:#FFEBEE;color:#c62828}.pill.priority-mid{background:#FFF3E0;color:#E65100}.pill.priority-low{background:#E8F5E9;color:#2E7D32}.priority-high{color:#c62828;font-weight:700}.priority-mid{color:#E65100;font-weight:700}.priority-low{color:#2E7D32;font-weight:700}hr{border:none;border-top:1px solid #E8F5E9;margin:20px 0}code{background:#f5f5f5;padding:2px 6px;border-radius:4px}em{color:#888}</style>';
-  html += '</head><body>'+(_lastReportHTML || buildReportHTML(lang))+'</body></html>';
+  html += '</head><body>'+_lastReportHTML+'</body></html>';
   var blob = new Blob([html], {type:'text/html;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);

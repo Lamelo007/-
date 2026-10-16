@@ -41,17 +41,34 @@ app.get("/api/zones", (req, res) => {
     FROM zones
   `).all();
 
-  const zones = rows.map(r => ({
-    ...r,
-    functions_en: r.functions_en ? r.functions_en.split("|") : [],
-    functions_zh_cn: r.functions_zh_cn ? r.functions_zh_cn.split("|") : [],
-    functions_zh_tw: r.functions_zh_tw ? r.functions_zh_tw.split("|") : [],
-    opinion_count: db.prepare("SELECT COUNT(*) as c FROM surveys WHERE zone_id = ?").get(r.id).c,
-    avg_satisfaction: (() => {
-      const avg = db.prepare("SELECT AVG(rating) as a FROM surveys WHERE zone_id = ?").get(r.id).a;
-      return avg ? parseFloat(avg.toFixed(1)) : 0;
-    })(),
-  }));
+  /* One grouped pass each, so the endpoint stays O(1) queries instead of
+     two per zone. Opinion counts come from heat_points — the same rows the
+     map and the dashboard table read — while submissions come from surveys. */
+  const opRows = db.prepare(
+    "SELECT zone_id, COUNT(*) as c FROM heat_points GROUP BY zone_id"
+  ).all();
+  const subRows = db.prepare(
+    "SELECT zone_id, COUNT(*) as c, AVG(rating) as a FROM surveys GROUP BY zone_id"
+  ).all();
+
+  const opByZone = {}, subByZone = {};
+  opRows.forEach(r => { opByZone[r.zone_id] = r.c; });
+  subRows.forEach(r => { subByZone[r.zone_id] = r; });
+
+  const zones = rows.map(r => {
+    const sub = subByZone[r.id];
+    return {
+      ...r,
+      functions_en: r.functions_en ? r.functions_en.split("|") : [],
+      functions_zh_cn: r.functions_zh_cn ? r.functions_zh_cn.split("|") : [],
+      functions_zh_tw: r.functions_zh_tw ? r.functions_zh_tw.split("|") : [],
+      opinion_count: opByZone[r.id] || 0,
+      /* null means "nobody has rated this zone yet" — a real 0 rating is
+         impossible because the survey form only allows 1-5. */
+      avg_satisfaction: (sub && sub.a !== null) ? parseFloat(sub.a.toFixed(1)) : null,
+      submission_count: sub ? sub.c : 0,
+    };
+  });
 
   res.json({ zones });
 });
@@ -212,51 +229,68 @@ app.get("/api/dashboard", (req, res) => {
     WHERE date(created_at) = date('now')
   `).get().c;
 
-  const funcDist = db.prepare(`
-    SELECT functions FROM surveys
-    WHERE functions IS NOT NULL AND functions != '[]'
-  `).all();
+  /* ---- opinion aggregates --------------------------------------------
+     `heat_points` IS the opinion dataset: one row per aggregated opinion,
+     whether it came from the seed baseline or from a resident submission.
+     The dashboard, the pie chart, the per-zone opinion counts and the heat
+     map therefore all read the same rows and can never disagree.
+     `surveys` only supplies submission-level facts: how many people
+     submitted, when, and what they rated. */
+  const hpRows = db.prepare("SELECT zone_id, type, tag FROM heat_points").all();
 
+  const totalOpinions = hpRows.length;
+  const opTypeCount = { positive: 0, improve: 0, concern: 0, function: 0 };
+  const opTypePercent = { positive: 0, improve: 0, concern: 0, function: 0 };
+  const zoneOpinions = {};
+  const tagCount = {};
   const funcCount = {};
-  funcDist.forEach(r => {
-    try {
-      const arr = JSON.parse(r.functions);
-      arr.forEach(f => { funcCount[f] = (funcCount[f] || 0) + 1; });
-    } catch(e) {}
+
+  hpRows.forEach(r => {
+    if (opTypeCount[r.type] !== undefined) opTypeCount[r.type]++;
+    zoneOpinions[r.zone_id] = (zoneOpinions[r.zone_id] || 0) + 1;
+    if (r.tag) {
+      tagCount[r.tag] = (tagCount[r.tag] || 0) + 1;
+      if (r.tag.indexOf("func.") === 0) funcCount[r.tag] = (funcCount[r.tag] || 0) + 1;
+    }
   });
 
-  /* Hot topics — count each keyword individually.
+  if (totalOpinions > 0) {
+    Object.keys(opTypePercent).forEach(k => {
+      opTypePercent[k] = Math.round(opTypeCount[k] / totalOpinions * 100);
+    });
+  }
+
+  /* Hot topics — count each tag individually.
      (The previous version grouped by the whole JSON array string, so two
      submissions with the same tags in a different order counted as two
      separate groups and never aggregated.) */
-  const kwRows = db.prepare(`
-    SELECT keywords FROM surveys
-    WHERE keywords IS NOT NULL AND keywords != '[]'
-  `).all();
-
-  const tagCount = {};
-  kwRows.forEach(r => {
-    try {
-      JSON.parse(r.keywords).forEach(k => { tagCount[k] = (tagCount[k] || 0) + 1; });
-    } catch(e) {}
-  });
-
   const topTags = Object.entries(tagCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
     .map(([tag, c]) => ({ tag, c }));
 
-  const hotTopic = topTags.length > 0 ? topTags[0].tag : "tag.shade";
+  /* No opinions yet -> no hot topic. Returning a default tag here would
+     make an empty database display a "most discussed" topic it never had. */
+  const hotTopic = topTags.length > 0 ? topTags[0].tag : null;
+
+  /* Per-zone row: opinion points from heat_points, submissions from surveys. */
+  const zoneTable = stats.zone_stats.map(r => Object.assign({}, r, {
+    opinions: zoneOpinions[r.id] || 0,
+    submissions: r.opinions || 0,
+  }));
 
   res.json({
     total_surveys: stats.total,
+    total_opinions: totalOpinions,
     today_new: todayNew,
     avg_rating: stats.avg_rating,
     active_zones: stats.active_zones,
-    type_percent: stats.type_percent,
+    type_percent: opTypePercent,
+    type_counts: opTypeCount,
     hot_topic: hotTopic,
+    top_tags: topTags,
     func_distribution: funcCount,
-    zone_table: stats.zone_stats,
+    zone_table: zoneTable,
   });
 });
 

@@ -95,7 +95,10 @@ function detectIntent(message, zones) {
      (/(生成|產生|build|generate)/.test(m) && /(报告|報告|report)/.test(m)))
     return "report";
 
-  if (/如何|怎么参与|怎麼參與|how to|参与|participat|问卷|問卷|submit/.test(m))
+  /* Participation guidance must require an actual participation phrase.
+     Matching a bare "如何" / "how" used to swallow ordinary questions such as
+     "拉姆萨尔湿地的情况如何", which are zone lookups, not how-to questions. */
+  if (/如何参与|怎麼參與|怎么参与|怎樣參與|怎样参与|如何参加|如何參加|如何提交|如何填写|如何填寫|提交问卷|提交問卷|填写问卷|填寫問卷|参与方式|參與方式|问卷怎么|問卷怎麼|how (to|do i|can i) (participate|join|submit|take part)|participat|how does (the )?survey/.test(m))
     return "guide";
 
   if (/对比|對比|比较|比較|compare|哪个|哪個|which|versus|vs/.test(m) || detectZones(m).length >= 2)
@@ -113,7 +116,9 @@ function detectIntent(message, zones) {
   if (/在哪|在哪裡|在哪裏|where|位置|location|怎么去|怎麼去/.test(m))
     return "location";
 
-  if (/总|全部|overview|概览|综合|整體|整体|summary|概况|概況/.test(m) && !detectZones(m).length)
+  /* Bare "总" also matched inside unrelated words, so require a full
+     overview-style phrase. */
+  if (/总共|總共|总数|總數|总体|總體|总览|總覽|全部|所有|overview|概览|概覽|综合|綜合|整體|整体|summary|概况|概況/.test(m) && !detectZones(m).length)
     return "overview";
 
   if (detectZones(m).length >= 1)
@@ -122,52 +127,78 @@ function detectIntent(message, zones) {
   return "fallback";
 }
 
-/* ---- data helpers ---- */
+/* ---- data helpers ----
+   Opinions live in `heat_points` (baseline samples plus one row per resident
+   submission); star ratings only exist on `surveys`. Every count below reads
+   heat_points so the assistant can never quote a different opinion total from
+   the map and the dashboard. */
+
 function getAllZones(db) {
   return db.prepare("SELECT * FROM zones ORDER BY id").all();
 }
 
+/* Same rule as the frontend: an unrated zone has no satisfaction score, so a
+   missing rating must not be treated as a bad one. */
+function priorityFor(count, avg, hasRating) {
+  if (!count) return "low";
+  if (hasRating && avg < 3.5) return "high";
+  if (count > 80) return "high";
+  if (hasRating && avg < 4.0) return "mid";
+  if (count > 30) return "mid";
+  return "low";
+}
+
+/* Never print "0 / 5.0" for a zone nobody has rated — that reads as the worst
+   possible score instead of "no data". */
+function avgText(avg, hasRating, isZh) {
+  return hasRating ? `${avg} / 5.0` : (isZh ? "暂无评分" : "no ratings yet");
+}
+
 function getZoneStats(db, zoneId) {
-  const count = db.prepare("SELECT COUNT(*) as c FROM surveys WHERE zone_id = ?").get(zoneId).c;
-  const avgRow = db.prepare("SELECT AVG(rating) as a FROM surveys WHERE zone_id = ?").get(zoneId);
-  const avg = avgRow.a ? parseFloat(avgRow.a.toFixed(1)) : 0;
-  const typeRows = db.prepare("SELECT opinion_type, COUNT(*) as c FROM surveys WHERE zone_id = ? GROUP BY opinion_type").all(zoneId);
+  const count = db.prepare("SELECT COUNT(*) as c FROM heat_points WHERE zone_id = ?").get(zoneId).c;
+
+  const avgRow = db.prepare(
+    "SELECT AVG(rating) as a, COUNT(*) as n FROM surveys WHERE zone_id = ?"
+  ).get(zoneId);
+  const hasRating = avgRow.n > 0 && avgRow.a !== null;
+  const avg = hasRating ? parseFloat(avgRow.a.toFixed(1)) : 0;
+
+  const typeRows = db.prepare(
+    "SELECT type, COUNT(*) as c FROM heat_points WHERE zone_id = ? GROUP BY type"
+  ).all(zoneId);
   const types = { positive: 0, improve: 0, concern: 0, function: 0 };
-  typeRows.forEach(r => { if (types[r.opinion_type] !== undefined) types[r.opinion_type] = r.c; });
+  typeRows.forEach(r => { if (types[r.type] !== undefined) types[r.type] = r.c; });
 
-  const kwRows = db.prepare(`
-    SELECT keywords FROM surveys WHERE zone_id = ? AND keywords IS NOT NULL AND keywords != '[]'
-  `).all(zoneId);
-  const topicCounts = {};
-  kwRows.forEach(r => {
-    try { JSON.parse(r.keywords).forEach(k => { topicCounts[k] = (topicCounts[k] || 0) + 1; }); }
-    catch(e) {}
-  });
-  const topTopics = Object.keys(topicCounts).sort((a,b) => topicCounts[b] - topicCounts[a]).slice(0, 3);
+  const tagRows = db.prepare(
+    "SELECT tag, COUNT(*) as c FROM heat_points WHERE zone_id = ? AND tag IS NOT NULL GROUP BY tag"
+  ).all(zoneId);
+  const topTopics = tagRows.sort((a, b) => b.c - a.c).slice(0, 3).map(r => r.tag);
 
-  const heatCount = db.prepare("SELECT COUNT(*) as c FROM heat_points WHERE zone_id = ?").get(zoneId).c;
-
-  let priority = "low";
-  if (count > 80 || avg < 3.5) priority = "high";
-  else if (count > 30 || avg < 4.0) priority = "mid";
-
-  return { count, avg, types, topTopics, heatCount, priority };
+  return {
+    count, avg, hasRating, types, topTopics,
+    heatCount: count,
+    priority: priorityFor(count, avg, hasRating),
+  };
 }
 
 function getPlatformStats(db) {
-  const total = db.prepare("SELECT COUNT(*) as c FROM surveys").get().c;
-  const typeRows = db.prepare("SELECT opinion_type, COUNT(*) as c FROM surveys GROUP BY opinion_type").all();
+  const total = db.prepare("SELECT COUNT(*) as c FROM heat_points").get().c;
+  const typeRows = db.prepare("SELECT type, COUNT(*) as c FROM heat_points GROUP BY type").all();
   const types = { positive: 0, improve: 0, concern: 0, function: 0 };
-  typeRows.forEach(r => { if (types[r.opinion_type] !== undefined) types[r.opinion_type] = r.c; });
-  const avgRow = db.prepare("SELECT AVG(rating) as a FROM surveys").get();
-  const avg = avgRow.a ? parseFloat(avgRow.a.toFixed(1)) : 0;
-  const activeZones = db.prepare("SELECT COUNT(DISTINCT zone_id) as c FROM surveys").get().c;
+  typeRows.forEach(r => { if (types[r.type] !== undefined) types[r.type] = r.c; });
+
+  const avgRow = db.prepare("SELECT AVG(rating) as a, COUNT(*) as n FROM surveys").get();
+  const hasRating = avgRow.n > 0 && avgRow.a !== null;
+  const avg = hasRating ? parseFloat(avgRow.a.toFixed(1)) : 0;
+
+  const activeZones = db.prepare("SELECT COUNT(DISTINCT zone_id) as c FROM heat_points").get().c;
   const zoneCount = db.prepare("SELECT COUNT(*) as c FROM zones").get().c;
-  const heatCount = db.prepare("SELECT COUNT(*) as c FROM heat_points").get().c;
+  const submissions = db.prepare("SELECT COUNT(*) as c FROM surveys").get().c;
 
   const totalCount = total || 1;
   return {
-    total, avg, activeZones, zoneCount, heatCount, types,
+    total, submissions, avg, hasRating, activeZones, zoneCount,
+    heatCount: total, types,
     typePercent: {
       positive: Math.round(types.positive / totalCount * 100),
       improve: Math.round(types.improve / totalCount * 100),
@@ -178,19 +209,13 @@ function getPlatformStats(db) {
 }
 
 function getHotTopics(db, limit = 5) {
-  const rows = db.prepare(`
-    SELECT keywords FROM surveys
-    WHERE keywords IS NOT NULL AND keywords != '[]'
-  `).all();
-  const counts = {};
-  rows.forEach(r => {
-    try { JSON.parse(r.keywords).forEach(k => { counts[k] = (counts[k] || 0) + 1; }); }
-    catch(e) {}
-  });
-  return Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
+  const rows = db.prepare(
+    "SELECT tag, COUNT(*) as c FROM heat_points WHERE tag IS NOT NULL GROUP BY tag"
+  ).all();
+  return rows
+    .sort((a, b) => b.c - a.c)
     .slice(0, limit)
-    .map(([tag, count]) => ({ tag, count }));
+    .map(r => ({ tag: r.tag, count: r.c }));
 }
 
 /* ================================================================
@@ -238,12 +263,12 @@ function processChat(db, message, lang) {
       const highPri = allStats.filter(r => r.s.priority === "high");
 
       answer = isZh
-        ? `【综合数据概览】\n\n北部都会区绿化空间平台目前覆盖 **${st.zoneCount} 个规划绿化区域**，已聚合 **${st.total.toLocaleString()} 条**居民意见，生成 **${st.heatCount} 个**空间意见热力点。\n\n📊 **意见类型分布**\n• 正面评价：${st.typePercent.positive}%\n• 改进建议：${st.typePercent.improve}%\n• 担忧反馈：${st.typePercent.concern}%\n• 功能需求：${st.typePercent.function}%\n\n⭐ **平均满意度**：${st.avg} / 5.0\n\n🔴 **高优先级区域（需重点关注）**：${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join("、") : "暂无"}\n\n您可以输入具体区域名称（如「米埔」「塱原」）查看详情，或输入「报告」生成完整建设建议报告。`
-        : `【Overview】\n\nThe platform covers **${st.zoneCount} planned green zones** with **${st.total.toLocaleString()} aggregated opinions** and **${st.heatCount} spatial heat points**.\n\n📊 **Opinion types**: Positive ${st.typePercent.positive}% · Improvement ${st.typePercent.improve}% · Concerns ${st.typePercent.concern}% · Function needs ${st.typePercent.function}%\n\n⭐ **Avg satisfaction**: ${st.avg} / 5.0\n\n🔴 **High-priority zones**: ${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join(", ") : "none"}\n\nType a zone name (e.g. "Mai Po") for details, or "report" for a full suggestion report.`;
+        ? `【综合数据概览】\n\n北部都会区绿化空间平台目前覆盖 **${st.zoneCount} 个规划绿化区域**，已聚合 **${st.total.toLocaleString()} 条**意见，生成 **${st.heatCount} 个**空间意见热力点。\n\n📊 **意见类型分布**\n• 正面评价：${st.typePercent.positive}%\n• 改进建议：${st.typePercent.improve}%\n• 担忧反馈：${st.typePercent.concern}%\n• 功能需求：${st.typePercent.function}%\n\n⭐ **平均满意度**：${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **高优先级区域（需重点关注）**：${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join("、") : "暂无"}\n\n您可以输入具体区域名称（如「米埔」「塱原」）查看详情，或输入「报告」生成完整建设建议报告。`
+        : `【Overview】\n\nThe platform covers **${st.zoneCount} planned green zones** with **${st.total.toLocaleString()} aggregated opinions** and **${st.heatCount} spatial heat points**.\n\n📊 **Opinion types**: Positive ${st.typePercent.positive}% · Improvement ${st.typePercent.improve}% · Concerns ${st.typePercent.concern}% · Function needs ${st.typePercent.function}%\n\n⭐ **Avg satisfaction**: ${avgText(st.avg, st.hasRating, isZh)}\n\n🔴 **High-priority zones**: ${highPri.length ? highPri.map(r => zoneName(r.z, lang)).join(", ") : "none"}\n\nType a zone name (e.g. "Mai Po") for details, or "report" for a full suggestion report.`;
       tags = [
         { text: `${st.zoneCount} zones`, type: "info" },
         { text: `${st.total} opinions`, type: "info" },
-        { text: `${st.avg}/5.0`, type: "hot" },
+        { text: st.hasRating ? `${st.avg}/5.0` : (isZh ? "暂无评分" : "no ratings"), type: "hot" },
       ];
       quickActions = [
         { text: isZh ? "🔥 热门议题" : "🔥 Hot Topics", query: isZh ? "热门议题" : "hot topics" },
@@ -299,12 +324,16 @@ function processChat(db, message, lang) {
       rows.forEach(r => {
         const pri = r.s.priority === "high" ? "🔴" : r.s.priority === "mid" ? "🟡" : "🟢";
         const priLabel = PRIORITY_LABELS[lang]?.[r.s.priority] || r.s.priority;
-        out.push(`• ${zoneName(r.z, lang)}（${zoneTypeLabel(r.z, lang)}）：${r.s.count} ${isZh ? "条意见" : "opinions"}, ${isZh ? "满意度" : "satisfaction"} ${r.s.avg}, ${isZh ? "优先级" : "priority"} ${pri}${priLabel}`);
+        out.push(`• ${zoneName(r.z, lang)}（${zoneTypeLabel(r.z, lang)}）：${r.s.count} ${isZh ? "条意见" : "opinions"}, ${isZh ? "满意度" : "satisfaction"} ${avgText(r.s.avg, r.s.hasRating, isZh)}, ${isZh ? "优先级" : "priority"} ${pri}${priLabel}`);
       });
-      rows.sort((a, b) => b.s.avg - a.s.avg);
-      if (rows.length >= 2) {
-        out.push(isZh ? `\n⭐ 满意度最高：${zoneName(rows[0].z, lang)}（${rows[0].s.avg}）` : `\n⭐ Best: ${zoneName(rows[0].z, lang)} (${rows[0].s.avg})`);
-        out.push(isZh ? `⚠️ 需重点关注：${zoneName(rows[rows.length - 1].z, lang)}（${rows[rows.length - 1].s.avg}）` : `⚠️ Watch: ${zoneName(rows[rows.length - 1].z, lang)} (${rows[rows.length - 1].s.avg})`);
+      /* Only rank by satisfaction when at least one zone has actually been
+         rated; otherwise every zone would tie at zero. */
+      const rated = rows.filter(r => r.s.hasRating).sort((a, b) => b.s.avg - a.s.avg);
+      if (rated.length >= 2) {
+        out.push(isZh ? `\n⭐ 满意度最高：${zoneName(rated[0].z, lang)}（${rated[0].s.avg}）` : `\n⭐ Best: ${zoneName(rated[0].z, lang)} (${rated[0].s.avg})`);
+        out.push(isZh ? `⚠️ 需重点关注：${zoneName(rated[rated.length - 1].z, lang)}（${rated[rated.length - 1].s.avg}）` : `⚠️ Watch: ${zoneName(rated[rated.length - 1].z, lang)} (${rated[rated.length - 1].s.avg})`);
+      } else if (!rated.length) {
+        out.push(isZh ? "\n（暂无居民评分，提交问卷后即可对比各区域满意度。）" : "\n(No ratings yet — submit a survey to compare satisfaction across zones.)");
       }
       answer = out.join("\n");
       tags = rows.slice(0, 3).map(r => ({ text: zoneName(r.z, lang), type: r.s.priority === "high" ? "warn" : "info" }));
@@ -331,7 +360,7 @@ function processChat(db, message, lang) {
       if (funcs.length) out.push(`\n🎯 ${isZh ? "规划功能" : "Functions"}：${funcs.join(isZh ? "、" : ", ")}`);
       out.push(`\n📊 ${isZh ? "意见数据" : "Opinion data"}：`);
       out.push(`• ${isZh ? "意见总数" : "Total opinions"}：${s.count}`);
-      out.push(`• ${isZh ? "平均满意度" : "Avg satisfaction"}：${s.avg} / 5.0`);
+      out.push(`• ${isZh ? "平均满意度" : "Avg satisfaction"}：${avgText(s.avg, s.hasRating, isZh)}`);
       out.push(`• ${isZh ? "热力点" : "Heat points"}：${s.heatCount}`);
       if (s.topTopics.length) {
         out.push(`• ${isZh ? "热门议题" : "Top topics"}：${s.topTopics.join("、")}`);
@@ -340,7 +369,7 @@ function processChat(db, message, lang) {
       answer = out.join("\n");
       tags = [
         { text: zoneTypeLabel(z, lang), type: "info" },
-        { text: `${s.avg}/5.0`, type: s.avg >= 4 ? "info" : "warn" },
+        { text: s.hasRating ? `${s.avg}/5.0` : (isZh ? "暂无评分" : "no ratings"), type: (s.hasRating && s.avg >= 4) ? "info" : "warn" },
       ];
       quickActions = [
         { text: isZh ? "📝 提交意见" : "📝 Submit Opinion", query: isZh ? "如何参与" : "how to participate" },
@@ -353,14 +382,21 @@ function processChat(db, message, lang) {
       dataSources = ["zones", "surveys"];
       const st = getPlatformStats(db);
       const allStats = zones.map(z => ({ z, s: getZoneStats(db, z.id) }));
+      if (!st.hasRating) {
+        answer = isZh
+          ? `【满意度分析】\n\n目前尚无居民评分——已聚合 ${st.total} 条意见，但还没有人提交 1–5 分的满意度评分。\n\n💡 请点击「居民问卷」提交评分，之后即可查看各区域满意度对比。`
+          : `【Satisfaction Analysis】\n\nNo resident ratings yet — ${st.total} opinions have been aggregated, but nobody has submitted a 1–5 satisfaction score.\n\n💡 Submit a survey to start seeing per-zone satisfaction comparisons.`;
+        break;
+      }
       allStats.sort((a, b) => b.s.avg - a.s.avg);
       const lines = [
-        isZh ? `【满意度分析】\n\n整体平均满意度：${st.avg} / 5.0\n\n各区域满意度（从高到低）：\n`
-             : `【Satisfaction Analysis】\n\nOverall avg: ${st.avg} / 5.0\n\nBy zone (high → low):\n`,
+        isZh ? `【满意度分析】\n\n整体平均满意度：${avgText(st.avg, st.hasRating, isZh)}\n\n各区域满意度（从高到低）：\n`
+             : `【Satisfaction Analysis】\n\nOverall avg: ${avgText(st.avg, st.hasRating, isZh)}\n\nBy zone (high → low):\n`,
       ];
       allStats.forEach(r => {
-        const bar = "★".repeat(Math.round(r.s.avg)) + "☆".repeat(5 - Math.round(r.s.avg));
-        lines.push(`${zoneName(r.z, lang)}: ${r.s.avg} ${bar}`);
+        const stars = Math.max(0, Math.min(5, Math.round(r.s.avg)));
+        const bar = "★".repeat(stars) + "☆".repeat(5 - stars);
+        lines.push(`${zoneName(r.z, lang)}: ${avgText(r.s.avg, r.s.hasRating, isZh)} ${r.s.hasRating ? bar : ""}`.trimEnd());
       });
       lines.push(isZh ? "\n💡 满意度偏低的区域通常存在「担忧」类意见较多，建议优先关注。" : "\n💡 Low-satisfaction zones tend to have more concern-type opinions.");
       answer = lines.join("\n");
@@ -420,8 +456,8 @@ function generateReport(db, lang) {
     title: isZh ? "执行摘要" : "Executive Summary",
     type: "exec",
     content: isZh
-      ? `本报告基于北部都会区绿化空间平台的实时数据，涵盖 ${st.zoneCount} 个规划绿化区域、${st.total.toLocaleString()} 条居民意见和 ${st.heatCount} 个空间意见热力点。整体满意度 ${st.avg}/5.0，其中 ${highPri.length} 个区域被标记为高优先级。`
-      : `This report is based on real-time data from the Northern Metropolis Green Space Platform, covering ${st.zoneCount} planned green zones, ${st.total.toLocaleString()} resident opinions, and ${st.heatCount} spatial heat points. Overall satisfaction is ${st.avg}/5.0, with ${highPri.length} zones flagged as high priority.`,
+      ? `本报告基于北部都会区绿化空间平台的实时数据，涵盖 ${st.zoneCount} 个规划绿化区域、${st.total.toLocaleString()} 条意见和 ${st.heatCount} 个空间意见热力点。整体满意度 ${avgText(st.avg, st.hasRating, isZh)}，其中 ${highPri.length} 个区域被标记为高优先级。`
+      : `This report is based on real-time data from the Northern Metropolis Green Space Platform, covering ${st.zoneCount} planned green zones, ${st.total.toLocaleString()} aggregated opinions, and ${st.heatCount} spatial heat points. Overall satisfaction is ${avgText(st.avg, st.hasRating, isZh)}, with ${highPri.length} zones flagged as high priority.`,
   });
 
   /* ---- Priority Zones Table ---- */
@@ -435,6 +471,7 @@ function generateReport(db, lang) {
       type: zoneTypeLabel(r.z, lang),
       opinions: r.s.count,
       avg: r.s.avg,
+      avgText: avgText(r.s.avg, r.s.hasRating, isZh),
       priority: PRIORITY_LABELS[lang]?.[r.s.priority] || r.s.priority,
       priorityKey: r.s.priority,
     }));
@@ -465,8 +502,8 @@ function generateReport(db, lang) {
       zone: zoneName(r.z, lang),
       priority: isZh ? "高" : "High",
       suggestion: isZh
-        ? `针对「${zoneName(r.z, lang)}」满意度偏低（${r.s.avg}/5.0），建议优先解决居民关注的${r.s.topTopics.length ? r.s.topTopics.slice(0, 2).join("、") : "相关"}问题。`
-        : `For "${zoneName(r.z, lang)}" (satisfaction ${r.s.avg}/5.0), address resident concerns about ${r.s.topTopics.length ? r.s.topTopics.slice(0, 2).join(", ") : "key issues"}.`,
+        ? `针对「${zoneName(r.z, lang)}」（满意度 ${avgText(r.s.avg, r.s.hasRating, isZh)}），建议优先解决居民关注的${r.s.topTopics.length ? r.s.topTopics.slice(0, 2).join("、") : "相关"}问题。`
+        : `For "${zoneName(r.z, lang)}" (satisfaction ${avgText(r.s.avg, r.s.hasRating, isZh)}), address resident concerns about ${r.s.topTopics.length ? r.s.topTopics.slice(0, 2).join(", ") : "key issues"}.`,
     });
   });
 
@@ -520,7 +557,7 @@ function generateReport(db, lang) {
       md += `| ${sec.columns.map(() => "---").join(" | ")} |\n`;
       sec.rows.forEach(r => {
         const priIcon = r.priorityKey === "high" ? "🔴" : r.priorityKey === "mid" ? "🟡" : "🟢";
-        md += `| ${r.name} | ${r.type} | ${r.opinions} | ${r.avg} | ${priIcon} ${r.priority} |\n`;
+        md += `| ${r.name} | ${r.type} | ${r.opinions} | ${r.avgText} | ${priIcon} ${r.priority} |\n`;
       });
       md += "\n";
     } else if (sec.type === "list") {
@@ -548,7 +585,9 @@ function generateReport(db, lang) {
     stats: {
       zoneCount: st.zoneCount,
       totalOpinions: st.total,
-      avgSatisfaction: st.avg,
+      avgSatisfaction: st.hasRating ? st.avg : null,
+      hasRatings: st.hasRating,
+      submissions: st.submissions,
       heatPoints: st.heatCount,
       highPriorityCount: highPri.length,
       midPriorityCount: midPri.length,
