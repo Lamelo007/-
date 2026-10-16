@@ -381,12 +381,10 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
   <div class="nav-brand"><span class="logo-icon">🌿</span><span>GreenSpace NM</span></div>
   <div class="nav-links" id="navLinks">
     <a class="nav-link active" data-target="hero" data-i18n="nav.overview">概览</a>
-    <a class="nav-link" data-target="problem" data-i18n="nav.problem">问题</a>
     <a class="nav-link" data-target="map-section" data-i18n="nav.map">绿化地图</a>
     <a class="nav-link" data-target="survey-section" data-i18n="nav.survey">居民问卷</a>
     <a class="nav-link" data-target="opinion-section" data-i18n="nav.opinion">AI意见热图</a>
     <a class="nav-link" data-target="dashboard-section" data-i18n="nav.dashboard">政府看板</a>
-    <a class="nav-link" data-target="roadmap-section" data-i18n="nav.roadmap">项目路线</a>
     <a class="nav-link" data-target="ai-section"><span data-i18n="nav.ai">AI 助手</span></a>
   </div>
   <div class="nav-right">
@@ -414,42 +412,6 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <div class="hero-stat"><div class="num" id="stat2">1,284</div><div class="label" data-i18n="hero.stat2">居民意见提交</div></div>
       <div class="hero-stat"><div class="num" id="stat3">6</div><div class="label" data-i18n="hero.stat3">功能类型</div></div>
       <div class="hero-stat"><div class="num" id="stat4">6</div><div class="label" data-i18n="hero.stat4">示范区覆盖</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="problem">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag" style="background:#FFEBEE;color:#e53935;">PROBLEM</span>
-      <h2 class="section-title" data-i18n="problem.title">当前痛点</h2>
-      <p class="section-subtitle" data-i18n="problem.subtitle">居民与政府之间缺乏关于绿化空间规划的直观沟通渠道</p>
-    </div>
-    <div class="problem-grid">
-      <div class="problem-card"><div class="icon">📄</div><h3 data-i18n="problem.c1.title">文字报告难理解</h3><p data-i18n="problem.c1.desc">官方绿化规划主要以文字报告形式发布，公众难以理解绿化区域在哪里、用途是什么，信息获取门槛高。</p></div>
-      <div class="problem-card"><div class="icon">💬</div><h3 data-i18n="problem.c2.title">意见无法空间化</h3><p data-i18n="problem.c2.desc">现有公众咨询渠道以文字形式收集意见，居民建议无法在地图上展示，政府也难以了解意见的空间分布。</p></div>
-      <div class="problem-card"><div class="icon">🔍</div><h3 data-i18n="problem.c3.title">信息透明度不足</h3><p data-i18n="problem.c3.desc">居民无法方便地查看规划信息，政府也看不到公众建议的地理分布，降低了公众参与效率。</p></div>
-      <div class="problem-card"><div class="icon">📊</div><h3 data-i18n="problem.c4.title">反馈整理效率低</h3><p data-i18n="problem.c4.desc">公众反馈以纯文本收集，需要人工整理分类，缺乏自动化的空间意见聚合和可视化工具。</p></div>
-    </div>
-    <div class="before-after">
-      <div class="ba-card">
-        <div class="header before-header" data-i18n="problem.before.title">❌ 现状：文字驱动</div>
-        <div class="body"><ul>
-          <li><span class="cross">✗</span> <span data-i18n="problem.before.1">规划报告以 PDF 文字为主，缺乏地图可视化</span></li>
-          <li><span class="cross">✗</span> <span data-i18n="problem.before.2">公众意见以文字表格收集，无法定位到地理空间</span></li>
-          <li><span class="cross">✗</span> <span data-i18n="problem.before.3">政府需手动整理意见，效率低、覆盖面窄</span></li>
-          <li><span class="cross">✗</span> <span data-i18n="problem.before.4">居民难以参与，沟通障碍大</span></li>
-        </ul></div>
-      </div>
-      <div class="ba-card">
-        <div class="header after-header" data-i18n="problem.after.title">✅ 方案：地图驱动</div>
-        <div class="body"><ul>
-          <li><span class="check">✓</span> <span data-i18n="problem.after.1">官方规划一键转化为互动可视化地图</span></li>
-          <li><span class="check">✓</span> <span data-i18n="problem.after.2">居民在地图上查看规划并提交空间意见</span></li>
-          <li><span class="check">✓</span> <span data-i18n="problem.after.3">AI 自动聚合反馈生成意见热图</span></li>
-          <li><span class="check">✓</span> <span data-i18n="problem.after.4">政府直观查看意见分布，辅助决策</span></li>
-        </ul></div>
-      </div>
     </div>
   </div>
 </section>
@@ -1674,17 +1636,6 @@ a{text-decoration:none;color:inherit}ul{list-style:none}
       <h4 data-i18n="dash.tableTitle">📋 区域意见汇总表</h4>
       <table class="dash-table"><thead><tr><th data-i18n="dash.col1">区域名称</th><th data-i18n="dash.col2">类型</th><th data-i18n="dash.col3">意见数</th><th data-i18n="dash.col4">平均满意度</th><th data-i18n="dash.col5">热门议题</th><th data-i18n="dash.col6">优先级</th></tr></thead><tbody id="dashTableBody"></tbody></table>
     </div>
-  </div>
-</section>
-
-<section class="section" id="roadmap-section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag" style="background:var(--purple-bg);color:var(--purple-primary);">ROADMAP</span>
-      <h2 class="section-title" data-i18n="roadmap.title">项目路线图</h2>
-      <p class="section-subtitle" data-i18n="roadmap.subtitle">从规划到部署的完整里程碑</p>
-    </div>
-    <div class="timeline" id="timeline"></div>
   </div>
 </section>
 
