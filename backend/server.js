@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { db } = require("./database");
 const { extractKeywords, classifyOpinion, generateHeatPoint, aggregateStats } = require("./ai-engine");
+const { processChat, generateReport, getSuggestedQuestions } = require("./ai-assistant");
 
 const app = express();
 const PORT = 3000;
@@ -206,6 +207,52 @@ app.get("/api/dashboard", (req, res) => {
 });
 
 /* ================================================================
+   POST /api/ai/chat  — AI assistant chat
+   body: { message, lang }
+   Returns: { answer, intent, tags, quickActions, dataSources, lang }
+   ================================================================ */
+app.post("/api/ai/chat", (req, res) => {
+  const { message, lang } = req.body;
+
+  if (!message || !message.trim())
+    return res.status(400).json({ error: "message is required" });
+
+  try {
+    const result = processChat(db, message, lang || "zh-CN");
+    res.json(result);
+  } catch (err) {
+    console.error("[AI Chat Error]", err);
+    res.status(500).json({ error: "AI processing failed", detail: err.message });
+  }
+});
+
+/* ================================================================
+   POST /api/ai/report  — generate construction report
+   body: { lang }
+   Returns: { title, generatedAt, lang, sections, markdown, stats }
+   ================================================================ */
+app.post("/api/ai/report", (req, res) => {
+  try {
+    const { lang } = req.body || {};
+    const report = generateReport(db, lang || "zh-CN");
+    res.json(report);
+  } catch (err) {
+    console.error("[AI Report Error]", err);
+    res.status(500).json({ error: "Report generation failed", detail: err.message });
+  }
+});
+
+/* ================================================================
+   GET /api/ai/suggest  — get suggested questions
+   query: ?lang=zh-CN|en|zh-TW
+   ================================================================ */
+app.get("/api/ai/suggest", (req, res) => {
+  const lang = req.query.lang || "zh-CN";
+  const questions = getSuggestedQuestions(lang);
+  res.json({ questions });
+});
+
+/* ================================================================
    Start server
    ================================================================ */
 app.listen(PORT, () => {
@@ -215,5 +262,8 @@ app.listen(PORT, () => {
   console.log(`    GET  /api/zones/:id     - single zone detail`);
   console.log(`    POST /api/surveys       - submit a survey`);
   console.log(`    GET  /api/heatmap       - opinion heat points`);
-  console.log(`    GET  /api/dashboard     - dashboard statistics\n`);
+  console.log(`    GET  /api/dashboard     - dashboard statistics`);
+  console.log(`    POST /api/ai/chat       - AI assistant chat`);
+  console.log(`    POST /api/ai/report     - generate construction report`);
+  console.log(`    GET  /api/ai/suggest     - suggested questions\n`);
 });
