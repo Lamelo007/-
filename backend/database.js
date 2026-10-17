@@ -1,7 +1,15 @@
 const Database = require("better-sqlite3");
 const path = require("path");
+const fs = require("fs");
 
-const DB_PATH = path.join(__dirname, "greenspace.db");
+/* Data lives in its own directory so the code tree stays clean and the file is
+   easy to wipe between demo runs. Override with DB_PATH if needed. */
+const DB_PATH = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(__dirname, "data", "greenspace.db");
+
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
 const db = new Database(DB_PATH);
 
 db.pragma("journal_mode = WAL");

@@ -18,7 +18,7 @@ app.use(express.json({ limit: "64kb" }));
 /* ---- Static frontend ------------------------------------------------
    express.static is mounted on the project root so index.html is served.
    The backend directory must stay unreachable: it holds the source code
-   AND the SQLite database file (greenspace.db). This guard runs first. */
+   AND the SQLite database file (data/greenspace.db). This guard runs first. */
 app.use((req, res, next) => {
   if (/^\/backend(\/|$)/i.test(req.path)) {
     return res.status(404).json({ error: "Not found" });

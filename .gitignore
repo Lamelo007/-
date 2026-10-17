@@ -10,6 +10,7 @@ start-backend.cmd
 node_modules/
 
 # Generated SQLite database (recreated and seeded on first run)
+backend/data/
 *.db
 *.db-wal
 *.db-shm

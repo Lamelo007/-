@@ -1,6 +1,6 @@
 # GreenSpace NM — Northern Metropolis Green Space Interactive Platform
 
-**Live demo:** <https://6c7c7e11ff9040e7a146d291bd4f1273.sg.agentos-app.run>
+**Live demo:** <https://d74594edc6b8490f963188d57ba3ebaa.sg.agentos-app.run>
 
 **Team:** Rhodes Island (Team 1130) · **Track:** Sustainable Northern Metropolis · **Institution:** City University of Hong Kong
 
@@ -148,8 +148,9 @@ and the UI shows `—`, never `0`, so "no data" is never mistaken for "rated 1".
   - `ai-engine.js` — keyword extraction, opinion classification, heat-point generation
   - `ai-assistant.js` — intent detection, chat answers, report generation
 
-`node_modules/` and the generated `greenspace.db` are git-ignored; the database
-is created and seeded automatically on first run.
+`node_modules/` and the generated database at `backend/data/greenspace.db` are
+git-ignored; the database directory is created and seeded automatically on first
+run. Delete that file (or set `DB_PATH`) to reset the demo to a clean baseline.
 
 ## License
 
