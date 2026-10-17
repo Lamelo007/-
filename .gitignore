@@ -1,5 +1,23 @@
+# OS noise
 nul
-nul
+Thumbs.db
+.DS_Store
+
+# Local helper script
 start-backend.cmd
+
+# Dependencies
 node_modules/
+
+# Generated SQLite database (recreated and seeded on first run)
+*.db
+*.db-wal
+*.db-shm
+
+# Secrets
+.env
+.env.*
+
+# Local scratch / build artefacts
 ppt-project/
+*.log

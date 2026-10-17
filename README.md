@@ -1,8 +1,13 @@
 # GreenSpace NM — Northern Metropolis Green Space Interactive Platform
 
-Hackathon demo: an interactive web platform that turns official text-based green
-space planning documents into a visual, map-driven experience for the Northern
-Metropolis (Hong Kong).
+**Live demo:** <https://6c7c7e11ff9040e7a146d291bd4f1273.sg.agentos-app.run>
+
+**Team:** Rhodes Island (Team 1130) · **Track:** Sustainable Northern Metropolis · **Institution:** City University of Hong Kong
+
+An interactive web platform that turns official text-based green space planning
+documents into a visual, map-driven experience for the Northern Metropolis
+(Hong Kong) — so residents can see, rate and comment on real conservation sites,
+and planners can read the aggregated feedback back as spatial evidence.
 
 ## Features
 
@@ -148,4 +153,4 @@ is created and seeded automatically on first run.
 
 ## License
 
-Hackathon Demo — 2026
+MIT — 2026, Team Rhodes Island.
